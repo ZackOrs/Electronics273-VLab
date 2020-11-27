@@ -10,6 +10,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField][Range(0.0f, 0.5f)] float moveSmoothTime = 0.3f;
     [SerializeField][Range(0.0f, 0.5f)] float mouseSmoothTime = 0.03f;
     [SerializeField] bool lockCursor = true;
+    [SerializeField] float xBoundMax = 6.0f;
+    [SerializeField] float xBoundMin = 4.0f;
+    [SerializeField] float zBoundMax = 1.5f;
+    [SerializeField] float zBoundMin = -1.5f;
+
 
     [SerializeField] float gravity = -13.0f;
 
@@ -37,9 +42,8 @@ public class PlayerController : MonoBehaviour
     {
         UpdateMouseLook();
         UpdateMovement();
+        CheckPosition();
     }
-
-
     void UpdateMouseLook()
     {
 
@@ -71,5 +75,24 @@ public class PlayerController : MonoBehaviour
     
         controller.Move(velocity * Time.deltaTime);
 
+    }
+    void CheckPosition(){
+        Vector3 position = GameObject.Find("Player").transform.position;
+        if(position.x > xBoundMax){
+            position.x = xBoundMax;
+            GameObject.Find("Player").transform.position = position;
+        }
+        else if(position.x < xBoundMin){
+            position.x = xBoundMin;
+            GameObject.Find("Player").transform.position = position;
+        }
+        if(position.z > zBoundMax){
+            position.z = zBoundMax;
+            GameObject.Find("Player").transform.position = position;
+        }
+                if(position.z < zBoundMin){
+            position.z = zBoundMin;
+            GameObject.Find("Player").transform.position = position;
+        }
     }
 }
