@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float zBoundMax = 8.0f;
     [SerializeField] float zBoundMin = -2.0f;
 
+    public ScreenText screenText;
 
     [SerializeField] float gravity = -13.0f;
 
@@ -76,7 +77,8 @@ public class PlayerController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
     }
-    void CheckPosition(){
+    void CheckPosition()
+    {
         Vector3 position = GameObject.Find("Player").transform.position;
         if(position.x > xBoundMax){
             position.x = xBoundMax;
@@ -95,4 +97,5 @@ public class PlayerController : MonoBehaviour
             GameObject.Find("Player").transform.position = position;
         }
     }
+
 }
