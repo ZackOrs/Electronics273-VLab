@@ -15,8 +15,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float zBoundMax = 8.0f;
     [SerializeField] float zBoundMin = -2.0f;
 
-    public ScreenText screenText;
-
     [SerializeField] float gravity = -13.0f;
 
     float cameraPitch = 0.0f;

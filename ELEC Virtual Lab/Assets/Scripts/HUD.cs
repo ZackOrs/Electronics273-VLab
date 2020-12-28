@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScreenText : MonoBehaviour
+public class HUD : MonoBehaviour
 {
 
     public GameObject MessagePanel;
