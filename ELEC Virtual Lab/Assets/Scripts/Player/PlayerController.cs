@@ -10,8 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField][Range(0.0f, 0.5f)] float moveSmoothTime = 0.3f;
     [SerializeField][Range(0.0f, 0.5f)] float mouseSmoothTime = 0.03f;
     [SerializeField] bool lockCursor = true;
-    [SerializeField] float xBoundMax = 8.0f;
-    [SerializeField] float xBoundMin = -2.0f;
+    [SerializeField] float xBoundMax = 5.0f;
+    [SerializeField] float xBoundMin = -5.0f;
     [SerializeField] float zBoundMax = 8.0f;
     [SerializeField] float zBoundMin = -2.0f;
 

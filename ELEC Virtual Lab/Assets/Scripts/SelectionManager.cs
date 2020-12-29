@@ -9,7 +9,7 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] private string selectableTag = "Selectable";
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private Material defaultMaterial;
-    [SerializeField] private float interactDistance = 5.0f;
+    [SerializeField] private float interactDistance = 2.0f;
 
     public HUD Hud;
     private Transform _selection;
