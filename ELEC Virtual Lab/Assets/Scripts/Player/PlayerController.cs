@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,11 +10,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField][Range(0.0f, 0.5f)] float moveSmoothTime = 0.3f;
     [SerializeField][Range(0.0f, 0.5f)] float mouseSmoothTime = 0.03f;
     [SerializeField] bool lockCursor = true;
-    [SerializeField] float xBoundMax = 6.0f;
-    [SerializeField] float xBoundMin = 4.0f;
-    [SerializeField] float zBoundMax = 1.5f;
-    [SerializeField] float zBoundMin = -1.5f;
-
+    [SerializeField] float xBoundMax = 5.0f;
+    [SerializeField] float xBoundMin = -5.0f;
+    [SerializeField] float zBoundMax = 8.0f;
+    [SerializeField] float zBoundMin = -2.0f;
 
     [SerializeField] float gravity = -13.0f;
 
@@ -47,15 +46,18 @@ public class PlayerController : MonoBehaviour
     void UpdateMouseLook()
     {
 
-        Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        
-        currentMouseDelta = Vector2.SmoothDamp(currentMouseDelta, targetMouseDelta, ref currentMouseDeltaVelocity, mouseSmoothTime);
+        if(!PauseMenu.gamePaused)
+        {
+            Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            
+            currentMouseDelta = Vector2.SmoothDamp(currentMouseDelta, targetMouseDelta, ref currentMouseDeltaVelocity, mouseSmoothTime);
 
-        cameraPitch -= currentMouseDelta.y * mouseSensitivity;
-        cameraPitch = Mathf.Clamp(cameraPitch,-90.0f, 90.0f);
-        playerCamera.localEulerAngles = Vector2.right * cameraPitch;
+            cameraPitch -= currentMouseDelta.y * mouseSensitivity;
+            cameraPitch = Mathf.Clamp(cameraPitch,-90.0f, 90.0f);
+            playerCamera.localEulerAngles = Vector2.right * cameraPitch;
 
-        transform.Rotate(Vector3.up * currentMouseDelta.x * mouseSensitivity);
+            transform.Rotate(Vector3.up * currentMouseDelta.x * mouseSensitivity) ;
+        }
     }
 
     void UpdateMovement()
@@ -76,7 +78,8 @@ public class PlayerController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
     }
-    void CheckPosition(){
+    void CheckPosition()
+    {
         Vector3 position = GameObject.Find("Player").transform.position;
         if(position.x > xBoundMax){
             position.x = xBoundMax;
@@ -95,4 +98,5 @@ public class PlayerController : MonoBehaviour
             GameObject.Find("Player").transform.position = position;
         }
     }
+
 }
