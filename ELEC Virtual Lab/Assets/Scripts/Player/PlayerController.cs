@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,15 +46,18 @@ public class PlayerController : MonoBehaviour
     void UpdateMouseLook()
     {
 
-        Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        
-        currentMouseDelta = Vector2.SmoothDamp(currentMouseDelta, targetMouseDelta, ref currentMouseDeltaVelocity, mouseSmoothTime);
+        if(!PauseMenu.gamePaused)
+        {
+            Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            
+            currentMouseDelta = Vector2.SmoothDamp(currentMouseDelta, targetMouseDelta, ref currentMouseDeltaVelocity, mouseSmoothTime);
 
-        cameraPitch -= currentMouseDelta.y * mouseSensitivity;
-        cameraPitch = Mathf.Clamp(cameraPitch,-90.0f, 90.0f);
-        playerCamera.localEulerAngles = Vector2.right * cameraPitch;
+            cameraPitch -= currentMouseDelta.y * mouseSensitivity;
+            cameraPitch = Mathf.Clamp(cameraPitch,-90.0f, 90.0f);
+            playerCamera.localEulerAngles = Vector2.right * cameraPitch;
 
-        transform.Rotate(Vector3.up * currentMouseDelta.x * mouseSensitivity);
+            transform.Rotate(Vector3.up * currentMouseDelta.x * mouseSensitivity) ;
+        }
     }
 
     void UpdateMovement()

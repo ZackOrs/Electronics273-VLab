@@ -25,22 +25,35 @@ public class PauseMenu : MonoBehaviour
     }
 
 
-    private void ResumeGame()
+    public void ResumeGame()
     {
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1.0f;
         gamePaused = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
     }
 
     private void PauseGame()
     {
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0.0f;
-        gamePaused = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        gamePaused = true;
+    }
+
+    public void GoToSettingsMenu()
+    {
+        //TODO: IMPLEMENT SETTINGS
+        Debug.Log("Going to settings...");
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("Quitting Application...");
+        Application.Quit();
 
     }
 }

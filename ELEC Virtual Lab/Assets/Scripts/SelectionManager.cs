@@ -9,7 +9,7 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] private string selectableTag = "Selectable";
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private Material defaultMaterial;
-    [SerializeField] private float interactDistance = 2.0f;
+    [SerializeField] private float interactDistance = 3.0f;
 
     public HUD Hud;
     private Transform _selection;
@@ -38,7 +38,8 @@ public class SelectionManager : MonoBehaviour
         {
             var selection = hit.transform;
             if(selection.CompareTag(selectableTag) &&
-             (Vector3.Distance(GameObject.Find("Player").transform.position, selection.position) <=interactDistance ))
+             (Vector3.Distance(GameObject.Find("Player").transform.position, selection.position) <=interactDistance ) &&
+             PauseMenu.gamePaused == false)
             {
                 var selectionRender = selection.GetComponent<Renderer>();
                 if(selectionRender!= null)
