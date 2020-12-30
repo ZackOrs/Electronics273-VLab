@@ -51,6 +51,7 @@ public class SelectionManager : MonoBehaviour
 
                     if( item != null && Input.GetKeyDown("f"))
                     {
+                        item.onInteract();
                         Debug.Log("it works");
                     }
                 }

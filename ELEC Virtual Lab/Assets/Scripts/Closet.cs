@@ -15,7 +15,7 @@ public class Closet : SelectableItemBase
 
     public override void onInteract()
     {
-
+        Debug.Log("yooo");
     }
 
 }
