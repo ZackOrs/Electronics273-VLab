@@ -46,6 +46,13 @@ public class SelectionManager : MonoBehaviour
                 {
                     selectionRender.material = highlightMaterial;
                     Hud.OpenMessagePanel("open");
+
+                    ISelectableItem item = selection.GetComponent<ISelectableItem>();
+
+                    if( item != null && Input.GetKeyDown("f"))
+                    {
+                        Debug.Log("it works");
+                    }
                 }
                 _selection = selection;
                 
