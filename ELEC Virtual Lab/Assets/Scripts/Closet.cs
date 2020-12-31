@@ -5,6 +5,8 @@ using UnityEngine;
 public class Closet : SelectableItemBase
 {
 
+    public GameObject ClosetPanel;
+
     public override string Name
     {
         get
@@ -14,9 +16,53 @@ public class Closet : SelectableItemBase
     }
 
     public override void onInteract()
-    {
-        Debug.Log("yooo");
+    { 
+        OpenClosetPanel();
     }
 
+    public void OpenClosetPanel()
+    {
+        ClosetPanel.SetActive(true);
+        
+        Globals.showCrosshair = false;
+        Globals.menuOpened = true;
+        Globals.showCrosshair = false;
+
+        Time.timeScale = 0.0f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        
+    }       
+    public void CloseClosetPanel()
+    {
+        ClosetPanel.SetActive(false);
+
+        Globals.showCrosshair = true;
+        Globals.menuOpened = false;
+
+        Time.timeScale = 1.0f;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    //Button functions
+    public void CancelButton()
+    {
+        CloseClosetPanel();
+    }
+
+    public void ResetButton()
+    {
+        //TODO: IMPLEMENT CLEAR, probably add a tag to all created objects and then remove them
+        Debug.Log("Clearing table");
+    }
+
+    public void ConfirmButton()
+    {
+        //TODO: Impletement confirm, probably make a list containing all objects and then create them as needed
+        Debug.Log("Confirm Selection");
+        CloseClosetPanel();
+    }
 }
+
  
