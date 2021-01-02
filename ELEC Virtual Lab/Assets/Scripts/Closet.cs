@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Closet : SelectableItemBase
 {
@@ -70,15 +71,14 @@ public class Closet : SelectableItemBase
 
     private void SpawnSelectedObects()
     {
-        int a = 0;
         for (int i = 0 ; i < ClosetPanel.transform.childCount ; i ++)
         {
             var child = ClosetPanel.transform.GetChild(i);
             if(child.CompareTag(spawnableTag))
             {
-                a++;
+                ISpawnableItem item = child.GetComponent<ISpawnableItem>();
+                item.onSpawn();
             }
         }
-        Debug.Log("A is: " + a);
     }
 }
