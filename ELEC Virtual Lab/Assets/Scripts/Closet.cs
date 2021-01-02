@@ -5,7 +5,9 @@ using UnityEngine;
 public class Closet : SelectableItemBase
 {
 
+    [SerializeField] private string spawnableTag = "Spawnable";
     public GameObject ClosetPanel;
+    
 
     public override string Name
     {
@@ -61,8 +63,22 @@ public class Closet : SelectableItemBase
     {
         //TODO: Impletement confirm, probably make a list containing all objects and then create them as needed
         Debug.Log("Confirm Selection");
+        SpawnSelectedObects();
         CloseClosetPanel();
     }
-}
 
- 
+
+    private void SpawnSelectedObects()
+    {
+        int a = 0;
+        for (int i = 0 ; i < ClosetPanel.transform.childCount ; i ++)
+        {
+            var child = ClosetPanel.transform.GetChild(i);
+            if(child.CompareTag(spawnableTag))
+            {
+                a++;
+            }
+        }
+        Debug.Log("A is: " + a);
+    }
+}
