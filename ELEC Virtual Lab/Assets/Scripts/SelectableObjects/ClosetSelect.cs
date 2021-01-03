@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Closet : SelectableItemBase
+public class ClosetSelect : SelectableItemBase
 {
 
     [SerializeField] private string spawnableTag = "Spawnable";

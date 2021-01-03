@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class SpawnWireItem : SpawnableItemBase
+public class WireSpawn : SpawnableItemBase
 {
     public TMP_Text itemName;
     public TMP_Dropdown itemValue;
@@ -47,6 +47,8 @@ public class SpawnWireItem : SpawnableItemBase
         Debug.Log("name: " + ItemName);
         Debug.Log("val: " + (Values)ItemValue);
         Debug.Log("Quant: " + ItemQuantity + "\n");
+
+        Instantiate(itemPrefab);
     }
 
 
