@@ -39,13 +39,25 @@ public class SelectionManager : MonoBehaviour
             var selection = hit.transform;
             if(selection.CompareTag(selectableTag) &&
              (Vector3.Distance(GameObject.Find("Player").transform.position, selection.position) <=interactDistance ) &&
-             PauseMenu.gamePaused == false)
+             Globals.gamePaused == false)
             {
                 var selectionRender = selection.GetComponent<Renderer>();
                 if(selectionRender!= null)
                 {
                     selectionRender.material = highlightMaterial;
-                    Hud.OpenMessagePanel("open");
+                    if(Globals.menuOpened == false)
+                    {
+                        Hud.OpenMessagePanel("open");
+
+                        ISelectableItem item = selection.GetComponent<ISelectableItem>();
+
+                        if( item != null && Input.GetKeyDown("f"))
+                        {
+                            item.onInteract();
+                            Debug.Log("Interacting with: " + item.Name);
+                        }
+                    }
+                        
                 }
                 _selection = selection;
                 
