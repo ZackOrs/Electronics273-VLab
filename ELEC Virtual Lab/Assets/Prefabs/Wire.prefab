@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 29902974453565699}
   - component: {fileID: 9128742175931750611}
   - component: {fileID: 4888297746947023310}
+  - component: {fileID: -3585499276382635466}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Selectable
@@ -311,3 +312,24 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &-3585499276382635466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8195202485822340592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0af125ba74d8224497a5395defc25d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnableTag: Spawnable
+  materialList:
+  - {fileID: 2100000, guid: f2cd19da4e6d0c44bbdceabbe535c467, type: 2}
+  - {fileID: 2100000, guid: 545009328fba5ff41955d948e7e8dcaa, type: 2}
+  - {fileID: 2100000, guid: 4fa2675c65b441e479b89cffb2c9dab0, type: 2}
+  - {fileID: 2100000, guid: 0b61b59cffe12134ba45c0f5816e389c, type: 2}
+  - {fileID: 2100000, guid: d3b9180149207bd4698e916db0303991, type: 2}
+  wire: {fileID: 8195202485822340592}
+  Colour: 0

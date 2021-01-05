@@ -48,7 +48,8 @@ public class WireSpawn : SpawnableItemBase
         Debug.Log("val: " + (Values)ItemValue);
         Debug.Log("Quant: " + ItemQuantity + "\n");
 
-        Instantiate(itemPrefab);
+        var spawnObject = Instantiate(itemPrefab);
+        spawnObject.GetComponent<WireSelect>().Colour = ItemValue;
     }
 
 

@@ -1,68 +1,94 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class SelectionManager : MonoBehaviour
-{
-
-
+using UnityEngine.Rendering;
+ 
+public class SelectionManager : MonoBehaviour {
+ 
+    public Color highlightMaterial;
+    Color originalMaterial;
+    GameObject lastHighlightedObject;
+    [SerializeField] float rayDistance = 4.0f;
     [SerializeField] private string selectableTag = "Selectable";
-    [SerializeField] private Material highlightMaterial = null;
-    [SerializeField] private Material defaultMaterial = null;
-    [SerializeField] private float interactDistance = 3.0f;
 
     public HUD Hud;
-    private Transform _selection;
-
-    // Start is called before the first frame update
-    void Start()
+ 
+    void HighlightObject(GameObject gameObject, Transform selection)
     {
-        
+        if (lastHighlightedObject != gameObject)
+        {
+            ClearHighlighted();
+            originalMaterial = gameObject.GetComponent<MeshRenderer>().material.color;
+            gameObject.GetComponent<MeshRenderer>().material.color = highlightMaterial;
+            lastHighlightedObject = gameObject;
+            InteractWithObject(selection);
+        }
+        InteractWithObject(selection);
     }
 
-    // Update is called once per frame
-    void Update()
+    void InteractWithObject(Transform selection)
     {
-        Hud.CloseMessagePanel();
-        if(_selection != null)
+
+        if(Globals.menuOpened == false)
         {
-            var selectionRender = _selection.GetComponent<Renderer>();
-            selectionRender.material = defaultMaterial;
-            _selection = null;
+            Hud.OpenMessagePanel("open");
         }
+        ISelectableItem item = selection.GetComponent<ISelectableItem>();
 
-
-        var ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width/2f, Screen.height/2f, 0f));
-        RaycastHit hit;
-        if(Physics.Raycast(ray, out hit))
+        if( item != null && Input.GetKeyDown("f"))
         {
-            var selection = hit.transform;
-            if(selection.CompareTag(selectableTag) &&
-             (Vector3.Distance(GameObject.Find("Player").transform.position, selection.position) <=interactDistance ) &&
-             Globals.gamePaused == false)
+            item.onInteract();
+            Debug.Log("Interacting with: " + item.Name);
+        }
+    }
+ 
+    void ClearHighlighted()
+    {
+        if (lastHighlightedObject != null)
+        {
+            lastHighlightedObject.GetComponent<MeshRenderer>().material.color = originalMaterial;
+            lastHighlightedObject = null;
+            Hud.CloseMessagePanel();
+            Debug.Log("close colour");
+        }
+    }
+ 
+    void HighlightObjectInCenterOfCam()
+    {
+        
+        // Ray from the center of the viewport.
+        Hud.CloseMessagePanel();
+        // Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width/2f, Screen.height/2f, 0f));
+        RaycastHit rayHit;
+        // Check if we hit something.
+        if (Physics.Raycast(ray, out rayHit, rayDistance) &&
+        Globals.gamePaused == false)
+        {
+            // Get the object that was hit.
+
+            var selection = rayHit.transform;
+            if(selection.CompareTag(selectableTag))
             {
-                var selectionRender = selection.GetComponent<Renderer>();
-                if(selectionRender!= null)
-                {
-                    selectionRender.material = highlightMaterial;
-                    if(Globals.menuOpened == false)
-                    {
-                        Hud.OpenMessagePanel("open");
-
-                        ISelectableItem item = selection.GetComponent<ISelectableItem>();
-
-                        if( item != null && Input.GetKeyDown("f"))
-                        {
-                            item.onInteract();
-                            Debug.Log("Interacting with: " + item.Name);
-                        }
-                    }
-                        
-                }
-                _selection = selection;
-                
+                GameObject hitObject = rayHit.collider.gameObject;
+                HighlightObject(hitObject, selection);
             }
+            else
+            {
+                ClearHighlighted();
+            }
+                
+        }
+        else
+        {
+            ClearHighlighted();
         }
         
+
+    }
+ 
+    void Update()
+    {
+        HighlightObjectInCenterOfCam();
     }
 }
