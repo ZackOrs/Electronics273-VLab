@@ -49,7 +49,6 @@ public class SelectionManager : MonoBehaviour {
             lastHighlightedObject.GetComponent<MeshRenderer>().material.color = originalMaterial;
             lastHighlightedObject = null;
             Hud.CloseMessagePanel();
-            Debug.Log("close colour");
         }
     }
  
