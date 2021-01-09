@@ -5,8 +5,8 @@ using TMPro;
 
 public class WireSelect : SelectableItemBase
 {
-    [SerializeField] private List<Material> materialList;
-    [SerializeField] GameObject wire;
+    [SerializeField] private List<Material> materialList = new List<Material>();
+    [SerializeField] GameObject wire = null;
 
     public int Colour;
     public override string Name
@@ -20,7 +20,6 @@ public class WireSelect : SelectableItemBase
     public void Start()
     {
         wire.GetComponent<Renderer>().material = materialList[Colour];
-        
     }
 
     public override void onInteract()
