@@ -55,8 +55,6 @@ public class WireSpawn : SpawnableItemBase
             Quaternion xyz = new Quaternion(0,0,0,0);
             var spawnObject = Instantiate(itemPrefab,abc,xyz, WorkBench.transform);
             spawnObject.GetComponent<WireSelect>().Colour = ItemValue;
-
-            
         }
 
     }
