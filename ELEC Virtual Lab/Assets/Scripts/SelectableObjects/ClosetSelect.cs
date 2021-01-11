@@ -9,7 +9,8 @@ public class ClosetSelect : SelectableItemBase
     [SerializeField] private string spawnableTag = "Spawnable";
     [SerializeField] private List<TMP_Dropdown> dropDownsList = null;
     [SerializeField] private List<TMP_InputField> inputFieldsList = null;
-    public GameObject ClosetPanel;
+    [SerializeField] private GameObject ClosetPanel;
+    [SerializeField] private GameObject ClosetListContent;
     
 
     public override string Name
@@ -78,11 +79,12 @@ public class ClosetSelect : SelectableItemBase
 
     private void SpawnSelectedObects()
     {
-        for (int i = 0 ; i < ClosetPanel.transform.childCount ; i ++)
+        for (int i = 0 ; i < ClosetListContent.transform.childCount ; i ++)
         {
-            var child = ClosetPanel.transform.GetChild(i);
+            var child = ClosetListContent.transform.GetChild(i);
             if(child.CompareTag(spawnableTag))
             {
+                Debug.Log("Getting item :" + child.ToString());
                 ISpawnableItem item = child.GetComponent<ISpawnableItem>();
                 item.onSpawn();
             }
