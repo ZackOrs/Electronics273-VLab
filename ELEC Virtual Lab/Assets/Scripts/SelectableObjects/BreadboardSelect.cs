@@ -26,6 +26,14 @@ public class BreadboardSelect : SelectableItemBase
         OpenBreadboardPanel();
     }
 
+        void Update()
+    {
+        if(Input.GetKeyDown("p") || Input.GetKeyDown(KeyCode.Escape))
+        {
+                CancelButton();
+        }
+    }
+
     public void OpenBreadboardPanel()
     {
         BreadboardPanel.SetActive(true);
