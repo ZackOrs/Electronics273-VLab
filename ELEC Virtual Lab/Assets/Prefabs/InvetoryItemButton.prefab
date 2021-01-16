@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5308212918998441916}
   - component: {fileID: 5308212918998441917}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 5308212919263318615}
   - component: {fileID: 5308212919263318616}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ButtonImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

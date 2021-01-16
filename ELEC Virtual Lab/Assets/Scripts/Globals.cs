@@ -9,4 +9,6 @@ public class Globals : MonoBehaviour
     public static bool menuOpened = false;
     public static bool showCrosshair = true;
 
+    public static List<SpawnableItem> inventoryItems= new List<SpawnableItem>();
+
 }

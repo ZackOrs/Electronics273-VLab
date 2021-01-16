@@ -2080,7 +2080,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh15392
+  m_Name: pb_Mesh15382
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8856,8 +8856,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 910f00456028bca44a00b970012e9159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnableTag: Spawnable
   BreadboardPanel: {fileID: 1546129741}
+  InventoryList: {fileID: 780934155}
+  InvetoryItemButton: {fileID: 5308212920746252923, guid: 014279dd16afd96458b6c83c2bb54e17,
+    type: 3}
 --- !u!64 &652168184
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -18997,7 +18999,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh15968
+  m_Name: pb_Mesh15958
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
