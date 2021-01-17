@@ -9,7 +9,7 @@ public class BreadboardSelect : SelectableItemBase
 
     // [SerializeField] private string spawnableTag = "Spawnable";
     public GameObject BreadboardPanel;
-    public GameObject InventoryList;
+    public GameObject InventoryListContent;
     public GameObject InvetoryItemButton;
     
 
@@ -46,6 +46,7 @@ public class BreadboardSelect : SelectableItemBase
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         UnityEngine.Cursor.visible = true;
 
+        ClearInventoryList();
         CreateInventoryList();
     }     
 
@@ -61,14 +62,21 @@ public class BreadboardSelect : SelectableItemBase
         UnityEngine.Cursor.visible = false;
     }
 
-    public void CreateInventoryList()
+
+    private void ClearInventoryList()
+    {
+        for(int i=0 ; i < InventoryListContent.transform.childCount; i++)
+        {
+            Destroy(InventoryListContent.transform.GetChild(i).gameObject);
+        }
+    }
+    private void CreateInventoryList()
     {
         for(int i = 0 ; i < Globals.inventoryItems.Count ; i++)
-        {
-            
+        {            
             InvetoryItemButton.GetComponentInChildren<TMP_Text>().text = (Globals.inventoryItems[i] as SpawnableItem).ItemName;
             InvetoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>("Red").color;
-            Instantiate(InvetoryItemButton,InventoryList.transform);
+            Instantiate(InvetoryItemButton,InventoryListContent.transform);
         }
     }
 

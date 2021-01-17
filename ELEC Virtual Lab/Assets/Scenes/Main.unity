@@ -7071,14 +7071,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnableTag: Spawnable
-  dropDownsList:
-  - {fileID: 947126855}
-  - {fileID: 1880528973}
-  - {fileID: 901573441}
-  inputFieldsList:
-  - {fileID: 170300737}
-  - {fileID: 419809560}
-  - {fileID: 1042395199}
   ClosetPanel: {fileID: 265434005}
   ClosetListContent: {fileID: 1581510098}
 --- !u!1 &521745238
@@ -8857,7 +8849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BreadboardPanel: {fileID: 1546129741}
-  InventoryList: {fileID: 780934155}
+  InventoryListContent: {fileID: 780934155}
   InvetoryItemButton: {fileID: 5308212920746252923, guid: 014279dd16afd96458b6c83c2bb54e17,
     type: 3}
 --- !u!64 &652168184
@@ -9767,8 +9759,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 97.243, y: 21}
-  m_SizeDelta: {x: 173.79337, y: 49.81626}
+  m_AnchoredPosition: {x: 98, y: 21}
+  m_SizeDelta: {x: 175, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &677517702
 MonoBehaviour:
@@ -12863,7 +12855,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &806727459
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12876,8 +12868,8 @@ RectTransform:
   m_LocalScale: {x: 1.3333334, y: 1.3333334, z: 1.3333334}
   m_Children:
   - {fileID: 677517701}
-  - {fileID: 1993039577}
   - {fileID: 1488995251}
+  - {fileID: 1993039577}
   m_Father: {fileID: 1366372279}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -25918,12 +25910,12 @@ RectTransform:
   m_Children:
   - {fileID: 1525068443}
   m_Father: {fileID: 806727459}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 118.53, y: -121}
-  m_SizeDelta: {x: 216.36697, y: 48.930504}
+  m_AnchoredPosition: {x: 118, y: -48}
+  m_SizeDelta: {x: 215, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1488995252
 MonoBehaviour:
@@ -33867,12 +33859,12 @@ RectTransform:
   m_Children:
   - {fileID: 285352192}
   m_Father: {fileID: 806727459}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 65.38, y: -48}
-  m_SizeDelta: {x: 110.066895, y: 50.12156}
+  m_AnchoredPosition: {x: 65.5, y: -120}
+  m_SizeDelta: {x: 110, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1993039578
 MonoBehaviour:
