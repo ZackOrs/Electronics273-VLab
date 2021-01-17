@@ -7,8 +7,9 @@ public class ClosetSelect : SelectableItemBase
 {
 
     [SerializeField] private string spawnableTag = "Spawnable";
-    [SerializeField] private GameObject ClosetPanel;
-    [SerializeField] private GameObject ClosetListContent;
+    [SerializeField] private GameObject ClosetPanel = null;
+    [SerializeField] private GameObject ClosetListContent = null;
+    [SerializeField] private GameObject WorkBenchSpawnedItems = null;
     
 
     public override string Name
@@ -63,8 +64,16 @@ public class ClosetSelect : SelectableItemBase
 
     public void ResetButton()
     {
-        //TODO: IMPLEMENT CLEAR, probably add a tag to all created objects and then remove them
         Debug.Log("Clearing table");
+        for(int i=0 ; i < WorkBenchSpawnedItems.transform.childCount; i++)
+        {
+            Destroy(WorkBenchSpawnedItems.transform.GetChild(i).gameObject);
+            Globals.inventoryItems.Clear();
+
+            //Reset item spawn locations
+            WireSpawn.spawnSpace = 0;
+        }
+        CloseClosetPanel();
     }
 
     public void ConfirmButton()
