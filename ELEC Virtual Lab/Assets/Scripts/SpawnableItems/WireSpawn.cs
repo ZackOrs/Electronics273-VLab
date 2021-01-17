@@ -10,8 +10,8 @@ public class WireSpawn : SpawnableItemBase
     public TMP_InputField itemQuantity;
     public GameObject itemPrefab;
 
-    [SerializeField] private GameObject WorkBench;
-    private static float spawnSpace = 0.0f;
+    [SerializeField] private GameObject workBenchSpawnedItems = null;
+    public static float spawnSpace = 0.0f;
 
     public override string ItemName
     {
@@ -53,7 +53,7 @@ public class WireSpawn : SpawnableItemBase
             spawnSpace +=0.05f;
             Vector3 abc = new Vector3(2.4f - spawnSpace,2.5f,3.5f);
             Quaternion xyz = new Quaternion(0,0,0,0);
-            var spawnObject = Instantiate(itemPrefab,abc,xyz, WorkBench.transform);
+            var spawnObject = Instantiate(itemPrefab,abc,xyz, workBenchSpawnedItems.transform);
             spawnObject.GetComponent<WireSelect>().Colour = ItemValue;
             SpawnableItem wire = new SpawnableItem(ItemName, ItemValue);
             Globals.inventoryItems.Add(wire);
