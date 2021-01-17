@@ -32,13 +32,14 @@ public class SelectionManager : MonoBehaviour {
         if(Globals.menuOpened == false)
         {
             Hud.OpenMessagePanel("open");
-        }
-        ISelectableItem item = selection.GetComponent<ISelectableItem>();
+            ISelectableItem item = selection.GetComponent<ISelectableItem>();
 
-        if( item != null && Input.GetKeyDown("f"))
-        {
-            item.onInteract();
-            Debug.Log("Interacting with: " + item.Name);
+            
+            if( item != null && Input.GetKeyDown("f"))
+            {
+                item.onInteract();
+                Debug.Log("Interacting with: " + item.Name);
+            }
         }
     }
  

@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class BreadboardSelect : SelectableItemBase
 {
 
-    [SerializeField] private string spawnableTag = "Spawnable";
+    // [SerializeField] private string spawnableTag = "Spawnable";
     public GameObject BreadboardPanel;
+    public GameObject InventoryListContent;
+    public GameObject InvetoryItemButton;
     
 
     public override string Name
@@ -23,6 +26,14 @@ public class BreadboardSelect : SelectableItemBase
         OpenBreadboardPanel();
     }
 
+        void Update()
+    {
+        if(Input.GetKeyDown("p") || Input.GetKeyDown(KeyCode.Escape))
+        {
+                CancelButton();
+        }
+    }
+
     public void OpenBreadboardPanel()
     {
         BreadboardPanel.SetActive(true);
@@ -32,8 +43,11 @@ public class BreadboardSelect : SelectableItemBase
         Globals.showCrosshair = false;
 
         Time.timeScale = 0.0f;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
+
+        ClearInventoryList();
+        CreateInventoryList();
     }     
 
     public void CloseBreadboardPanel()
@@ -44,8 +58,26 @@ public class BreadboardSelect : SelectableItemBase
         Globals.menuOpened = false;
 
         Time.timeScale = 1.0f;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
+    }
+
+
+    private void ClearInventoryList()
+    {
+        for(int i=0 ; i < InventoryListContent.transform.childCount; i++)
+        {
+            Destroy(InventoryListContent.transform.GetChild(i).gameObject);
+        }
+    }
+    private void CreateInventoryList()
+    {
+        for(int i = 0 ; i < Globals.inventoryItems.Count ; i++)
+        {            
+            InvetoryItemButton.GetComponentInChildren<TMP_Text>().text = (Globals.inventoryItems[i] as SpawnableItem).ItemName;
+            InvetoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>("Red").color;
+            Instantiate(InvetoryItemButton,InventoryListContent.transform);
+        }
     }
 
     //Button functions

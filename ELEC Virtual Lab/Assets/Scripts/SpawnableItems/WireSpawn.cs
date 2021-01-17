@@ -47,16 +47,17 @@ public class WireSpawn : SpawnableItemBase
 
     public override void onSpawn()
     {
-        Debug.Log("Spawning: "+ItemQuantity+" " +(Values)ItemValue + " " +ItemName);
-        for(int i = 0 ; i < ItemQuantity ; i++)
+        Debug.Log("Spawning: "+int.Parse(itemQuantity.text)+" " +(Values)ItemValue + " " +ItemName);
+        for(int i = 0 ; i < int.Parse(itemQuantity.text) ; i++)
         {
             spawnSpace +=0.05f;
             Vector3 abc = new Vector3(2.4f - spawnSpace,2.5f,3.5f);
             Quaternion xyz = new Quaternion(0,0,0,0);
             var spawnObject = Instantiate(itemPrefab,abc,xyz, WorkBench.transform);
             spawnObject.GetComponent<WireSelect>().Colour = ItemValue;
+            SpawnableItem wire = new SpawnableItem(ItemName, ItemValue);
+            Globals.inventoryItems.Add(wire);
         }
-
     }
 
 

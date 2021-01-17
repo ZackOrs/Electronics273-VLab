@@ -7,8 +7,6 @@ public class ClosetSelect : SelectableItemBase
 {
 
     [SerializeField] private string spawnableTag = "Spawnable";
-    [SerializeField] private List<TMP_Dropdown> dropDownsList = null;
-    [SerializeField] private List<TMP_InputField> inputFieldsList = null;
     [SerializeField] private GameObject ClosetPanel;
     [SerializeField] private GameObject ClosetListContent;
     
@@ -38,10 +36,11 @@ public class ClosetSelect : SelectableItemBase
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         
-        for (int i = 0 ; i < dropDownsList.Count ; i++)
+        for(int i = 0 ; i < ClosetListContent.transform.childCount ; i++ )
         {
-            dropDownsList[i].value = 0;
-            inputFieldsList[i].text = "0";
+            var child = ClosetListContent.transform.GetChild(i);
+            child.Find("ItemValue").GetComponentInChildren<TMP_Dropdown>().value = 0;
+            child.Find("ItemQuantity").GetComponentInChildren<TMP_InputField>().text = "0";
         }
     }       
     public void CloseClosetPanel()

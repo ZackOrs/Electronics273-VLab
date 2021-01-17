@@ -10,6 +10,7 @@ public interface ISpawnableItem
     int ItemQuantity{get;}
     GameObject ItemPrefab {get;}
     void onSpawn();
+
 }
 
 public class SpawnableItemsEventArgs : EventArgs
@@ -24,3 +25,16 @@ public class SpawnableItemsEventArgs : EventArgs
 
 }
 
+public class SpawnableItem
+{
+    public string ItemName;
+    public int ItemValue;
+    public int ItemQuantity;
+    public GameObject ItemPrefab;
+
+    public SpawnableItem(string itemName, int itemValue)
+    {
+         ItemName = itemName;
+         ItemValue = itemValue;
+    }
+}
