@@ -9,6 +9,15 @@ public class Globals : MonoBehaviour
     public static bool menuOpened = false;
     public static bool showCrosshair = true;
 
-    public static List<SpawnableItem> inventoryItems= new List<SpawnableItem>();
+    public static int itemIDCount = 0;
+
+    public static List<SpawnableItem> inventoryItems = new List<SpawnableItem>();
+
+    public enum availableItems
+    {
+        Wire,
+        Resistor,
+        Capacitor
+    }
 
 }

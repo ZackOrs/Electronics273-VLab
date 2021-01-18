@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class SpawnableItemBase : MonoBehaviour , ISpawnableItem
 {
-    public virtual string ItemName
+    public virtual Globals.availableItems ItemName
     {
         get
         {
-            return "";
+            return 0;
         }
     }
     public virtual int ItemValue
