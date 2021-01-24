@@ -5,7 +5,7 @@ using UnityEngine;
 
 public interface ISpawnableItem
 {    
-    string ItemName {get;}
+    Globals.availableItems ItemName {get;}
     int ItemValue {get;}
     int ItemQuantity{get;}
     GameObject ItemPrefab {get;}
@@ -27,14 +27,16 @@ public class SpawnableItemsEventArgs : EventArgs
 
 public class SpawnableItem
 {
-    public string ItemName;
-    public int ItemValue;
-    public int ItemQuantity;
-    public GameObject ItemPrefab;
+    public Globals.availableItems itemName;
+    public int itemValue;
+    public int itemQuantity;
+    public int itemID;
+    public GameObject itemPrefab;
 
-    public SpawnableItem(string itemName, int itemValue)
+    public SpawnableItem(Globals.availableItems iName, int iValue)
     {
-         ItemName = itemName;
-         ItemValue = itemValue;
+         itemName = iName;
+         itemValue = iValue;
+         itemID = Globals.itemIDCount++;
     }
 }
