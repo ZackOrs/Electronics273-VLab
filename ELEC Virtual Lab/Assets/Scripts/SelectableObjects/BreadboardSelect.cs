@@ -57,6 +57,8 @@ public class BreadboardSelect : SelectableItemBase
         Time.timeScale = 1.0f;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
+
+        CursorStyle.breadbBoardItemSelectedClickCount = 0;
     }
 
 
