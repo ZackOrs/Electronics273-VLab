@@ -1,6 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemClickHandler : MonoBehaviour
 {
@@ -19,7 +21,7 @@ public class ItemClickHandler : MonoBehaviour
 
     public void ItemClicked()
     {
-        Debug.Log("Item component is: " + spawnableItem.itemName.ToString());
+        // Debug.Log("Item component is: " + spawnableItem.itemName.ToString());
         ItemClickToHandle();
     }
 
@@ -46,6 +48,8 @@ public class ItemClickHandler : MonoBehaviour
     private void WireClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
+        CursorStyle.breadbBoardItemSelectedClickCount = 1;
+        WaitForClick();
     }
         private void ResistorClicked()
     {
@@ -54,5 +58,11 @@ public class ItemClickHandler : MonoBehaviour
         private void CapacitorClicked()
     {
          Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
+    }
+
+
+    private void WaitForClick()
+    {
+
     }
 }
