@@ -8,15 +8,19 @@ public class ItemClickHandler : MonoBehaviour
 {
 
     public SpawnableItem spawnableItem;
+
+    private bool doFirstClick = false;
+    private bool doSecondClick = false;
     void start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(doFirstClick || doSecondClick)
+            WaitForClick();
     }
 
     public void ItemClicked()
@@ -48,8 +52,9 @@ public class ItemClickHandler : MonoBehaviour
     private void WireClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
-        CursorStyle.breadbBoardItemSelectedClickCount = 1;
-        WaitForClick();
+        CursorStyle.breadbBoardItemSelectedClickCount++;
+        doFirstClick = true;
+        StartCoroutine("WaitForClick"); 
     }
         private void ResistorClicked()
     {
@@ -63,6 +68,29 @@ public class ItemClickHandler : MonoBehaviour
 
     private void WaitForClick()
     {
-
+        if(doFirstClick)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                Debug.Log("First clicked");
+                doFirstClick = false;
+                doSecondClick = true;
+                CursorStyle.breadbBoardItemSelectedClickCount++;
+            }
+        }
+        else if(doSecondClick)
+        {
+             Debug.Log("Second Not CLicked");
+            if(Input.GetMouseButtonDown(0))
+            {
+                Debug.Log("Second clicked");
+                doSecondClick = false;
+                CursorStyle.breadbBoardItemSelectedClickCount = 0;
+            }
+        }
+        else
+        {
+            Debug.Log("Something is wrong");
+        }
     }
 }

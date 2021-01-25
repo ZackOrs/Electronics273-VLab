@@ -16,7 +16,7 @@ public class Slot : MonoBehaviour
         
     }
 
-    public bool isClicked()
+    public bool PlaceItem()
     {
         if(isFree)
         {
@@ -25,5 +25,10 @@ public class Slot : MonoBehaviour
         }
         
         return false;
+    }
+
+    public void RemoveItem()
+    {
+        isFree = true;
     }
 }
