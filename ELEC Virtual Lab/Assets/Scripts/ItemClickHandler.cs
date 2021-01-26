@@ -37,7 +37,6 @@ public class ItemClickHandler : MonoBehaviour
 
     private void ItemClickToHandle()
     {
-
         switch (spawnableItem.itemName)
         {
             case Globals.availableItems.Wire:
@@ -59,12 +58,13 @@ public class ItemClickHandler : MonoBehaviour
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
         CursorStyle.breadbBoardItemSelectedClickCount = 1;
-
     }
+
     private void ResistorClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
     }
+
     private void CapacitorClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
@@ -74,14 +74,13 @@ public class ItemClickHandler : MonoBehaviour
     {
         switch (CursorStyle.breadbBoardItemSelectedClickCount)
         {
-            case 1:               
+            case 1:
                 if (Input.GetMouseButtonDown(0))
                 {
                     CheckIfBBSlot();
                     if (isBBSlot)
                     {
                         Debug.Log("First clicked");
-                        // CursorStyle.breadbBoardItemSelectedClickCount = 2;
                     }
                 }
                 break;
@@ -93,7 +92,6 @@ public class ItemClickHandler : MonoBehaviour
                     if (isBBSlot)
                     {
                         Debug.Log("Second clicked");
-                        // CursorStyle.breadbBoardItemSelectedClickCount = 0;
                     }
                 }
                 break;
@@ -102,7 +100,7 @@ public class ItemClickHandler : MonoBehaviour
                 Debug.Log("Something is wrong");
                 break;
         }
-
+        
         yield return 0;
     }
 
