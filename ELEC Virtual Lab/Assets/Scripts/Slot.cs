@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    bool isFree = true;
+    public bool isFree = true;
     void Start()
     {
         
@@ -16,14 +16,35 @@ public class Slot : MonoBehaviour
         
     }
 
-    public bool isClicked()
+    public void PlaceItem()
     {
         if(isFree)
         {
-            isFree = false;
-            return true;
+            if(CursorStyle.breadbBoardItemSelectedClickCount== 1)
+            {
+                //Code to say this is starting point of object
+                isFree = false;
+                CursorStyle.breadbBoardItemSelectedClickCount = 2;
+            }
+            else if(CursorStyle.breadbBoardItemSelectedClickCount == 2)
+            {
+                //code to say this is ending point of object
+                isFree = false;
+                CursorStyle.breadbBoardItemSelectedClickCount = 0;
+            }
+            else
+            {
+                Debug.Log("No item selected");
+            }
         }
-        
-        return false;
+        else
+        {
+            Debug.Log("Slot is no free");
+        }
+    }
+
+    public void RemoveItem()
+    {
+        isFree = true;
     }
 }

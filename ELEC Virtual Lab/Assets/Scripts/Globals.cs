@@ -20,4 +20,9 @@ public class Globals : MonoBehaviour
         Capacitor
     }
 
+    public static IEnumerator WaitForTimeInSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);        
+    }
+
 }
