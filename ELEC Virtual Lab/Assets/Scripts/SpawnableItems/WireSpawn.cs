@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -14,11 +14,11 @@ public class WireSpawn : SpawnableItemBase
     [SerializeField] private GameObject workBenchSpawnedItems = null;
     public static float spawnSpace = 0.0f;
 
-    public override Globals.availableItems ItemName
+    public override Globals.AvailableItems ItemName
     {
         get
         {
-            return (Globals.availableItems)Enum.Parse(typeof(Globals.availableItems), itemName.text);
+            return (Globals.AvailableItems)Enum.Parse(typeof(Globals.AvailableItems), itemName.text);
         }
     }
 

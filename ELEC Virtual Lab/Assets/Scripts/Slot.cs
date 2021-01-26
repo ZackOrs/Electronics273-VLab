@@ -7,34 +7,34 @@ public class Slot : MonoBehaviour
     public bool isFree = true;
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void PlaceItem()
     {
-        if(isFree)
+        if (isFree)
         {
-            if(CursorStyle.breadbBoardItemSelectedClickCount== 1)
+
+            switch (Globals.mouseClickAction)
             {
-                //Code to say this is starting point of object
-                isFree = false;
-                CursorStyle.breadbBoardItemSelectedClickCount = 2;
-            }
-            else if(CursorStyle.breadbBoardItemSelectedClickCount == 2)
-            {
-                //code to say this is ending point of object
-                isFree = false;
-                CursorStyle.breadbBoardItemSelectedClickCount = 0;
-            }
-            else
-            {
-                Debug.Log("No item selected");
+                case Globals.MouseClickAction.TwoClicks_FirstClick:
+                    isFree = false;
+                    Globals.mouseClickAction = Globals.MouseClickAction.TwoClicks_SecondClick;
+                    break;
+
+                case Globals.MouseClickAction.TwoClicks_SecondClick:
+                    isFree = false;
+                    Globals.mouseClickAction = Globals.MouseClickAction.NoClick;
+                    break;
+                default:
+                    Debug.Log("No item selected");
+                    break;
             }
         }
         else

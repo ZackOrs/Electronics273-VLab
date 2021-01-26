@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public interface ISpawnableItem
 {    
-    Globals.availableItems ItemName {get;}
+    Globals.AvailableItems ItemName {get;}
     int ItemValue {get;}
     int ItemQuantity{get;}
     GameObject ItemPrefab {get;}
@@ -27,13 +27,13 @@ public class SpawnableItemsEventArgs : EventArgs
 
 public class SpawnableItem
 {
-    public Globals.availableItems itemName;
+    public Globals.AvailableItems itemName;
     public int itemValue;
     public int itemQuantity;
     public int itemID;
     public GameObject itemPrefab;
 
-    public SpawnableItem(Globals.availableItems iName, int iValue)
+    public SpawnableItem(Globals.AvailableItems iName, int iValue)
     {
          itemName = iName;
          itemValue = iValue;

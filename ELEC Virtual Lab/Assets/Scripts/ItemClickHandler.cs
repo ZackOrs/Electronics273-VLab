@@ -39,13 +39,13 @@ public class ItemClickHandler : MonoBehaviour
     {
         switch (spawnableItem.itemName)
         {
-            case Globals.availableItems.Wire:
+            case Globals.AvailableItems.Wire:
                 WireClicked();
                 break;
-            case Globals.availableItems.Resistor:
+            case Globals.AvailableItems.Resistor:
                 ResistorClicked();
                 break;
-            case Globals.availableItems.Capacitor:
+            case Globals.AvailableItems.Capacitor:
                 CapacitorClicked();
                 break;
             default:
@@ -57,7 +57,7 @@ public class ItemClickHandler : MonoBehaviour
     private void WireClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
-        CursorStyle.breadbBoardItemSelectedClickCount = 1;
+        Globals.mouseClickAction = Globals.MouseClickAction.TwoClicks_FirstClick;
     }
 
     private void ResistorClicked()
@@ -72,9 +72,9 @@ public class ItemClickHandler : MonoBehaviour
 
     private IEnumerator WaitForClick()
     {
-        switch (CursorStyle.breadbBoardItemSelectedClickCount)
+        switch (Globals.mouseClickAction)
         {
-            case 1:
+            case Globals.MouseClickAction.TwoClicks_FirstClick:
                 if (Input.GetMouseButtonDown(0))
                 {
                     CheckIfBBSlot();
@@ -85,7 +85,7 @@ public class ItemClickHandler : MonoBehaviour
                 }
                 break;
 
-            case 2:
+            case Globals.MouseClickAction.TwoClicks_SecondClick:
                 if (Input.GetMouseButtonDown(0))
                 {
                     CheckIfBBSlot();

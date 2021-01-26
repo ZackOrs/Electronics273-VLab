@@ -1,10 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnableItemBase : MonoBehaviour , ISpawnableItem
 {
-    public virtual Globals.availableItems ItemName
+    public virtual Globals.AvailableItems ItemName
     {
         get
         {
