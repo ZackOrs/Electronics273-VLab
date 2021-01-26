@@ -24,16 +24,11 @@ public class CursorStyle : MonoBehaviour
     {
         if(breadbBoardItemSelectedClickCount == 1)
         {
-            
-            Debug.Log("X: " + mouseOffset.x);
-            Debug.Log("Y: " + mouseOffset.y);
-            Debug.Log("Enabling CursorA");
             cursorA.SetActive(true);
             cursorA.transform.position = CalculateMouseOffset();           
         }
         else if(breadbBoardItemSelectedClickCount == 2)
         {
-            Debug.Log("Enabling CursorB");
             cursorA.SetActive(false);
             cursorB.SetActive(true);
             cursorB.transform.position = CalculateMouseOffset();
