@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Slot : MonoBehaviour
 {
     public bool isFree = true;
-    [SerializeField] private Button button;
+    [SerializeField] private Button button = null;
     void Start()
     {
 
