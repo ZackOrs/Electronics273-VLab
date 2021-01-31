@@ -24,7 +24,7 @@ public class Globals : MonoBehaviour
 
     public enum MouseClickAction
     {
-        NoClick = -1,
+        NoClick = 0,
         TwoClicks_FirstClick = 1,
         TwoClicks_SecondClick = 2
     }

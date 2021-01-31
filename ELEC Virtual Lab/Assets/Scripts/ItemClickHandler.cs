@@ -10,7 +10,7 @@ public class ItemClickHandler : MonoBehaviour
 
     public SpawnableItem spawnableItem;
 
-    public static bool isBBSlot = false;
+    public static bool isBBSlotFree = false;
 
     
     void start()
@@ -21,15 +21,15 @@ public class ItemClickHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CursorStyle.breadbBoardItemSelectedClickCount > 0)
+        if (Globals.mouseClickAction > 0)
         {
-            StartCoroutine(WaitForClick());
+            WaitForClick();
         }
     }
 
     public void ItemClicked()
     {
-        if (CursorStyle.breadbBoardItemSelectedClickCount == 0)
+        if (Globals.mouseClickAction == 0)
         {
             ItemClickToHandle();
         }
@@ -70,7 +70,7 @@ public class ItemClickHandler : MonoBehaviour
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
     }
 
-    private IEnumerator WaitForClick()
+    private void WaitForClick()
     {
         switch (Globals.mouseClickAction)
         {
@@ -78,9 +78,9 @@ public class ItemClickHandler : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     CheckIfBBSlot();
-                    if (isBBSlot)
+                    if (isBBSlotFree)
                     {
-                        Debug.Log("First clicked");
+                        Debug.Log("First Click GOOD");
                     }
                 }
                 break;
@@ -89,9 +89,9 @@ public class ItemClickHandler : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     CheckIfBBSlot();
-                    if (isBBSlot)
+                    if (isBBSlotFree)
                     {
-                        Debug.Log("Second clicked");
+                        Debug.Log("Second Click GOOD");
                     }
                 }
                 break;
@@ -100,13 +100,11 @@ public class ItemClickHandler : MonoBehaviour
                 Debug.Log("Something is wrong");
                 break;
         }
-        
-        yield return 0;
     }
 
     private void CheckIfBBSlot()
     {
-        isBBSlot = false;
+        isBBSlotFree = false;
         PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
         pointerEventData.position = Input.mousePosition;
         List<RaycastResult> results = new List<RaycastResult>();
@@ -117,7 +115,7 @@ public class ItemClickHandler : MonoBehaviour
             {
                 if (results[i].gameObject.transform.CompareTag("BBSlot"))
                 {
-                        isBBSlot = true;
+                    isBBSlotFree = results[i].gameObject.transform.GetComponent<Slot>().isFree;
                 }
             }
         }
