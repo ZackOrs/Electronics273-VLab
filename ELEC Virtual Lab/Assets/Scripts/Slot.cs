@@ -69,4 +69,9 @@ public class Slot : MonoBehaviour
             button.colors = colors;
         }
     }
+
+    private void OnRightClick()
+    {
+
+    }
 }

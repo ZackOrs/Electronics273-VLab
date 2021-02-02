@@ -8,9 +8,13 @@ using UnityEngine.UI;
 public class ItemClickHandler : MonoBehaviour
 {
 
-    public SpawnableItem spawnableItem;
+    public static SpawnableItem spawnableItem;
+
+    [SerializeField] GameObject BreadboardUI;
 
     public static bool isBBSlotFree = false;
+    private GameObject pointA = null;
+    private GameObject pointB = null;
 
     
     void start()
@@ -27,15 +31,15 @@ public class ItemClickHandler : MonoBehaviour
         }
     }
 
-    public void ItemClicked()
+    public static void ItemClicked()
     {
-        if (Globals.mouseClickAction == 0)
+        if (Globals.mouseClickAction == 0 && spawnableItem!=null)
         {
-            ItemClickToHandle();
+             ItemClickToHandle();
         }
     }
 
-    private void ItemClickToHandle()
+    private static void ItemClickToHandle()
     {
         switch (spawnableItem.itemName)
         {
@@ -54,29 +58,31 @@ public class ItemClickHandler : MonoBehaviour
         }
     }
 
-    private void WireClicked()
+    private static void WireClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
         Globals.mouseClickAction = Globals.MouseClickAction.TwoClicks_FirstClick;
     }
 
-    private void ResistorClicked()
+    private static void ResistorClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
     }
 
-    private void CapacitorClicked()
+    private static void CapacitorClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
     }
 
     private void WaitForClick()
     {
+        Debug.Log("a");
         switch (Globals.mouseClickAction)
         {
             case Globals.MouseClickAction.TwoClicks_FirstClick:
                 if (Input.GetMouseButtonDown(0))
                 {
+                    Debug.Log("Counting");
                     CheckIfBBSlot();
                     if (isBBSlotFree)
                     {
@@ -91,7 +97,8 @@ public class ItemClickHandler : MonoBehaviour
                     CheckIfBBSlot();
                     if (isBBSlotFree)
                     {
-                        Debug.Log("Second Click GOOD");
+                        Debug.Log("Second Click GOOD DRAWING LINE");
+                        DrawLineBetweenPoints();
                     }
                 }
                 break;
@@ -101,6 +108,12 @@ public class ItemClickHandler : MonoBehaviour
                 break;
         }
     }
+
+    private void DrawLineBetweenPoints()
+    {  
+
+    }
+
 
     private void CheckIfBBSlot()
     {
@@ -116,6 +129,15 @@ public class ItemClickHandler : MonoBehaviour
                 if (results[i].gameObject.transform.CompareTag("BBSlot"))
                 {
                     isBBSlotFree = results[i].gameObject.transform.GetComponent<Slot>().isFree;
+
+                    if(Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_FirstClick)
+                    {
+                        pointA = results[i].gameObject;
+                    }
+                    else if(Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_SecondClick)
+                    {
+                        pointB = results[i].gameObject;
+                    }
                 }
             }
         }
