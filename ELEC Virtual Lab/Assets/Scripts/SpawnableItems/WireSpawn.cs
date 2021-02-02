@@ -11,6 +11,7 @@ public class WireSpawn : SpawnableItemBase
     public TMP_InputField itemQuantity;
     public GameObject itemPrefab;
 
+
     [SerializeField] private GameObject workBenchSpawnedItems = null;
     public static float spawnSpace = 0.0f;
 
@@ -22,7 +23,7 @@ public class WireSpawn : SpawnableItemBase
         }
     }
 
-    public override int ItemValue 
+    public override int ItemValue
     {
         get
         {
@@ -48,19 +49,18 @@ public class WireSpawn : SpawnableItemBase
 
     public override void onSpawn()
     {
-        Debug.Log("Spawning: "+int.Parse(itemQuantity.text)+" " +(Values)ItemValue + " " +ItemName);
-        for(int i = 0 ; i < int.Parse(itemQuantity.text) ; i++)
+        Debug.Log("Spawning: " + int.Parse(itemQuantity.text) + " " + (Values)ItemValue + " " + ItemName);
+        for (int i = 0; i < int.Parse(itemQuantity.text); i++)
         {
-            spawnSpace +=0.05f;
-            Vector3 abc = new Vector3(2.4f - spawnSpace,2.5f,3.5f);
-            Quaternion xyz = new Quaternion(0,0,0,0);
-            var spawnObject = Instantiate(itemPrefab,abc,xyz, workBenchSpawnedItems.transform);
+            spawnSpace += 0.05f;
+            Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.5f, 3.5f);
+            Quaternion rotationValue = new Quaternion(0, 0, 0, 0);
+            var spawnObject = Instantiate(itemPrefab, worldSpawnLocation, rotationValue, workBenchSpawnedItems.transform);
             spawnObject.GetComponent<WireSelect>().Colour = ItemValue;
             SpawnableItem wire = new SpawnableItem(ItemName, ItemValue);
             Globals.inventoryItems.Add(wire);
         }
     }
-
 
     public enum Values
     {

@@ -31,6 +31,7 @@ public class SpawnableItem
     public int itemValue;
     public int itemQuantity;
     public int itemID;
+    public bool isPlaced;
     public GameObject itemPrefab;
 
     public SpawnableItem(Globals.AvailableItems iName, int iValue)
@@ -38,5 +39,6 @@ public class SpawnableItem
          itemName = iName;
          itemValue = iValue;
          itemID = Globals.itemIDCount++;
+         isPlaced = false;
     }
 }

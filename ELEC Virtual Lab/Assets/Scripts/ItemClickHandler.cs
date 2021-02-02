@@ -76,13 +76,11 @@ public class ItemClickHandler : MonoBehaviour
 
     private void WaitForClick()
     {
-        Debug.Log("a");
         switch (Globals.mouseClickAction)
         {
             case Globals.MouseClickAction.TwoClicks_FirstClick:
                 if (Input.GetMouseButtonDown(0))
                 {
-                    Debug.Log("Counting");
                     CheckIfBBSlot();
                     if (isBBSlotFree)
                     {

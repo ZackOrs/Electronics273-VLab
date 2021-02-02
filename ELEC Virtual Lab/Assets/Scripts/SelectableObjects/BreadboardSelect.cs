@@ -80,7 +80,19 @@ public class BreadboardSelect : SelectableItemBase
         for(int i = 0 ; i < Globals.inventoryItems.Count ; i++)
         {   
             InventoryItemButton.GetComponentInChildren<TMP_Text>().text = (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString();
-            InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>("Red").color;
+            Debug.Log("Item is: " + (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString());
+
+            if((Globals.inventoryItems[i] as SpawnableItem).itemName == Globals.AvailableItems.Wire)
+            {
+            InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>(
+                (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() + 
+                (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString()).color;
+            }
+            else
+            {
+            InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>("Wire0").color;
+            }
+            
             InventoryItemButton.GetComponent<InventoryItemClick>().Item = Globals.inventoryItems[i];
             Debug.Log(InventoryItemButton.GetComponent<InventoryItemClick>().Item.itemID);
 
