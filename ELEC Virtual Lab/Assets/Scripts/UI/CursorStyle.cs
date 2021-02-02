@@ -10,37 +10,42 @@ public class CursorStyle : MonoBehaviour
     [SerializeField] public GameObject cursorB;
 
     private Vector3 mouseOffset;
-    
+
 
     public static int breadbBoardItemSelectedClickCount;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(breadbBoardItemSelectedClickCount == 1)
+        switch (Globals.mouseClickAction)
         {
-            cursorA.SetActive(true);
-            cursorA.transform.position = CalculateMouseOffset();           
-        }
-        else if(breadbBoardItemSelectedClickCount == 2)
-        {
-            cursorA.SetActive(false);
-            cursorB.SetActive(true);
-            cursorB.transform.position = CalculateMouseOffset();
-        }
-        else if(breadbBoardItemSelectedClickCount > 2)
-        {
-            breadbBoardItemSelectedClickCount = 0;
-        }
-        else
-        {
-            cursorA.SetActive(false);
-            cursorB.SetActive(false);
+            case Globals.MouseClickAction.TwoClicks_FirstClick:
+                if (!cursorA.activeSelf)
+                {
+                    cursorA.SetActive(true);
+                }
+                cursorA.transform.position = CalculateMouseOffset();
+                break;
+            case Globals.MouseClickAction.TwoClicks_SecondClick:
+                if (cursorA.activeSelf)
+                {
+                    cursorA.SetActive(false);
+                    cursorB.SetActive(true);
+                }
+                cursorB.transform.position = CalculateMouseOffset();
+                break;
+            default:
+                if(cursorA.activeSelf || cursorB.activeSelf)
+                {
+                    cursorA.SetActive(false);
+                    cursorB.SetActive(false);
+                }
+                break;
         }
     }
 

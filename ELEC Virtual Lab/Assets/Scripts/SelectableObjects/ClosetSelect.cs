@@ -78,7 +78,6 @@ public class ClosetSelect : SelectableItemBase
 
     public void ConfirmButton()
     {
-        //TODO: Impletement confirm, probably make a list containing all objects and then create them as needed
         Debug.Log("Confirm Selection");
         SpawnSelectedObects();
         CloseClosetPanel();
