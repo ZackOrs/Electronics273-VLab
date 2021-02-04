@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Selectable
+  - Spawnable
+  - BBSlot
   layers:
   - Default
   - TransparentFX
