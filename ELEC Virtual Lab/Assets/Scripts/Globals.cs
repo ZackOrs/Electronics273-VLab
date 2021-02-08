@@ -11,22 +11,13 @@ public class Globals : MonoBehaviour
 
     public static int itemIDCount = 0;
 
-    public static MouseClickAction mouseClickAction;
-
     public static List<SpawnableItem> inventoryItems = new List<SpawnableItem>();
 
-    public enum AvailableItems
+    public enum availableItems
     {
         Wire,
         Resistor,
         Capacitor
-    }
-
-    public enum MouseClickAction
-    {
-        NoClick = 0,
-        TwoClicks_FirstClick = 1,
-        TwoClicks_SecondClick = 2
     }
 
     public static IEnumerator WaitForTimeInSeconds(float seconds)
