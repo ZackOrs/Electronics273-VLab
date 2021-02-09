@@ -12,9 +12,6 @@ public class BreadboardSelect : SelectableItemBase
     public GameObject InventoryItemButton;
 
 
-    //THIS IS A BAD SOLUTION, NEED TO GET RID OF IT
-    public static int index;
-    
     public override string Name
     {
         get
@@ -24,14 +21,14 @@ public class BreadboardSelect : SelectableItemBase
     }
 
     public override void onInteract()
-    { 
+    {
         OpenBreadboardPanel();
     }
-        void Update()
+    void Update()
     {
-        if(Input.GetKeyDown("p") || Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown("p") || Input.GetKeyDown(KeyCode.Escape))
         {
-                CancelButton();
+            CancelButton();
         }
     }
 
@@ -46,7 +43,7 @@ public class BreadboardSelect : SelectableItemBase
         Time.timeScale = 0.0f;
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         UnityEngine.Cursor.visible = true;
-        
+
         CreateInventoryList();
     }
 
@@ -57,6 +54,7 @@ public class BreadboardSelect : SelectableItemBase
 
         Globals.showCrosshair = true;
         Globals.menuOpened = false;
+        Globals.mouseClickAction = Globals.MouseClickAction.NoClick;
 
         Time.timeScale = 1.0f;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
@@ -69,7 +67,7 @@ public class BreadboardSelect : SelectableItemBase
     private void ClearInventoryList()
     {
         Debug.Log("Destroy Count: " + InventoryListContent.transform.childCount);
-        for(int i=0 ; i < InventoryListContent.transform.childCount; i++)
+        for (int i = 0; i < InventoryListContent.transform.childCount; i++)
         {
             Destroy(InventoryListContent.transform.GetChild(i).gameObject);
         }
@@ -77,31 +75,27 @@ public class BreadboardSelect : SelectableItemBase
     private void CreateInventoryList()
     {
         Debug.Log("Create Count: " + Globals.inventoryItems.Count);
-        for(int i = 0 ; i < Globals.inventoryItems.Count ; i++)
-        {   
-            InventoryItemButton.GetComponentInChildren<TMP_Text>().text = (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString();
-            Debug.Log("Item is: " + (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString());
-
-            if((Globals.inventoryItems[i] as SpawnableItem).itemName == Globals.AvailableItems.Wire)
+        for (int i = 0; i < Globals.inventoryItems.Count; i++)
+        {
+            if (!(Globals.inventoryItems[i] as SpawnableItem).isPlaced)
             {
-            InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>(
-                (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() + 
-                (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString()).color;
+                InventoryItemButton.GetComponentInChildren<TMP_Text>().text = (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString();
+                Debug.Log("Item is: " + (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString());
+
+                if ((Globals.inventoryItems[i] as SpawnableItem).itemName == Globals.AvailableItems.Wire)
+                {
+                    InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>(
+                        (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() +
+                        (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString()).color;
+                }
+                else
+                {
+                    InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>("Wire0").color;
+                }
+                var buttonListButton = Instantiate(InventoryItemButton, InventoryListContent.transform);
+                buttonListButton.GetComponent<InventoryItemClick>().Item = Globals.inventoryItems[i];
+                Debug.Log(buttonListButton.GetComponent<InventoryItemClick>().Item.itemID);
             }
-            else
-            {
-            InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>("Wire0").color;
-            }
-            
-            InventoryItemButton.GetComponent<InventoryItemClick>().Item = Globals.inventoryItems[i];
-            Debug.Log(InventoryItemButton.GetComponent<InventoryItemClick>().Item.itemID);
-
-            //THIS IS A BAD SOLUTION BUT I COULDN'T GET OTHER THINGS TO WORK!!!
-            index = i;
-
-
-            Instantiate(InventoryItemButton,InventoryListContent.transform);
-            
             //InventoryItemClick.transform.GetChild(i).GetComponent<ItemClickHandler>().spawnableItem = Globals.inventoryItems[i];
             // ItemClickHandler.spawnableItem = Globals.inventoryItems[i];
         }

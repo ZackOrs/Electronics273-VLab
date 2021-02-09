@@ -9,7 +9,7 @@ public class InventoryItemClick : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Item = Globals.inventoryItems[BreadboardSelect.index];
+
     }
 
     // Update is called once per frame
@@ -22,6 +22,7 @@ public class InventoryItemClick : MonoBehaviour
     {
         if(Globals.mouseClickAction == Globals.MouseClickAction.NoClick)
         {
+            Debug.Log("Clicked item");
             ItemClickHandler.spawnableItem = Item;
             ItemClickHandler.ItemClicked();
         }

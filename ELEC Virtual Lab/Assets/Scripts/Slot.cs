@@ -42,7 +42,7 @@ public class Slot : MonoBehaviour
         }
         else
         {
-            Debug.Log("Slot is no free");
+            Debug.Log("Slot is not free");
         }
     }
 
@@ -55,7 +55,7 @@ public class Slot : MonoBehaviour
 
     private void ChangeHighlightColor()
     {
-        Debug.Log("Color swapped");
+
         if (isFree)
         {
             ColorBlock colors = button.colors;
@@ -72,6 +72,6 @@ public class Slot : MonoBehaviour
 
     private void OnRightClick()
     {
-
+        //TODO: REMOVE PLACED ITEM
     }
 }
