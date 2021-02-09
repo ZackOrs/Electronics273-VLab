@@ -3535,18 +3535,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 213461953}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 386850006}
-        m_MethodName: PlaceItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &213461953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5671,18 +5660,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 361298548}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1478455596}
-        m_MethodName: PlaceItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &361298548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9560,18 +9538,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 647779118}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2008186099}
-        m_MethodName: PlaceItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &647779118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13971,18 +13938,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 843078327}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 578268973}
-        m_MethodName: PlaceItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &843078327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19226,18 +19182,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1111203925}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1269074159}
-        m_MethodName: PlaceItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1140399783
 GameObject:
   m_ObjectHideFlags: 0
@@ -22345,18 +22290,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1314141290}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2090132931}
-        m_MethodName: PlaceItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1314141290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35094,18 +35028,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1913074430}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1765384872}
-        m_MethodName: PlaceItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1913074430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37232,18 +37155,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2047691563}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 922679936}
-        m_MethodName: PlaceItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2047691563
 MonoBehaviour:
   m_ObjectHideFlags: 0
