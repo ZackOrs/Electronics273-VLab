@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,11 +11,13 @@ public class ItemClickHandler : MonoBehaviour
 
     public static SpawnableItem spawnableItem;
 
-    [SerializeField] GameObject BreadboardUI;
+    [SerializeField] GameObject _breadboardUI = null;
+    [SerializeField] Image _wireImage = null;
 
+    private GameObject bbSlot = null;
     public static bool isBBSlotFree = false;
-    private GameObject pointA = null;
-    private GameObject pointB = null;
+    private GameObject _pointA = null;
+    private GameObject _pointB = null;
 
     
     void start()
@@ -33,8 +36,9 @@ public class ItemClickHandler : MonoBehaviour
 
     public static void ItemClicked()
     {
-        if (Globals.mouseClickAction == 0 && spawnableItem!=null)
+        if (Globals.mouseClickAction == Globals.MouseClickAction.NoClick && spawnableItem!=null)
         {
+            Debug.Log("item clicked");
              ItemClickToHandle();
         }
     }
@@ -85,6 +89,7 @@ public class ItemClickHandler : MonoBehaviour
                     if (isBBSlotFree)
                     {
                         Debug.Log("First Click GOOD");
+                        _pointA.GetComponent<Slot>().PlaceItem();
                     }
                 }
                 break;
@@ -96,7 +101,9 @@ public class ItemClickHandler : MonoBehaviour
                     if (isBBSlotFree)
                     {
                         Debug.Log("Second Click GOOD DRAWING LINE");
+                        _pointB.GetComponent<Slot>().PlaceItem();
                         DrawLineBetweenPoints();
+                        RemoveItemButtonInList();    
                     }
                 }
                 break;
@@ -107,9 +114,68 @@ public class ItemClickHandler : MonoBehaviour
         }
     }
 
+    private void RemoveItemButtonInList()
+    {
+       spawnableItem.isPlaced = true;
+       //TODO: Find which button it is associated with and then remove it
+    }
+
     private void DrawLineBetweenPoints()
     {  
+        var placeItem = Instantiate(_wireImage,_breadboardUI.transform);
 
+        if(spawnableItem.itemName == Globals.AvailableItems.Wire) // Will colour the wire
+        {
+            placeItem.GetComponent<Image>().color = Resources.Load<Image>(
+                spawnableItem.itemName.ToString() + 
+                spawnableItem.itemValue.ToString()).color;
+        }
+
+        float distance = Vector2.Distance(_pointA.transform.position,_pointB.transform.position);
+        Debug.Log("Distance: " + distance);
+        distance -= 4; //Have it be slightly shorter so it gets the centers
+
+        float rotation = AngleBetweenVector2(_pointA.transform.position,_pointB.transform.position);
+        float posX = PositionXForLine(_pointA.transform.position,_pointB.transform.position);
+        float posY = PositionYForLine(_pointA.transform.position,_pointB.transform.position);
+
+        placeItem.transform.position = new Vector2(posX,posY);
+        placeItem.rectTransform.sizeDelta = new Vector2(distance, placeItem.rectTransform.sizeDelta.y);
+        placeItem.transform.Rotate(0,0,rotation,Space.Self);
+
+        //reset the points
+        _pointA = null;
+        _pointB = null;
+    }
+
+    private void ResetWire()
+    {
+        _wireImage.transform.position = new Vector3(0,0,0);
+        _wireImage.transform.Rotate(0,0,0,Space.World);
+        _wireImage.rectTransform.sizeDelta = new Vector2(25, _wireImage.rectTransform.sizeDelta.y);
+    }
+
+    private float AngleBetweenVector2(Vector2 vec1, Vector2 vec2)
+    {
+            Vector2 difference = vec2 - vec1;
+            float sign = (vec2.y < vec1.y)? -1.0f : 1.0f;
+            return Vector2.Angle(Vector2.right, difference) * sign;
+    }
+
+//Gets the center X between both points
+    private float PositionXForLine(Vector2 vec1, Vector2 vec2)
+    {
+        float x1 = vec1.x;
+        float x2 = vec2.x;
+        return ((x1 + x2) / 2.0f);
+    }
+
+    //Gets the center Y between both points
+    private float PositionYForLine(Vector2 vec1, Vector2 vec2)
+    {
+        float y1 = vec1.y;
+        float y2 = vec2.y;
+        return ((y1 + y2) / 2.0f);
     }
 
 
@@ -127,14 +193,15 @@ public class ItemClickHandler : MonoBehaviour
                 if (results[i].gameObject.transform.CompareTag("BBSlot"))
                 {
                     isBBSlotFree = results[i].gameObject.transform.GetComponent<Slot>().isFree;
+                    bbSlot = results[i].gameObject;
 
                     if(Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_FirstClick)
                     {
-                        pointA = results[i].gameObject;
+                        _pointA = results[i].gameObject;
                     }
                     else if(Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_SecondClick)
                     {
-                        pointB = results[i].gameObject;
+                        _pointB = results[i].gameObject;
                     }
                 }
             }
