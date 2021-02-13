@@ -11,10 +11,11 @@ public class ItemClickHandler : MonoBehaviour
 
     public static SpawnableItem spawnableItem;
 
+    public static GameObject buttonClicked;
+
     [SerializeField] GameObject _breadboardUI = null;
     [SerializeField] Image _wireImage = null;
 
-    private GameObject bbSlot = null;
     public static bool isBBSlotFree = false;
     private GameObject _pointA = null;
     private GameObject _pointB = null;
@@ -117,6 +118,7 @@ public class ItemClickHandler : MonoBehaviour
     private void RemoveItemButtonInList()
     {
        spawnableItem.isPlaced = true;
+       Destroy(buttonClicked);
        //TODO: Find which button it is associated with and then remove it
     }
 
@@ -193,7 +195,6 @@ public class ItemClickHandler : MonoBehaviour
                 if (results[i].gameObject.transform.CompareTag("BBSlot"))
                 {
                     isBBSlotFree = results[i].gameObject.transform.GetComponent<Slot>().isFree;
-                    bbSlot = results[i].gameObject;
 
                     if(Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_FirstClick)
                     {
