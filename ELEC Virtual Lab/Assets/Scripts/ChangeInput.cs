@@ -2,13 +2,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+
 
 public class ChangeInput : MonoBehaviour
 {
     EventSystem system;
     public Selectable firstInput;
-    public Button submitButton;
-    
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +21,7 @@ public class ChangeInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Tab) && Input.GetKey(KeyCode.LeftShift))
         {
             Selectable previous = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnUp();
@@ -34,11 +37,7 @@ public class ChangeInput : MonoBehaviour
             {
                 next.Select();
             }
-        } else if (Input.GetKeyDown(KeyCode.Return))
-        {
-            submitButton.onClick.Invoke();
-            Debug.Log("Let's Begin!");
-
-        }
+        } 
     }
+
 }
