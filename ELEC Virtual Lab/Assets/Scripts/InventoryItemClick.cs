@@ -24,6 +24,7 @@ public class InventoryItemClick : MonoBehaviour
         {
             Debug.Log("Clicked item");
             ItemClickHandler.spawnableItem = Item;
+            ItemClickHandler.buttonClicked = gameObject;
             ItemClickHandler.ItemClicked();
         }
     }
