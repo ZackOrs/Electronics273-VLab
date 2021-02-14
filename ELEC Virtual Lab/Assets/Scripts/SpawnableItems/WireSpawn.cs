@@ -49,7 +49,7 @@ public class WireSpawn : SpawnableItemBase
 
     public override void onSpawn()
     {
-        Debug.Log("Spawning: " + int.Parse(itemQuantity.text) + " " + (Values)ItemValue + " " + ItemName);
+        Debug.Log("Spawninggg: " + int.Parse(itemQuantity.text) + " " + (Values)ItemValue + " " + ItemName);
         for (int i = 0; i < int.Parse(itemQuantity.text); i++)
         {
             spawnSpace += 0.05f;
