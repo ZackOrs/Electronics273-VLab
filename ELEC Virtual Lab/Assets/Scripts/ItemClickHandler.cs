@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -8,9 +9,16 @@ using UnityEngine.UI;
 public class ItemClickHandler : MonoBehaviour
 {
 
-    public SpawnableItem spawnableItem;
+    public static SpawnableItem spawnableItem;
 
-    public static bool isBBSlot = false;
+    public static GameObject buttonClicked;
+
+    [SerializeField] GameObject _breadboardUI = null;
+    [SerializeField] Image _wireImage = null;
+
+    public static bool isBBSlotFree = false;
+    private GameObject _pointA = null;
+    private GameObject _pointB = null;
 
     
     void start()
@@ -21,32 +29,32 @@ public class ItemClickHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CursorStyle.breadbBoardItemSelectedClickCount > 0)
+        if (Globals.mouseClickAction > 0)
         {
-            StartCoroutine(WaitForClick());
+            WaitForClick();
         }
     }
 
-    public void ItemClicked()
+    public static void ItemClicked()
     {
-        if (CursorStyle.breadbBoardItemSelectedClickCount == 0)
+        if (Globals.mouseClickAction == Globals.MouseClickAction.NoClick && spawnableItem!=null)
         {
-            ItemClickToHandle();
+            Debug.Log("item clicked");
+             ItemClickToHandle();
         }
     }
 
-    private void ItemClickToHandle()
+    private static void ItemClickToHandle()
     {
-
         switch (spawnableItem.itemName)
         {
-            case Globals.availableItems.Wire:
+            case Globals.AvailableItems.Wire:
                 WireClicked();
                 break;
-            case Globals.availableItems.Resistor:
+            case Globals.AvailableItems.Resistor:
                 ResistorClicked();
                 break;
-            case Globals.availableItems.Capacitor:
+            case Globals.AvailableItems.Capacitor:
                 CapacitorClicked();
                 break;
             default:
@@ -55,45 +63,48 @@ public class ItemClickHandler : MonoBehaviour
         }
     }
 
-    private void WireClicked()
+    private static void WireClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
-        CursorStyle.breadbBoardItemSelectedClickCount = 1;
+        Globals.mouseClickAction = Globals.MouseClickAction.TwoClicks_FirstClick;
+    }
 
-    }
-    private void ResistorClicked()
-    {
-        Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
-    }
-    private void CapacitorClicked()
+    private static void ResistorClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
     }
 
-    private IEnumerator WaitForClick()
+    private static void CapacitorClicked()
     {
-        switch (CursorStyle.breadbBoardItemSelectedClickCount)
+        Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
+    }
+
+    private void WaitForClick()
+    {
+        switch (Globals.mouseClickAction)
         {
-            case 1:               
+            case Globals.MouseClickAction.TwoClicks_FirstClick:
                 if (Input.GetMouseButtonDown(0))
                 {
                     CheckIfBBSlot();
-                    if (isBBSlot)
+                    if (isBBSlotFree)
                     {
-                        Debug.Log("First clicked");
-                        // CursorStyle.breadbBoardItemSelectedClickCount = 2;
+                        Debug.Log("First Click GOOD");
+                        _pointA.GetComponent<Slot>().PlaceItem();
                     }
                 }
                 break;
 
-            case 2:
+            case Globals.MouseClickAction.TwoClicks_SecondClick:
                 if (Input.GetMouseButtonDown(0))
                 {
                     CheckIfBBSlot();
-                    if (isBBSlot)
+                    if (isBBSlotFree)
                     {
-                        Debug.Log("Second clicked");
-                        // CursorStyle.breadbBoardItemSelectedClickCount = 0;
+                        Debug.Log("Second Click GOOD DRAWING LINE");
+                        _pointB.GetComponent<Slot>().PlaceItem();
+                        DrawLineBetweenPoints();
+                        RemoveItemButtonInList();    
                     }
                 }
                 break;
@@ -102,13 +113,77 @@ public class ItemClickHandler : MonoBehaviour
                 Debug.Log("Something is wrong");
                 break;
         }
-
-        yield return 0;
     }
+
+    private void RemoveItemButtonInList()
+    {
+       spawnableItem.isPlaced = true;
+       Destroy(buttonClicked);
+       //TODO: Find which button it is associated with and then remove it
+    }
+
+    private void DrawLineBetweenPoints()
+    {  
+        var placeItem = Instantiate(_wireImage,_breadboardUI.transform);
+
+        if(spawnableItem.itemName == Globals.AvailableItems.Wire) // Will colour the wire
+        {
+            placeItem.GetComponent<Image>().color = Resources.Load<Image>(
+                spawnableItem.itemName.ToString() + 
+                spawnableItem.itemValue.ToString()).color;
+        }
+
+        float distance = Vector2.Distance(_pointA.transform.position,_pointB.transform.position);
+        Debug.Log("Distance: " + distance);
+        distance -= 4; //Have it be slightly shorter so it gets the centers
+
+        float rotation = AngleBetweenVector2(_pointA.transform.position,_pointB.transform.position);
+        float posX = PositionXForLine(_pointA.transform.position,_pointB.transform.position);
+        float posY = PositionYForLine(_pointA.transform.position,_pointB.transform.position);
+
+        placeItem.transform.position = new Vector2(posX,posY);
+        placeItem.rectTransform.sizeDelta = new Vector2(distance, placeItem.rectTransform.sizeDelta.y);
+        placeItem.transform.Rotate(0,0,rotation,Space.Self);
+
+        //reset the points
+        _pointA = null;
+        _pointB = null;
+    }
+
+    private void ResetWire()
+    {
+        _wireImage.transform.position = new Vector3(0,0,0);
+        _wireImage.transform.Rotate(0,0,0,Space.World);
+        _wireImage.rectTransform.sizeDelta = new Vector2(25, _wireImage.rectTransform.sizeDelta.y);
+    }
+
+    private float AngleBetweenVector2(Vector2 vec1, Vector2 vec2)
+    {
+            Vector2 difference = vec2 - vec1;
+            float sign = (vec2.y < vec1.y)? -1.0f : 1.0f;
+            return Vector2.Angle(Vector2.right, difference) * sign;
+    }
+
+//Gets the center X between both points
+    private float PositionXForLine(Vector2 vec1, Vector2 vec2)
+    {
+        float x1 = vec1.x;
+        float x2 = vec2.x;
+        return ((x1 + x2) / 2.0f);
+    }
+
+    //Gets the center Y between both points
+    private float PositionYForLine(Vector2 vec1, Vector2 vec2)
+    {
+        float y1 = vec1.y;
+        float y2 = vec2.y;
+        return ((y1 + y2) / 2.0f);
+    }
+
 
     private void CheckIfBBSlot()
     {
-        isBBSlot = false;
+        isBBSlotFree = false;
         PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
         pointerEventData.position = Input.mousePosition;
         List<RaycastResult> results = new List<RaycastResult>();
@@ -119,7 +194,16 @@ public class ItemClickHandler : MonoBehaviour
             {
                 if (results[i].gameObject.transform.CompareTag("BBSlot"))
                 {
-                        isBBSlot = true;
+                    isBBSlotFree = results[i].gameObject.transform.GetComponent<Slot>().isFree;
+
+                    if(Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_FirstClick)
+                    {
+                        _pointA = results[i].gameObject;
+                    }
+                    else if(Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_SecondClick)
+                    {
+                        _pointB = results[i].gameObject;
+                    }
                 }
             }
         }

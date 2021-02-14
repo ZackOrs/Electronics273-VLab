@@ -9,8 +9,9 @@ public class BreadboardSelect : SelectableItemBase
     // [SerializeField] private string spawnableTag = "Spawnable";
     public GameObject BreadboardPanel;
     public GameObject InventoryListContent;
-    public GameObject InvetoryItemButton;
-    
+    public GameObject InventoryItemButton;
+
+
     public override string Name
     {
         get
@@ -20,14 +21,14 @@ public class BreadboardSelect : SelectableItemBase
     }
 
     public override void onInteract()
-    { 
+    {
         OpenBreadboardPanel();
     }
-        void Update()
+    void Update()
     {
-        if(Input.GetKeyDown("p") || Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown("p") || Input.GetKeyDown(KeyCode.Escape))
         {
-                CancelButton();
+            CancelButton();
         }
     }
 
@@ -42,7 +43,7 @@ public class BreadboardSelect : SelectableItemBase
         Time.timeScale = 0.0f;
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         UnityEngine.Cursor.visible = true;
-        
+
         CreateInventoryList();
     }
 
@@ -53,6 +54,7 @@ public class BreadboardSelect : SelectableItemBase
 
         Globals.showCrosshair = true;
         Globals.menuOpened = false;
+        Globals.mouseClickAction = Globals.MouseClickAction.NoClick;
 
         Time.timeScale = 1.0f;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
@@ -65,7 +67,7 @@ public class BreadboardSelect : SelectableItemBase
     private void ClearInventoryList()
     {
         Debug.Log("Destroy Count: " + InventoryListContent.transform.childCount);
-        for(int i=0 ; i < InventoryListContent.transform.childCount; i++)
+        for (int i = 0; i < InventoryListContent.transform.childCount; i++)
         {
             Destroy(InventoryListContent.transform.GetChild(i).gameObject);
         }
@@ -73,12 +75,29 @@ public class BreadboardSelect : SelectableItemBase
     private void CreateInventoryList()
     {
         Debug.Log("Create Count: " + Globals.inventoryItems.Count);
-        for(int i = 0 ; i < Globals.inventoryItems.Count ; i++)
-        {   
-            InvetoryItemButton.GetComponentInChildren<TMP_Text>().text = (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString();
-            InvetoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>("Red").color;
-            Instantiate(InvetoryItemButton,InventoryListContent.transform);
-            InventoryListContent.transform.GetChild(i).GetComponent<ItemClickHandler>().spawnableItem = Globals.inventoryItems[i];
+        for (int i = 0; i < Globals.inventoryItems.Count; i++)
+        {
+            if (!(Globals.inventoryItems[i] as SpawnableItem).isPlaced)
+            {
+                InventoryItemButton.GetComponentInChildren<TMP_Text>().text = (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString();
+                Debug.Log("Item is: " + (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString());
+
+                if ((Globals.inventoryItems[i] as SpawnableItem).itemName == Globals.AvailableItems.Wire)
+                {
+                    InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>(
+                        (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() +
+                        (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString()).color;
+                }
+                else
+                {
+                    InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>("Wire0").color;
+                }
+                var buttonListButton = Instantiate(InventoryItemButton, InventoryListContent.transform);
+                buttonListButton.GetComponent<InventoryItemClick>().Item = Globals.inventoryItems[i];
+                Debug.Log(buttonListButton.GetComponent<InventoryItemClick>().Item.itemID);
+            }
+            //InventoryItemClick.transform.GetChild(i).GetComponent<ItemClickHandler>().spawnableItem = Globals.inventoryItems[i];
+            // ItemClickHandler.spawnableItem = Globals.inventoryItems[i];
         }
     }
 
