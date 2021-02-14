@@ -6926,7 +6926,7 @@ GameObject:
   - component: {fileID: 398393240}
   m_Layer: 5
   m_Name: ResistorItemBox
-  m_TagString: Spawnable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14290,7 +14290,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000076293945, y: 255.21666}
+  m_AnchoredPosition: {x: 0.0000076293945, y: 242.38545}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &780934157
@@ -16093,10 +16093,10 @@ RectTransform:
   m_Father: {fileID: 896219989}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 77.74, y: 1.32}
-  m_SizeDelta: {x: 146.3058, y: 510.4333}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -5.1, y: -2.2099986}
+  m_SizeDelta: {x: 140.62672, y: 484.77094}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &886061342
 MonoBehaviour:
@@ -38941,7 +38941,7 @@ GameObject:
   - component: {fileID: 1995050973}
   m_Layer: 5
   m_Name: CapacitorItemBox
-  m_TagString: Spawnable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
