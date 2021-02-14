@@ -88,6 +88,12 @@ public class BreadboardSelect : SelectableItemBase
                 (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() + 
                 (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString()).color;
             }
+            else if((Globals.inventoryItems[i] as SpawnableItem).itemName == Globals.AvailableItems.Resistor)
+            {
+                InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>(
+                (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() +
+                (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString()).color;
+            }
             else
             {
             InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>("Wire0").color;

@@ -4,9 +4,7 @@ using UnityEngine;
 using TMPro;
 using System;
 
-
-
-public class ResistorSpawn : SpawnableItemBase
+public class CapacitorSpawn : SpawnableItemBase
 {
     public TMP_Text itemName;
     public TMP_Dropdown itemValue;
@@ -55,12 +53,12 @@ public class ResistorSpawn : SpawnableItemBase
         for (int i = 0; i < int.Parse(itemQuantity.text); i++)
         {
             spawnSpace += 0.05f;
-            Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.5f, 3.5f);
+            Vector3 worldSpawnLocation = new Vector3(4.4f - spawnSpace, 2.5f, 5.5f);
             Quaternion rotationValue = new Quaternion(0, 0, 0, 0);
             var spawnObject = Instantiate(itemPrefab, worldSpawnLocation, rotationValue, workBenchSpawnedItems.transform);
-            spawnObject.GetComponent<ResistorSelect>().colorLabel = ItemValue;
-            SpawnableItem resistor = new SpawnableItem(ItemName, ItemValue);
-            Globals.inventoryItems.Add(resistor);
+            spawnObject.GetComponent<WireSelect>().Colour = ItemValue;
+            SpawnableItem wire = new SpawnableItem(ItemName, ItemValue);
+            Globals.inventoryItems.Add(wire);
         }
     }
 
