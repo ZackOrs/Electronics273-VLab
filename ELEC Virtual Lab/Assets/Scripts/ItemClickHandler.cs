@@ -19,19 +19,46 @@ public class ItemClickHandler : MonoBehaviour
     public static bool isBBSlotFree = false;
     private GameObject _pointA = null;
     private GameObject _pointB = null;
+    private List<GameObject> allSlots = new List<GameObject>();
 
     
-    void start()
+    void Start()
     {
-
+        Debug.Log("Adding slots");
+        allSlots.Clear();
+        
+        for (int i = 0 ; i < _breadboardUI.transform.childCount ; i ++)
+        {
+            var child = _breadboardUI.transform.GetChild(i);
+            if(child.CompareTag("BBSlot"))
+            {
+                allSlots.Add(child.gameObject);
+            }
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+
         if (Globals.mouseClickAction > 0)
         {
+            Debug.Log("Waiting on click");
             WaitForClick();
+        }
+        // // function attached to a button for testing
+        // CalculateCircuit();
+    }
+
+    public void CalculateCircuit()
+    {
+        Debug.Log("Slots number = " + allSlots.Count);
+        for (int i = 0; i < allSlots.Count;i++)
+        {
+            if(allSlots[i].transform.GetComponent<Slot>().itemPlaced != null)
+            {
+                Debug.Log("Slot: " + i + "\tItem: "+ allSlots[i].transform.GetComponent<Slot>().itemPlaced.itemName.ToString());
+            }          
         }
     }
 
@@ -91,6 +118,7 @@ public class ItemClickHandler : MonoBehaviour
                     {
                         Debug.Log("First Click GOOD");
                         _pointA.GetComponent<Slot>().PlaceItem();
+                        _pointA.GetComponent<Slot>().itemPlaced = spawnableItem;
                     }
                 }
                 break;
@@ -103,6 +131,7 @@ public class ItemClickHandler : MonoBehaviour
                     {
                         Debug.Log("Second Click GOOD DRAWING LINE");
                         _pointB.GetComponent<Slot>().PlaceItem();
+                        _pointB.GetComponent<Slot>().itemPlaced = spawnableItem;
                         DrawLineBetweenPoints();
                         RemoveItemButtonInList();    
                     }
@@ -119,7 +148,6 @@ public class ItemClickHandler : MonoBehaviour
     {
        spawnableItem.isPlaced = true;
        Destroy(buttonClicked);
-       //TODO: Find which button it is associated with and then remove it
     }
 
     private void DrawLineBetweenPoints()
@@ -135,7 +163,7 @@ public class ItemClickHandler : MonoBehaviour
 
         float distance = Vector2.Distance(_pointA.transform.position,_pointB.transform.position);
         Debug.Log("Distance: " + distance);
-        distance -= 4; //Have it be slightly shorter so it gets the centers
+        distance = distance * 0.68f; //Have it be slightly shorter so it gets the centers
 
         float rotation = AngleBetweenVector2(_pointA.transform.position,_pointB.transform.position);
         float posX = PositionXForLine(_pointA.transform.position,_pointB.transform.position);

@@ -6,10 +6,18 @@ using UnityEngine.UI;
 public class Slot : MonoBehaviour
 {
     public bool isFree = true;
+    [SerializeField] bool _startSlot = false;
+    public SpawnableItem itemPlaced;
     [SerializeField] private Button button = null;
+
+    public int voltage = 0;
+    
     void Start()
     {
-
+        if(_startSlot)
+        {
+            voltage = 5;
+        }
     }
 
     // Update is called once per frame

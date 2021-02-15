@@ -94,7 +94,6 @@ public class BreadboardSelect : SelectableItemBase
                 }
                 var buttonListButton = Instantiate(InventoryItemButton, InventoryListContent.transform);
                 buttonListButton.GetComponent<InventoryItemClick>().Item = Globals.inventoryItems[i];
-                Debug.Log(buttonListButton.GetComponent<InventoryItemClick>().Item.itemID);
             }
             //InventoryItemClick.transform.GetChild(i).GetComponent<ItemClickHandler>().spawnableItem = Globals.inventoryItems[i];
             // ItemClickHandler.spawnableItem = Globals.inventoryItems[i];
