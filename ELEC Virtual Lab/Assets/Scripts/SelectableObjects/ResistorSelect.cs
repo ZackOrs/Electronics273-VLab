@@ -6,7 +6,7 @@ using TMPro;
 public class ResistorSelect : SelectableItemBase
 
 {
-    [SerializeField] private List<Material> materialList = new List<Material>();
+    // [SerializeField] private List<Material> materialList = new List<Material>();
     [SerializeField] GameObject resistor = null;
 
     public int colorLabel;
@@ -20,7 +20,8 @@ public class ResistorSelect : SelectableItemBase
 
     public void Start()
     {
-        resistor.GetComponent<Renderer>().material = materialList[colorLabel];
+        resistor = this.gameObject;
+        resistor.GetComponent<Renderer>().material = Resources.Load<Material>("Default");
     }
 
     public override void onInteract()

@@ -11,6 +11,8 @@ public class ResistorSpawn : SpawnableItemBase
     public TMP_Text itemName;
     public TMP_Dropdown itemValue;
     public TMP_InputField itemQuantity;
+
+    [SerializeField] List<GameObject> itemPrefabList = new List<GameObject>();
     public GameObject itemPrefab;
 
 
@@ -45,22 +47,33 @@ public class ResistorSpawn : SpawnableItemBase
     {
         get
         {
-            return itemPrefab;
+            return itemPrefabList[itemValue.value];
         }
     }
 
     public override void onSpawn()
     {
+
+        Debug.Log("item Val: " + itemValue);
         Debug.Log("Spawning: " + int.Parse(itemQuantity.text) + " " + (Values)ItemValue + " " + ItemName);
         for (int i = 0; i < int.Parse(itemQuantity.text); i++)
         {
-            spawnSpace += 0.05f;
+            spawnSpace += 0.10f;
             Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.5f, 3.5f);
             Quaternion rotationValue = new Quaternion(0, 0, 0, 0);
-            var spawnObject = Instantiate(itemPrefab, worldSpawnLocation, rotationValue, workBenchSpawnedItems.transform);
+            var spawnObject = Instantiate(itemPrefabList[itemValue.value], worldSpawnLocation, rotationValue, workBenchSpawnedItems.transform);
+            spawnObject.gameObject.AddComponent<ResistorSelect>();
+            spawnObject.AddComponent<MeshRenderer>();
+            spawnObject.AddComponent<BoxCollider>();
+            spawnObject.GetComponent<BoxCollider>().isTrigger = true;
+            spawnObject.GetComponent<BoxCollider>().size = new Vector3(0.025f,0.025f, 0.025f);
+            spawnObject.tag = "Selectable";
+
+
             spawnObject.GetComponent<ResistorSelect>().colorLabel = ItemValue;
             SpawnableItem resistor = new SpawnableItem(ItemName, ItemValue);
             Globals.inventoryItems.Add(resistor);
+            
         }
     }
 
