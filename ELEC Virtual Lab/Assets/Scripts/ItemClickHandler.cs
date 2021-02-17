@@ -19,7 +19,7 @@ public class ItemClickHandler : MonoBehaviour
     public static bool isBBSlotFree = false;
     private GameObject _pointA = null;
     private GameObject _pointB = null;
-    private List<GameObject> allSlots = new List<GameObject>();
+    public static List<GameObject> allSlots = new List<GameObject>();
 
     
     void Start()
@@ -52,13 +52,42 @@ public class ItemClickHandler : MonoBehaviour
 
     public void CalculateCircuit()
     {
-        Debug.Log("Slots number = " + allSlots.Count);
-        for (int i = 0; i < allSlots.Count;i++)
+        Debug.Log("Circuit Calculated");
+        foreach(GameObject slot in allSlots)
         {
-            if(allSlots[i].transform.GetComponent<Slot>().itemPlaced != null)
+            slot.GetComponent<Slot>().slotChecked = false;
+            if(!slot.GetComponent<Slot>().startSlot)
+                slot.GetComponent<Slot>().voltage = 0;
+        }
+        // Debug.Log("Slots number = " + allSlots.Count);
+        int slotColumn;
+        Slot currentSlot = null;
+        Slot currentPairedSlot;
+        for (int i = allSlots.Count - 1; i >= 0 ;i--)
+        {
+            currentSlot = allSlots[i].GetComponent<Slot>();
+            
+            if(currentSlot.itemPlaced != null && !currentSlot.slotChecked)
             {
-                Debug.Log("Slot: " + i + "\tItem: "+ allSlots[i].transform.GetComponent<Slot>().itemPlaced.itemName.ToString());
-            }          
+                // Debug.Log("Slot: " + i + "\tItem: "+ currentSlot.itemPlaced.itemName.ToString());
+                currentPairedSlot = allSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>();
+                if(currentSlot.startSlot)
+                {
+
+                    slotColumn = allSlots.FindIndex(s => s.GetComponent<Slot>() == currentPairedSlot);
+                    currentPairedSlot.voltage += currentSlot.voltage;
+                    slotColumn = (int)Math.Floor((decimal)(slotColumn/4));
+                    slotColumn = slotColumn * 4;
+                    
+                    for(int j = 0; j <4 ; j++)
+                    {
+                        allSlots[slotColumn+j].transform.GetComponent<Slot>().voltage 
+                        = currentPairedSlot.voltage;
+                    }
+                }
+                currentPairedSlot.slotChecked = true;
+                currentSlot.slotChecked = true;
+            }
         }
     }
 
@@ -130,10 +159,15 @@ public class ItemClickHandler : MonoBehaviour
                     if (isBBSlotFree)
                     {
                         Debug.Log("Second Click GOOD DRAWING LINE");
+                        
                         _pointB.GetComponent<Slot>().PlaceItem();
                         _pointB.GetComponent<Slot>().itemPlaced = spawnableItem;
+
+
+                        _pointB.GetComponent<Slot>().slotPair = _pointA;
+                        _pointA.GetComponent<Slot>().slotPair = _pointB; 
                         DrawLineBetweenPoints();
-                        RemoveItemButtonInList();    
+                        RemoveItemButtonInList();   
                     }
                 }
                 break;

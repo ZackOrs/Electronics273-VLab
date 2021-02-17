@@ -6,15 +6,19 @@ using UnityEngine.UI;
 public class Slot : MonoBehaviour
 {
     public bool isFree = true;
-    [SerializeField] bool _startSlot = false;
+    public bool startSlot = false;
     public SpawnableItem itemPlaced;
     [SerializeField] private Button button = null;
+
+    public GameObject slotPair;
+
+    public bool slotChecked = false;
 
     public int voltage = 0;
     
     void Start()
     {
-        if(_startSlot)
+        if(startSlot)
         {
             voltage = 5;
         }
