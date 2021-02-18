@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -43,7 +44,6 @@ public class ItemClickHandler : MonoBehaviour
 
         if (Globals.mouseClickAction > 0)
         {
-            Debug.Log("Waiting on click");
             WaitForClick();
         }
         // // function attached to a button for testing
@@ -59,35 +59,113 @@ public class ItemClickHandler : MonoBehaviour
             if(!slot.GetComponent<Slot>().startSlot)
                 slot.GetComponent<Slot>().voltage = 0;
         }
+        List<int> columnsToCheck = new List<int>();
         // Debug.Log("Slots number = " + allSlots.Count);
         int slotColumn;
-        Slot currentSlot = null;
+        Slot startingSlot = null;
         Slot currentPairedSlot;
         for (int i = allSlots.Count - 1; i >= 0 ;i--)
         {
-            currentSlot = allSlots[i].GetComponent<Slot>();
-            
-            if(currentSlot.itemPlaced != null && !currentSlot.slotChecked)
+            startingSlot = allSlots[i].GetComponent<Slot>();
+            if(startingSlot.startSlot && startingSlot.itemPlaced != null && !startingSlot.slotChecked)
             {
-                // Debug.Log("Slot: " + i + "\tItem: "+ currentSlot.itemPlaced.itemName.ToString());
-                currentPairedSlot = allSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>();
-                if(currentSlot.startSlot)
-                {
+                currentPairedSlot = startingSlot.slotPair.GetComponent<Slot>();
 
-                    slotColumn = allSlots.FindIndex(s => s.GetComponent<Slot>() == currentPairedSlot);
-                    currentPairedSlot.voltage += currentSlot.voltage;
-                    slotColumn = (int)Math.Floor((decimal)(slotColumn/4));
-                    slotColumn = slotColumn * 4;
-                    
-                    for(int j = 0; j <4 ; j++)
+                
+                slotColumn = allSlots.FindIndex(s => s.GetComponent<Slot>() == currentPairedSlot);
+                int ignoredSlot = slotColumn;
+                currentPairedSlot.voltage += startingSlot.voltage;
+                slotColumn = (int)Math.Floor((decimal)(slotColumn/4));
+                slotColumn = slotColumn * 4;
+                columnsToCheck.Add(slotColumn);
+                Slot lastSlot = currentPairedSlot;
+                lastSlot.slotChecked = true;
+                Debug.Log("Column List size: "+ columnsToCheck.Count);
+                while(columnsToCheck.Count > 0)
+                {
+                    int removeAt = columnsToCheck.Count - 1;
+                    Debug.Log("Column List size: "+ columnsToCheck.Count);
+                    for(int j = 0; j < 4 ; j++)
                     {
-                        allSlots[slotColumn+j].transform.GetComponent<Slot>().voltage 
-                        = currentPairedSlot.voltage;
+                        Slot nextSlot = allSlots[columnsToCheck.Last() + j].GetComponent<Slot>();
+                        nextSlot.voltage = lastSlot.voltage;
+                        
+                        if(nextSlot.itemPlaced != null && !nextSlot.slotChecked)
+                        {
+                            slotColumn = allSlots.FindIndex(s => s.GetComponent<Slot>() == nextSlot.slotPair.GetComponent<Slot>());
+                            slotColumn = (int)Math.Floor((decimal)(slotColumn/4));
+                            slotColumn = slotColumn * 4;
+                            columnsToCheck.Add(slotColumn);
+                            Debug.Log("Added column: "+ slotColumn);
+                        }
+                        nextSlot.slotChecked = true;
+
                     }
+                    
+                    columnsToCheck.RemoveAt(removeAt);
                 }
+                
                 currentPairedSlot.slotChecked = true;
-                currentSlot.slotChecked = true;
+                startingSlot.slotChecked = true;
             }
+            // if(currentSlot.itemPlaced != null && !currentSlot.slotChecked)
+            // {
+            //     // Debug.Log("Slot: " + i + "\tItem: "+ currentSlot.itemPlaced.itemName.ToString());
+            //     currentPairedSlot = allSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>();
+            //     if(currentSlot.startSlot)
+            //     {
+
+            //         slotColumn = allSlots.FindIndex(s => s.GetComponent<Slot>() == currentPairedSlot);
+            //         currentPairedSlot.voltage += currentSlot.voltage;
+            //         slotColumn = (int)Math.Floor((decimal)(slotColumn/4));
+            //         slotColumn = slotColumn * 4;
+                    
+            //         for(int j = 0; j <4 ; j++)
+            //         {
+            //             Debug.Log("J is: "+ j);
+
+            //             Slot nextSlot = allSlots[slotColumn+j].transform.GetComponent<Slot>();                       
+            //             nextSlot.voltage = currentPairedSlot.voltage;
+            //             Debug.Log("Ground value: " + nextSlot.groundSlot);
+            //                 while(nextSlot.itemPlaced != null)
+            //                 {
+            //                     Debug.Log("entering while");
+            //                     nextSlot = findNextSlot(nextSlot);
+            //                     if(nextSlot != null)
+            //                     {
+            //                         nextSlot.voltage = currentPairedSlot.voltage;
+            //                         UpdateColumn(nextSlot);
+            //                     }
+
+            //                 }
+            //         }
+            //     }
+
+            // }
+        }
+    }
+
+    private Slot findNextSlot(Slot nextSlot)
+    {
+        Slot nullslot = null;
+        if(nextSlot.slotPair != null)
+            return nextSlot.slotPair.GetComponent<Slot>();
+
+        else
+            return nullslot;
+    }
+
+    private void UpdateColumn(Slot slotToUpdate)
+    {
+        int Column = allSlots.FindIndex(s => s.GetComponent<Slot>() == slotToUpdate);
+
+        Column = (int)Math.Floor((decimal)(Column/4));
+        Column = Column * 4;
+
+        for(int i = 0 ; i < 4 ; i++)
+        {
+            Slot nextSlot = allSlots[Column+i].transform.GetComponent<Slot>();                       
+            nextSlot.voltage = slotToUpdate.voltage;
         }
     }
 

@@ -7,6 +7,7 @@ public class Slot : MonoBehaviour
 {
     public bool isFree = true;
     public bool startSlot = false;
+    public bool groundSlot = false;
     public SpawnableItem itemPlaced;
     [SerializeField] private Button button = null;
 
