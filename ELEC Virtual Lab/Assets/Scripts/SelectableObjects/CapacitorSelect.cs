@@ -5,8 +5,8 @@ using TMPro;
 
 public class CapacitorSelect : SelectableItemBase
 {
-    [SerializeField] private List<Material> materialList = new List<Material>();
-    [SerializeField] GameObject resistor = null;
+    //[SerializeField] private List<Material> materialList = new List<Material>();
+    [SerializeField] GameObject capacitor = null;
 
     public int CapacitorValue;
     public override string Name
@@ -19,7 +19,8 @@ public class CapacitorSelect : SelectableItemBase
 
     public void Start()
     {
-        resistor.GetComponent<Renderer>().material = materialList[CapacitorValue];
+        capacitor = this.gameObject;
+        capacitor.GetComponent<Renderer>().material = Resources.Load<Material>("Default");
     }
 
     public override void onInteract()

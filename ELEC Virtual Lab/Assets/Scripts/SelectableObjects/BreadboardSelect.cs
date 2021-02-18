@@ -91,8 +91,24 @@ public class BreadboardSelect : SelectableItemBase
                 }
                 else if((Globals.inventoryItems[i] as SpawnableItem).itemName == Globals.AvailableItems.Resistor)
                 {
-                    Debug.Log("Hi");
-                    InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().sprite = Resources.Load<Image>("Resistor0").sprite;
+                    if ((Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString() == "0")
+                    {
+                        Debug.Log("Hello");
+                        InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().sprite = Resources.Load<Image>("Resistor0").sprite;
+                    }
+                    else if ((Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString() == "1")
+                    {
+                        Debug.Log("Hi");
+                        InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().sprite = Resources.Load<Image>("Resistor1").sprite;
+                    }
+                    else
+                    {
+                        InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().sprite = Resources.Load<Image>("Resistor2").sprite;
+                    }
+                }
+                else if((Globals.inventoryItems[i] as SpawnableItem).itemName == Globals.AvailableItems.Capacitor)
+                {
+                    InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().sprite = Resources.Load<Image>("Capacitor").sprite;
                 }
                 else
                 {

@@ -9,7 +9,7 @@ public class ResistorSelect : SelectableItemBase
     // [SerializeField] private List<Material> materialList = new List<Material>();
     [SerializeField] GameObject resistor = null;
 
-    public int colorLabel;
+    public int resistorLabel;
     public override string Name
     {
         get
@@ -26,6 +26,6 @@ public class ResistorSelect : SelectableItemBase
 
     public override void onInteract()
     {
-        Debug.Log("Resistor Value is value: " + colorLabel);
+        Debug.Log("Resistor Value is : " + resistorLabel);
     }
 }

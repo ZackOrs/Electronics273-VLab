@@ -52,20 +52,71 @@ public class CapacitorSpawn : SpawnableItemBase
         Debug.Log("Spawning: " + int.Parse(itemQuantity.text) + " " + (Values)ItemValue + " " + ItemName);
         for (int i = 0; i < int.Parse(itemQuantity.text); i++)
         {
-            spawnSpace += 0.05f;
-            Vector3 worldSpawnLocation = new Vector3(4.4f - spawnSpace, 2.5f, 5.5f);
+            spawnSpace += 0.20f;
+            Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.6f, 3.9f);
             Quaternion rotationValue = new Quaternion(0, 0, 0, 0);
             var spawnObject = Instantiate(itemPrefab, worldSpawnLocation, rotationValue, workBenchSpawnedItems.transform);
-            spawnObject.GetComponent<WireSelect>().Colour = ItemValue;
-            SpawnableItem wire = new SpawnableItem(ItemName, ItemValue);
-            Globals.inventoryItems.Add(wire);
+            spawnObject.gameObject.AddComponent<CapacitorSelect>();
+            spawnObject.AddComponent<MeshRenderer>();
+            spawnObject.AddComponent<BoxCollider>();
+            spawnObject.GetComponent<BoxCollider>().isTrigger = true;
+            spawnObject.GetComponent<BoxCollider>().size = new Vector3(0.025f, 0.025f, 0.025f);
+            spawnObject.tag = "Selectable";
+
+            
+            SpawnableItem capacitor = new SpawnableItem(ItemName, ItemValue);
+            Globals.inventoryItems.Add(capacitor);
+
+            
+            if (itemValue.value == 0)
+            {
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0;
+            }
+            else if (itemValue.value == 1)
+            {
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 1;
+            }
+            else if (itemValue.value == 2)
+            {
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 4;
+            }
+            else if (itemValue.value == 3)
+            {
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 5;
+            }
+            else if (itemValue.value == 4)
+            {
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 9;
+            }
+            else if (itemValue.value == 5)
+            {
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 12;
+            }
+            else if (itemValue.value == 6)
+            {
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 15;
+            }
+            else if (itemValue.value == 7)
+            {
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 19;
+            }
+            else
+            {
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 20;
+            }
         }
     }
 
     public enum Values
     {
-        Fifty = 0,
-        Hundred = 1,
-        HundredFifty = 2,
+        ZeroPointOne = 0,
+        One = 1,
+        Four = 2,
+        Five = 3,
+        Nine = 4,
+        Twelve = 5,
+        Fifteen = 6,
+        Nineteen = 7,
+        Twenty = 8,
     }
 }

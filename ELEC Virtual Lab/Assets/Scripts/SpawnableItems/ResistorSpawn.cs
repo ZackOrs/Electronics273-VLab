@@ -58,8 +58,8 @@ public class ResistorSpawn : SpawnableItemBase
         Debug.Log("Spawning: " + int.Parse(itemQuantity.text) + " " + (Values)ItemValue + " " + ItemName);
         for (int i = 0; i < int.Parse(itemQuantity.text); i++)
         {
-            spawnSpace += 0.10f;
-            Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.5f, 3.5f);
+            spawnSpace += 0.25f;
+            Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.5f, 3.7f);
             Quaternion rotationValue = new Quaternion(0, 0, 0, 0);
             var spawnObject = Instantiate(itemPrefabList[itemValue.value], worldSpawnLocation, rotationValue, workBenchSpawnedItems.transform);
             spawnObject.gameObject.AddComponent<ResistorSelect>();
@@ -70,17 +70,31 @@ public class ResistorSpawn : SpawnableItemBase
             spawnObject.tag = "Selectable";
 
 
-            spawnObject.GetComponent<ResistorSelect>().colorLabel = ItemValue;
+            
             SpawnableItem resistor = new SpawnableItem(ItemName, ItemValue);
             Globals.inventoryItems.Add(resistor);
-            
+
+            if (itemValue.value == 0)
+            {
+                spawnObject.GetComponent<ResistorSelect>().resistorLabel = 210;
+            }
+            else if (itemValue.value == 1)
+            {
+                spawnObject.GetComponent<ResistorSelect>().resistorLabel = 300;
+            }
+            else
+            {
+                spawnObject.GetComponent<ResistorSelect>().resistorLabel = 470;
+            }
+
+
         }
     }
 
     public enum Values
     {
-        Fifty = 0,
-        Hundred = 1,
-        HundredFifty = 2,
+        TwoHundredTen = 0,
+        ThreeHundred = 1,
+        FourHundredSeventy = 2,
     }
 }

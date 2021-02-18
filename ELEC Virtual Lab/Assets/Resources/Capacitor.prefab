@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &931763359745512491
+--- !u!1 &849974662551450348
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2631521272707262010}
-  - component: {fileID: 5244417329188394681}
-  - component: {fileID: 6084854757315476459}
+  - component: {fileID: 5298451504994325547}
+  - component: {fileID: 1185647016053695005}
+  - component: {fileID: 1340951611294955862}
   m_Layer: 5
-  m_Name: Resistor0
+  m_Name: Capacitor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &2631521272707262010
+--- !u!224 &5298451504994325547
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 931763359745512491}
+  m_GameObject: {fileID: 849974662551450348}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -37,21 +37,21 @@ RectTransform:
   m_AnchoredPosition: {x: 30, y: 0}
   m_SizeDelta: {x: 77, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &5244417329188394681
+--- !u!222 &1185647016053695005
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 931763359745512491}
+  m_GameObject: {fileID: 849974662551450348}
   m_CullTransparentMesh: 0
---- !u!114 &6084854757315476459
+--- !u!114 &1340951611294955862
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 931763359745512491}
+  m_GameObject: {fileID: 849974662551450348}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -60,11 +60,11 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 966c79f9d4cdd0847b9686b617267acc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1f81cd6c81a2f9a4fa4bfeb0b5a98684, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
