@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5244417329188394681}
   - component: {fileID: 6084854757315476459}
   m_Layer: 5
-  m_Name: Yellow
+  m_Name: Wire0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
