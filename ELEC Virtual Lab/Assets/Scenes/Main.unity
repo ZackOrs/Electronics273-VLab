@@ -7341,6 +7341,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71dc3a293b9b5437390132afd3447953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemName: {fileID: 1684883975}
+  itemValue: {fileID: 1880528973}
+  itemQuantity: {fileID: 419809560}
+  itemPrefabList:
+  - {fileID: 919132149155446097, guid: 2ec57593b6b7b354db0a4f0d69c1a9db, type: 3}
+  - {fileID: 919132149155446097, guid: fbe7998fc226625409c83d1c322849f2, type: 3}
+  - {fileID: 919132149155446097, guid: cc6659738c7397145a6489bc958fbca8, type: 3}
+  itemPrefab: {fileID: 0}
+  workBenchSpawnedItems: {fileID: 1571637788}
 --- !u!1 &399855847
 GameObject:
   m_ObjectHideFlags: 0
@@ -17883,15 +17892,23 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: 
+    - m_Text: "0.1 \xB5F"
       m_Image: {fileID: 0}
-    - m_Text: "50 \u03A9"
+    - m_Text: "1 \xB5F"
       m_Image: {fileID: 0}
-    - m_Text: "100 \u03A9"
+    - m_Text: "4 \xB5F"
       m_Image: {fileID: 0}
-    - m_Text: "150 \u03A9"
+    - m_Text: "5 \xB5F"
       m_Image: {fileID: 0}
-    - m_Text: "200 \u03A9"
+    - m_Text: "9 \xB5F"
+      m_Image: {fileID: 0}
+    - m_Text: "12 \xB5F"
+      m_Image: {fileID: 0}
+    - m_Text: "15 \xB5F"
+      m_Image: {fileID: 0}
+    - m_Text: "19 \xB5F"
+      m_Image: {fileID: 0}
+    - m_Text: " 20 \xB5F"
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -39296,15 +39313,11 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: 
+    - m_Text: "210 \u03A9"
       m_Image: {fileID: 0}
-    - m_Text: "50 \u03A9"
+    - m_Text: "300 \u03A9"
       m_Image: {fileID: 0}
-    - m_Text: "100 \u03A9"
-      m_Image: {fileID: 0}
-    - m_Text: "150 \u03A9"
-      m_Image: {fileID: 0}
-    - m_Text: "200 \u03A9"
+    - m_Text: "470 \u03A9"
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -41789,6 +41802,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d88e396d7bf4b63813a1fd5db35a00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemName: {fileID: 1454284453}
+  itemValue: {fileID: 901573441}
+  itemQuantity: {fileID: 1042395199}
+  itemPrefab: {fileID: 919132149155446097, guid: 6bfe407dea97eaa48946c6a3b84f0ff7,
+    type: 3}
+  workBenchSpawnedItems: {fileID: 1571637788}
 --- !u!1 &2000696871
 GameObject:
   m_ObjectHideFlags: 0
