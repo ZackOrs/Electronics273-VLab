@@ -80,17 +80,45 @@ public class BreadboardSelect : SelectableItemBase
             if (!(Globals.inventoryItems[i] as SpawnableItem).isPlaced)
             {
                 InventoryItemButton.GetComponentInChildren<TMP_Text>().text = (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString();
-                Debug.Log("Item is: " + (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString());
+                Debug.Log("Item is: " + (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() +
+                (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString());
 
-                if ((Globals.inventoryItems[i] as SpawnableItem).itemName == Globals.AvailableItems.Wire)
+
+                switch ((Globals.inventoryItems[i] as SpawnableItem).itemName)
                 {
-                    InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>(
+                    case Globals.AvailableItems.Wire:
+                        InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>(
                         (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() +
                         (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString()).color;
-                }
-                else
-                {
-                    InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>("Wire0").color;
+
+                        InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().sprite = Resources.Load<Image>(
+                        (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() +
+                        (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString()).sprite;
+                        break;
+
+                    case Globals.AvailableItems.Resistor:
+                        InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>(
+                        (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() +
+                        (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString()).color;
+
+                        InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().sprite = Resources.Load<Image>(
+                        (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() +
+                        (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString()).sprite;
+                        break;
+
+                    case Globals.AvailableItems.Capacitor:
+                        InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>(
+                            (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString()).color;
+
+                        InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().sprite = Resources.Load<Image>(
+                             (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString()).sprite;
+
+                        break;
+
+
+                    default:
+                        InventoryItemButton.transform.Find("ButtonImage").GetComponentInChildren<Image>().color = Resources.Load<Image>("Wire0").color;
+                        break;
                 }
                 var buttonListButton = Instantiate(InventoryItemButton, InventoryListContent.transform);
                 buttonListButton.GetComponent<InventoryItemClick>().Item = Globals.inventoryItems[i];

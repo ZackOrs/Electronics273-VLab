@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5244417329188394681}
   - component: {fileID: 6084854757315476459}
   m_Layer: 5
-  m_Name: Wire0
+  m_Name: Resistor0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,13 +58,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.78039217, g: 0.7490196, b: 0.11372549, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 966c79f9d4cdd0847b9686b617267acc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
