@@ -55,6 +55,7 @@ public class SlotColumn
         {
             isPowerSlot = true;
         }
+        
         foreach (Slot slot in slotList)
         {
             if (slot.slotPair != null)
@@ -133,9 +134,11 @@ public class SlotColumn
             Slot slot = slotList[i];
             if (slot.itemPlaced != null)
             {
+                Debug.Log("Column " + columnID + "Resistor added?" + slot.resistorAdded);
                 if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor && !slot.resistorAdded)
                 {
-                    resistorVal = GetResistorValue(slot);
+                    Debug.Log("Column" + columnID + "Adding resistor: " + GetResistorResistorValue(slot));
+                    resistorVal = GetResistorResistorValue(slot);
 
                     parallelResistors = CheckIfInParallel(slot, i);
 
@@ -158,9 +161,10 @@ public class SlotColumn
     private float CalculateParallelResistance(List<float> parallelResistors)
     {
         float resistTot = 0;
-
+        Debug.Log("Found "+ parallelResistors.Count + " parallel resistors in column" + columnID);
         for (int i = 0; i < parallelResistors.Count; i++)
         {
+            Debug.Log(parallelResistors[i].ToString());
             resistTot += (1 / parallelResistors[i]);
         }
         resistTot = 1 / resistTot;
@@ -172,7 +176,7 @@ public class SlotColumn
     {
         List<float> parallelResistors = new List<float>();
 
-        parallelResistors.Add(GetResistorValue(currentSlot));
+        parallelResistors.Add(GetResistorResistorValue(currentSlot));
 
         int slotsEndSlot = getSlotColumn(currentSlot.slotPair.GetComponent<Slot>().slotID);
         for (int i = currentSlotNumber + 1; i < slotList.Count; i++)
@@ -187,7 +191,7 @@ public class SlotColumn
                     int otherSlotEndSlot = getSlotColumn(slot.slotPair.GetComponent<Slot>().slotID);
                     if (slotsEndSlot == otherSlotEndSlot)
                     {
-                        parallelResistors.Add(GetResistorValue(slot));
+                        parallelResistors.Add(GetResistorResistorValue(slot));
                         slot.resistorAdded = true;
                         slot.slotPair.GetComponent<Slot>().resistorAdded = true;
                     }
@@ -198,28 +202,30 @@ public class SlotColumn
     }
 
 
-    private float GetResistorValue(Slot slot)
+    private float GetResistorResistorValue(Slot slot)
     {
-        float resistorVal = 0;
+        float impedanceResistorVal = 0;
         switch (slot.itemPlaced.itemValue)
         {
             case (0):
-                resistorVal = 210;
+                impedanceResistorVal = 210;
                 break;
 
             case (1):
-                resistorVal = 370;
+                impedanceResistorVal = 370;
                 break;
 
             case (2):
-                resistorVal = 480;
+                impedanceResistorVal = 480;
                 break;
 
             default:
                 break;
         }
 
-        return resistorVal;
+        
+
+        return impedanceResistorVal;
     }
 
 }

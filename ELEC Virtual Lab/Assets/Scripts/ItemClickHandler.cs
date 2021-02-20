@@ -41,8 +41,12 @@ public class ItemClickHandler : MonoBehaviour
             var child = _breadboardUI.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
-                allSlots.Add(child.gameObject);
-                child.GetComponent<Slot>().slotID = slotIDCounter++;
+                if(child.GetComponent<Slot>().slotType != Globals.SlotType.voltmeterSlot)
+                {
+                    allSlots.Add(child.gameObject);
+                    child.GetComponent<Slot>().slotID = slotIDCounter++;
+                }
+
             }
         }
 
@@ -91,12 +95,12 @@ public class ItemClickHandler : MonoBehaviour
                 slotColumns.Add(slotColumn);
             }
         }
-        for (int i = 0; i < slotColumns.Count; i++)
-        {
-            // Debug.Log("Slot column: " + slotColumns[i].columnID + "\n slot connections: " + slotColumns[i].PrintAllSlotConnections());
+        // for (int i = 0; i < slotColumns.Count; i++)
+        // {
+        //     // Debug.Log("Slot column: " + slotColumns[i].columnID + "\n slot connections: " + slotColumns[i].PrintAllSlotConnections());
 
-            Debug.Log(slotColumns[i].printAllColumnConnections());
-        }
+        //     Debug.Log(slotColumns[i].printAllColumnConnections());
+        // }
 
         UpdateSuccessors();
 
@@ -112,6 +116,7 @@ public class ItemClickHandler : MonoBehaviour
         //     Debug.Log(slotColumns[i].printAllColumnConnections());
         // }
 
+        Debug.Log("***** DONE CALCULATION *****");
     }
 
     private void UpdateSuccessors()
@@ -187,7 +192,7 @@ public class ItemClickHandler : MonoBehaviour
                 continue;
             if (slotColumns[i].columnConnections.Count == 1)
             {
-                Debug.Log("Deadend: "+ slotColumns[i].columnID);
+                // Debug.Log("Deadend: "+ slotColumns[i].columnID);
                 slotColumns[i].columnConnections.Clear();
                 RemoveConnectionSlot(slotColumns[i].columnID);
                 slotColumns[i].isDeadEnd = true;
@@ -211,11 +216,19 @@ public class ItemClickHandler : MonoBehaviour
     private void CalculateElectricalData()
     {
         float resistanceTotal = 0;
+        for(int i = 0 ; i < allSlots.Count; i++)
+        {
+            allSlots[i].GetComponent<Slot>().resistorAdded = false;
+        }
         for (int i = 0; i < slotColumns.Count; i++)
         {
             if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround)
             {
-                resistanceTotal += slotColumns[i].ResistorVal();
+                Debug.Log("Checking res for column: "+ slotColumns[i].columnID);
+                float columnResistance = slotColumns[i].ResistorVal();
+                resistanceTotal += columnResistance;
+                Debug.Log("DONE for column: "+ slotColumns[i].columnID + " Value of: " + columnResistance);
+               
             }
         }
         Debug.Log("Res Total: " + resistanceTotal);
