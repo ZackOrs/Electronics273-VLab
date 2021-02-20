@@ -72,6 +72,8 @@ public class ClosetSelect : SelectableItemBase
 
             //Reset item spawn locations
             WireSpawn.spawnSpace = 0;
+            CapacitorSpawn.spawnSpace = 0;
+            ResistorSpawn.spawnSpace = 0;
         }
         CloseClosetPanel();
     }
