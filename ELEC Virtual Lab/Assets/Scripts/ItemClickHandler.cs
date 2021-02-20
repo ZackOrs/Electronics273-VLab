@@ -97,20 +97,12 @@ public class ItemClickHandler : MonoBehaviour
                 slotColumns.Add(slotColumn);
             }
         }
-        // for (int i = 0; i < slotColumns.Count; i++)
-        // {
-        //     // Debug.Log("Slot column: " + slotColumns[i].columnID + "\n slot connections: " + slotColumns[i].PrintAllSlotConnections());
-
-        //     Debug.Log(slotColumns[i].printAllColumnConnections());
-        // }
 
         UpdateSuccessors();
-
     do
     {
         RemoveDeadEnds();
     }while(foundDeadEnd);
-
 
         CalculateElectricalData();
         //  for (int i = 0; i < slotColumns.Count; i++)
@@ -121,8 +113,8 @@ public class ItemClickHandler : MonoBehaviour
         Debug.Log("***** DONE CALCULATION *****");
 
         Debug.Log("Updating VoltMeter");
-
         _voltmeter.GetComponent<Voltmeter>().UpdateTerminals();
+        Debug.Log("VOLTMETER UPDATED");
     }
 
     private void UpdateSuccessors()
@@ -198,7 +190,7 @@ public class ItemClickHandler : MonoBehaviour
                 continue;
             if (slotColumns[i].columnConnections.Count == 1)
             {
-                // Debug.Log("Deadend: "+ slotColumns[i].columnID);
+                Debug.Log("Deadend: "+ slotColumns[i].columnID);
                 slotColumns[i].columnConnections.Clear();
                 RemoveConnectionSlot(slotColumns[i].columnID);
                 slotColumns[i].isDeadEnd = true;
@@ -213,8 +205,9 @@ public class ItemClickHandler : MonoBehaviour
         {
             if(slotColumns[i].columnConnections.Contains(slotIDToRemove))
             {
+                int elementIndex = slotColumns[i].columnConnections.IndexOf(slotIDToRemove);
                 // Debug.Log("Column: "+ slotColumns[i].columnID + " Removing connection: "+ slotIDToRemove);
-                slotColumns[i].columnConnections[slotIDToRemove] = -1;
+                slotColumns[i].columnConnections[elementIndex] = -1;
             }              
         }
     }
