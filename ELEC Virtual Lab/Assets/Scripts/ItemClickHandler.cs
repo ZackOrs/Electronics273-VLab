@@ -185,7 +185,6 @@ public class ItemClickHandler : MonoBehaviour
         foundDeadEnd = false;
         for (int i = 0; i < slotColumns.Count; i++)
         {
-            Debug.Log("In it");
             SlotColumn currentSlot = slotColumns[i];
             if (currentSlot.columnID == 4 || currentSlot.columnID == 5)
                 continue;
