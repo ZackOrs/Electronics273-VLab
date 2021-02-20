@@ -98,22 +98,11 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
 
-        Debug.Log("1 Not dead");
-        // for (int i = 0; i < slotColumns.Count; i++)
-        // {
-        //     // Debug.Log("Slot column: " + slotColumns[i].columnID + "\n slot connections: " + slotColumns[i].PrintAllSlotConnections());
-
-        //     Debug.Log(slotColumns[i].printAllColumnConnections());
-        // }
-
         UpdateSuccessors();
-        Debug.Log("2 Not dead");
     do
     {
         RemoveDeadEnds();
     }while(foundDeadEnd);
-
-        Debug.Log("3 Not dead");
 
         CalculateElectricalData();
         //  for (int i = 0; i < slotColumns.Count; i++)
@@ -124,8 +113,8 @@ public class ItemClickHandler : MonoBehaviour
         Debug.Log("***** DONE CALCULATION *****");
 
         Debug.Log("Updating VoltMeter");
-
         _voltmeter.GetComponent<Voltmeter>().UpdateTerminals();
+        Debug.Log("VOLTMETER UPDATED");
     }
 
     private void UpdateSuccessors()
