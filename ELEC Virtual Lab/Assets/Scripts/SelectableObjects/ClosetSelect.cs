@@ -20,6 +20,14 @@ public class ClosetSelect : SelectableItemBase
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown("p") || Input.GetKeyDown(KeyCode.Escape))
+        {
+            CancelButton();
+        }
+    }
+
     public override void onInteract()
     { 
         OpenClosetPanel();

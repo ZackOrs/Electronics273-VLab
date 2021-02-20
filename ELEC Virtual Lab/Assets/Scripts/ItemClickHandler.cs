@@ -97,6 +97,8 @@ public class ItemClickHandler : MonoBehaviour
                 slotColumns.Add(slotColumn);
             }
         }
+
+        Debug.Log("1 Not dead");
         // for (int i = 0; i < slotColumns.Count; i++)
         // {
         //     // Debug.Log("Slot column: " + slotColumns[i].columnID + "\n slot connections: " + slotColumns[i].PrintAllSlotConnections());
@@ -105,12 +107,13 @@ public class ItemClickHandler : MonoBehaviour
         // }
 
         UpdateSuccessors();
-
+        Debug.Log("2 Not dead");
     do
     {
         RemoveDeadEnds();
     }while(foundDeadEnd);
 
+        Debug.Log("3 Not dead");
 
         CalculateElectricalData();
         //  for (int i = 0; i < slotColumns.Count; i++)
@@ -193,12 +196,13 @@ public class ItemClickHandler : MonoBehaviour
         foundDeadEnd = false;
         for (int i = 0; i < slotColumns.Count; i++)
         {
+            Debug.Log("In it");
             SlotColumn currentSlot = slotColumns[i];
             if (currentSlot.columnID == 4 || currentSlot.columnID == 5)
                 continue;
             if (slotColumns[i].columnConnections.Count == 1)
             {
-                // Debug.Log("Deadend: "+ slotColumns[i].columnID);
+                Debug.Log("Deadend: "+ slotColumns[i].columnID);
                 slotColumns[i].columnConnections.Clear();
                 RemoveConnectionSlot(slotColumns[i].columnID);
                 slotColumns[i].isDeadEnd = true;
@@ -213,8 +217,9 @@ public class ItemClickHandler : MonoBehaviour
         {
             if(slotColumns[i].columnConnections.Contains(slotIDToRemove))
             {
+                int elementIndex = slotColumns[i].columnConnections.IndexOf(slotIDToRemove);
                 // Debug.Log("Column: "+ slotColumns[i].columnID + " Removing connection: "+ slotIDToRemove);
-                slotColumns[i].columnConnections[slotIDToRemove] = -1;
+                slotColumns[i].columnConnections[elementIndex] = -1;
             }              
         }
     }
