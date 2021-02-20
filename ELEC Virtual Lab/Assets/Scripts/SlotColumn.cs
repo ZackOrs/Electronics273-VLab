@@ -18,10 +18,12 @@ public class SlotColumn
     public bool connectedToPower = false;
 
     public bool isPowerSlot = false;
-
     public bool isGroundSlot = false;
 
+    public bool isDeadEnd = false;
+
     public float voltage;
+    public float resistance;
 
     List<int> slotPairConnection = new List<int>();
     public List<int> columnConnections = new List<int>();
@@ -44,6 +46,7 @@ public class SlotColumn
         slotList.Add(slot2);
         slotList.Add(slot3);
         slotList.Add(slot4);
+
         if (columnID == 4)
         {
             isGroundSlot = true;
@@ -57,7 +60,7 @@ public class SlotColumn
             if (slot.slotPair != null)
             {
                 //Prevent connections to self
-                if(getSlotColumn(slot.slotPair.GetComponent<Slot>().slotID) != columnID)
+                if (getSlotColumn(slot.slotPair.GetComponent<Slot>().slotID) != columnID)
                 {
                     slotConnection.Add(slot.slotID);
                     slotPairConnection.Add(slot.slotPair.GetComponent<Slot>().slotID);
@@ -71,7 +74,7 @@ public class SlotColumn
                         connectedToPower = true;
                     }
                 }
-                
+
             }
         }
     }
@@ -125,43 +128,98 @@ public class SlotColumn
     {
         float resistorVal = 0;
         List<float> parallelResistors = new List<float>();
-
-        CheckIfInParallel(parallelResistors);
-
-        foreach (Slot slot in slotList)
+        for (int i = 0; i < slotList.Count; i++)
         {
+            Slot slot = slotList[i];
             if (slot.itemPlaced != null)
             {
                 if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor && !slot.resistorAdded)
                 {
-                    switch (slot.itemPlaced.itemValue)
-                    {
-                        case (0):
-                            resistorVal += 210;
-                            break;
+                    resistorVal = GetResistorValue(slot);
 
-                        case (1):
-                            resistorVal += 370;
-                            break;
+                    parallelResistors = CheckIfInParallel(slot, i);
 
-                        case (2):
-                            resistorVal += 480;
-                            break;
-
-                        default:
-                            break;
-                    }
                     slot.resistorAdded = true;
                     slot.slotPair.GetComponent<Slot>().resistorAdded = true;
                 }
             }
         }
+
+        if (parallelResistors.Count > 1)
+        {
+            resistorVal = CalculateParallelResistance(parallelResistors);
+        }
+
+        Debug.Log("Column : " + columnID + " Resistance : " + resistorVal);
+        resistance = resistorVal;
         return resistorVal;
     }
 
-    private void CheckIfInParallel(List<float> parallelResistors)
+    private float CalculateParallelResistance(List<float> parallelResistors)
     {
+        float resistTot = 0;
 
+        for (int i = 0; i < parallelResistors.Count; i++)
+        {
+            resistTot += (1 / parallelResistors[i]);
+        }
+        resistTot = 1 / resistTot;
+
+        return resistTot;
+    }
+
+    private List<float> CheckIfInParallel(Slot currentSlot, int currentSlotNumber)
+    {
+        List<float> parallelResistors = new List<float>();
+
+        parallelResistors.Add(GetResistorValue(currentSlot));
+
+        int slotsEndSlot = getSlotColumn(currentSlot.slotPair.GetComponent<Slot>().slotID);
+        for (int i = currentSlotNumber + 1; i < slotList.Count; i++)
+        {
+
+            Slot slot = slotList[i];
+            if (slot.itemPlaced != null)
+            {
+                if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor)
+                {
+                    Debug.Log("Resistors in parallel");
+                    int otherSlotEndSlot = getSlotColumn(slot.slotPair.GetComponent<Slot>().slotID);
+                    if (slotsEndSlot == otherSlotEndSlot)
+                    {
+                        parallelResistors.Add(GetResistorValue(slot));
+                        slot.resistorAdded = true;
+                        slot.slotPair.GetComponent<Slot>().resistorAdded = true;
+                    }
+                }
+            }
+        }
+        return parallelResistors;
+    }
+
+
+    private float GetResistorValue(Slot slot)
+    {
+        float resistorVal = 0;
+        switch (slot.itemPlaced.itemValue)
+        {
+            case (0):
+                resistorVal = 210;
+                break;
+
+            case (1):
+                resistorVal = 370;
+                break;
+
+            case (2):
+                resistorVal = 480;
+                break;
+
+            default:
+                break;
+        }
+
+        return resistorVal;
     }
 
 }

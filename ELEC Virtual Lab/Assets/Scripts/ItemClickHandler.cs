@@ -107,10 +107,10 @@ public class ItemClickHandler : MonoBehaviour
 
 
         CalculateElectricalData();
-         for (int i = 0; i < slotColumns.Count; i++)
-        {
-            Debug.Log(slotColumns[i].printAllColumnConnections());
-        }
+        //  for (int i = 0; i < slotColumns.Count; i++)
+        // {
+        //     Debug.Log(slotColumns[i].printAllColumnConnections());
+        // }
 
     }
 
@@ -190,6 +190,7 @@ public class ItemClickHandler : MonoBehaviour
                 Debug.Log("Deadend: "+ slotColumns[i].columnID);
                 slotColumns[i].columnConnections.Clear();
                 RemoveConnectionSlot(slotColumns[i].columnID);
+                slotColumns[i].isDeadEnd = true;
                 foundDeadEnd= true;
             }
         }
@@ -202,40 +203,43 @@ public class ItemClickHandler : MonoBehaviour
             if(slotColumns[i].columnConnections.Contains(slotIDToRemove))
             {
                 // Debug.Log("Column: "+ slotColumns[i].columnID + " Removing connection: "+ slotIDToRemove);
-                slotColumns[i].columnConnections.Remove(slotIDToRemove);
+                slotColumns[i].columnConnections[slotIDToRemove] = -1;
             }              
         }
     }
 
     private void CalculateElectricalData()
     {
-        float resistorTotal = 0;
+        float resistanceTotal = 0;
         for (int i = 0; i < slotColumns.Count; i++)
         {
             if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround)
             {
-                resistorTotal += slotColumns[i].ResistorVal();
+                resistanceTotal += slotColumns[i].ResistorVal();
             }
         }
-        Debug.Log("Res Total: " + resistorTotal);
-        if(resistorTotal > 0)
+        Debug.Log("Res Total: " + resistanceTotal);
+        if(resistanceTotal > 0)
         {
-            circuitCurrent = slotColumns[5].voltage / resistorTotal;
+            circuitCurrent = slotColumns[5].voltage / resistanceTotal;
         }
         else
         {
             circuitCurrent = 99999;
         }
-        
 
         Debug.Log("Current: "+ circuitCurrent);
 
+
+        float prevVoltage = slotColumns[5].voltage;
         for (int i = 0; i < slotColumns.Count; i++)
         {
             if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround)
             {
-                float voltageDrop = circuitCurrent * slotColumns[i].ResistorVal();
-                slotColumns[i].ChangeAllVoltages(voltageDrop);
+                slotColumns[i].ChangeAllVoltages(prevVoltage);
+                float voltageDrop = circuitCurrent * slotColumns[i].resistance;
+                prevVoltage -= voltageDrop;
+                Debug.Log("voltage drop:" + voltageDrop);
             }
         }
     }
