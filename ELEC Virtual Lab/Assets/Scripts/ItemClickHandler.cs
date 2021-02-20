@@ -17,8 +17,10 @@ public class ItemClickHandler : MonoBehaviour
     float circuitCurrent;
 
     [SerializeField] GameObject _breadboardUI = null;
+    [SerializeField] GameObject _voltmeter = null;
     [SerializeField] Image _wireImage = null;
     [SerializeField] Image _resistorImage = null;
+
 
     public static bool isBBSlotFree = false;
     private GameObject _pointA = null;
@@ -117,6 +119,10 @@ public class ItemClickHandler : MonoBehaviour
         // }
 
         Debug.Log("***** DONE CALCULATION *****");
+
+        Debug.Log("Updating VoltMeter");
+
+        _voltmeter.GetComponent<Voltmeter>().UpdateTerminals();
     }
 
     private void UpdateSuccessors()

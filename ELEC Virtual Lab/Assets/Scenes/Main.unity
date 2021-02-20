@@ -11438,9 +11438,10 @@ GameObject:
   - component: {fileID: 612163765}
   - component: {fileID: 612163767}
   - component: {fileID: 612163766}
+  - component: {fileID: 612163768}
   m_Layer: 5
   m_Name: VM Neg Slot
-  m_TagString: Untagged
+  m_TagString: BBSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11502,6 +11503,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 612163764}
   m_CullTransparentMesh: 0
+--- !u!114 &612163768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612163764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71164e76e9b580f4c952f53678047abb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotID: 0
+  isFree: 1
+  slotType: 3
+  resistorAdded: 0
+  button: {fileID: 2016024929}
+  slotPair: {fileID: 0}
+  slotChecked: 0
+  voltage: -1
 --- !u!1 &630816906
 GameObject:
   m_ObjectHideFlags: 0
@@ -26427,6 +26448,7 @@ GameObject:
   - component: {fileID: 1290287095}
   - component: {fileID: 1290287097}
   - component: {fileID: 1290287096}
+  - component: {fileID: 1290287098}
   m_Layer: 5
   m_Name: VoltMeter
   m_TagString: Untagged
@@ -26494,6 +26516,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290287094}
   m_CullTransparentMesh: 0
+--- !u!114 &1290287098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290287094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3225dbef7af46c42961ebe1eb847b40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  posSlot: {fileID: 1373093342}
+  negSlot: {fileID: 612163764}
+  textBox: {fileID: 1137330751}
 --- !u!1 &1293267806
 GameObject:
   m_ObjectHideFlags: 0
@@ -28807,9 +28844,10 @@ GameObject:
   - component: {fileID: 1373093343}
   - component: {fileID: 1373093345}
   - component: {fileID: 1373093344}
+  - component: {fileID: 1373093346}
   m_Layer: 5
   m_Name: VM Pos Slot
-  m_TagString: Untagged
+  m_TagString: BBSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28871,6 +28909,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1373093342}
   m_CullTransparentMesh: 0
+--- !u!114 &1373093346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373093342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71164e76e9b580f4c952f53678047abb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotID: 0
+  isFree: 1
+  slotType: 3
+  resistorAdded: 0
+  button: {fileID: 969660886}
+  slotPair: {fileID: 0}
+  slotChecked: 0
+  voltage: -1
 --- !u!1 &1375435391
 GameObject:
   m_ObjectHideFlags: 0
@@ -34298,6 +34356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _breadboardUI: {fileID: 873207304}
+  _voltmeter: {fileID: 1290287094}
   _wireImage: {fileID: 8561823322331990391, guid: 6f7274fdd8056684d8eeb3c144f42e1c,
     type: 3}
   _resistorImage: {fileID: 3220167450444337859, guid: 791011f42e2b3834cb48cebedef62a6a,
