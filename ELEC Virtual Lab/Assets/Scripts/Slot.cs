@@ -5,9 +5,12 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour
 {
+    public int slotID;
     public bool isFree = true;
     public bool startSlot = false;
     public bool groundSlot = false;
+
+    public bool resistorAdded = false;
     public SpawnableItem itemPlaced;
     [SerializeField] private Button button = null;
 
@@ -15,13 +18,13 @@ public class Slot : MonoBehaviour
 
     public bool slotChecked = false;
 
-    public int voltage = 0;
+    public float voltage = 0.0f;
     
     void Start()
     {
         if(startSlot)
         {
-            voltage = 5;
+            voltage = 5.0f;
         }
     }
 
