@@ -29,6 +29,7 @@ public class ItemClickHandler : MonoBehaviour
 
     int slotIDCounter = 0;
 
+    private bool foundDeadEnd = true;
 
     void Start()
     {
@@ -99,10 +100,10 @@ public class ItemClickHandler : MonoBehaviour
 
         UpdateSuccessors();
 
+    do
+    {
         RemoveDeadEnds();
-        RemoveDeadEnds();
-        RemoveDeadEnds();
-        RemoveDeadEnds();
+    }while(foundDeadEnd);
 
 
         CalculateElectricalData();
@@ -178,6 +179,7 @@ public class ItemClickHandler : MonoBehaviour
 
     private void RemoveDeadEnds()
     {
+        foundDeadEnd = false;
         for (int i = 0; i < slotColumns.Count; i++)
         {
             SlotColumn currentSlot = slotColumns[i];
@@ -188,6 +190,7 @@ public class ItemClickHandler : MonoBehaviour
                 Debug.Log("Deadend: "+ slotColumns[i].columnID);
                 slotColumns[i].columnConnections.Clear();
                 RemoveConnectionSlot(slotColumns[i].columnID);
+                foundDeadEnd= true;
             }
         }
     }
