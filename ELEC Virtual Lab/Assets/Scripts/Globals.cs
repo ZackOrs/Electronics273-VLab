@@ -33,5 +33,13 @@ public class Globals : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);        
     }
+    
+    public enum SlotType
+    {
+        defaultSlot,
+        startSlot,
+        groundSlot,
+        voltmeterSlot
+    }
 
 }

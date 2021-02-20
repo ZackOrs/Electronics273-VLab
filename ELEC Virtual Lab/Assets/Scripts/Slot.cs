@@ -5,9 +5,10 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour
 {
+    public int slotID;
     public bool isFree = true;
-    public bool startSlot = false;
-    public bool groundSlot = false;
+    public Globals.SlotType slotType = default;
+    public bool resistorAdded = false;
     public SpawnableItem itemPlaced;
     [SerializeField] private Button button = null;
 
@@ -15,13 +16,24 @@ public class Slot : MonoBehaviour
 
     public bool slotChecked = false;
 
-    public int voltage = 0;
-    
+    public float voltage = -1.0f;
+
     void Start()
     {
-        if(startSlot)
+
+        switch (slotType)
         {
-            voltage = 5;
+            case (Globals.SlotType.startSlot):
+                voltage = 5.0f;
+                break;
+
+            case (Globals.SlotType.groundSlot):
+                voltage = 0.0f;
+                break;
+
+            default:
+                voltage = -1.0f;
+                break;
         }
     }
 
@@ -72,7 +84,7 @@ public class Slot : MonoBehaviour
         if (isFree)
         {
             ColorBlock colors = button.colors;
-            colors.highlightedColor = new Color( 0.3f, 0.4f, 1.0f, 1.0f);
+            colors.highlightedColor = new Color(0.3f, 0.4f, 1.0f, 1.0f);
             button.colors = colors;
         }
         else
