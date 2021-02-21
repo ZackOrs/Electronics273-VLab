@@ -74,6 +74,9 @@ public class Slot : MonoBehaviour
     public void RemoveItem()
     {
         isFree = true;
+        slotPair = null;
+        itemPlaced = null;
+
         ChangeHighlightColor();
     }
 

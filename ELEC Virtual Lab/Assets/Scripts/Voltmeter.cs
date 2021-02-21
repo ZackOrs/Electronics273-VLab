@@ -32,8 +32,13 @@ public class Voltmeter : MonoBehaviour
         if(posSlot.GetComponent<Slot>().itemPlaced != null && negSlot.GetComponent<Slot>().itemPlaced != null)
         {
             voltageReading = posVoltage - negVoltage;
+            UpdateText();
         }
-        UpdateText();
+        else
+        {
+            textBox.text = "NO READING";
+        }
+        
     }
 
     private void UpdateText()

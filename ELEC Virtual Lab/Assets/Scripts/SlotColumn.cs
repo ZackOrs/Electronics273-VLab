@@ -60,6 +60,7 @@ public class SlotColumn
         {
             if (slot.slotPair != null)
             {
+                if(slot.slotPair.GetComponent<Slot>().slotType != Globals.SlotType.voltmeterSlot)
                 //Prevent connections to self
                 if (getSlotColumn(slot.slotPair.GetComponent<Slot>().slotID) != columnID)
                 {
@@ -134,10 +135,8 @@ public class SlotColumn
             Slot slot = slotList[i];
             if (slot.itemPlaced != null)
             {
-                Debug.Log("Column " + columnID + "Resistor added?" + slot.resistorAdded);
                 if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor && !slot.resistorAdded)
                 {
-                    Debug.Log("Column" + columnID + "Adding resistor: " + GetResistorResistorValue(slot));
                     resistorVal = GetResistorResistorValue(slot);
 
                     parallelResistors = CheckIfInParallel(slot, i);
@@ -187,7 +186,6 @@ public class SlotColumn
             {
                 if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor)
                 {
-                    Debug.Log("Resistors in parallel");
                     int otherSlotEndSlot = getSlotColumn(slot.slotPair.GetComponent<Slot>().slotID);
                     if (slotsEndSlot == otherSlotEndSlot)
                     {
