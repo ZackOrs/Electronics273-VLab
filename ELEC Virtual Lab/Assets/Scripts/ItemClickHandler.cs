@@ -21,6 +21,7 @@ public class ItemClickHandler : MonoBehaviour
     [SerializeField] Image _wireImage = null;
     [SerializeField] Image _resistorImage = null;
 
+    [SerializeField] GameObject _placedImages = null;
 
     public static bool isBBSlotFree = false;
     private GameObject _pointA = null;
@@ -360,7 +361,7 @@ public class ItemClickHandler : MonoBehaviour
         switch (spawnableItem.itemName)
         {
             case (Globals.AvailableItems.Wire):
-                placeItem = Instantiate(_wireImage, _breadboardUI.transform);
+                placeItem = Instantiate(_wireImage, _placedImages.transform);
                 placeItem.GetComponent<Image>().color = Resources.Load<Image>(
                 spawnableItem.itemName.ToString() +
                 spawnableItem.itemValue.ToString()).color;
@@ -368,11 +369,11 @@ public class ItemClickHandler : MonoBehaviour
                 break;
 
             case (Globals.AvailableItems.Resistor):
-                placeItem = Instantiate(_resistorImage, _breadboardUI.transform);
+                placeItem = Instantiate(_resistorImage, _placedImages.transform);
                 break;
 
             default:
-                placeItem = Instantiate(_wireImage, _breadboardUI.transform);
+                placeItem = Instantiate(_wireImage, _placedImages.transform);
                 break;
         }
         if (spawnableItem.itemName == Globals.AvailableItems.Wire) // Will colour the wire
