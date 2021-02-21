@@ -24,7 +24,7 @@ public class ClosetSelect : SelectableItemBase
     {
         if (Input.GetKeyDown("p") || Input.GetKeyDown(KeyCode.Escape))
         {
-            CancelButton();
+            ClosePanel();
         }
     }
 
@@ -68,6 +68,11 @@ public class ClosetSelect : SelectableItemBase
     public void CancelButton()
     {
         CloseClosetPanel();
+    }
+
+    private void ClosePanel()
+    {
+        ClosetPanel.SetActive(false);
     }
 
     public void ResetButton()
