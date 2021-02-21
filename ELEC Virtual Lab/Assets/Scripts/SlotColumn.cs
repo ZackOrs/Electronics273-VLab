@@ -60,7 +60,10 @@ public class SlotColumn
         {
             if (slot.slotPair != null)
             {
-                if (slot.slotPair.GetComponent<Slot>().slotType != Globals.SlotType.voltmeterSlot)
+                Slot slotpair = slot.slotPair.GetComponent<Slot>();
+                if (slotpair.slotType == Globals.SlotType.defaultSlot ||
+                     slotpair.slotType == Globals.SlotType.groundSlot ||
+                      slotpair.slotType == Globals.SlotType.startSlot)
                     //Prevent connections to self
                     if (getSlotColumn(slot.slotPair.GetComponent<Slot>().slotID) != columnID)
                     {
@@ -233,7 +236,7 @@ public class SlotColumn
         else if (slot.itemPlaced.itemName == Globals.AvailableItems.Capacitor)
         {
             float capacitorVal = 0;
-            
+
             switch (slot.itemPlaced.itemValue)
             {
                 case (0):
@@ -272,7 +275,7 @@ public class SlotColumn
                 default:
                     break;
             }
-            Debug.Log("Capacitor Val: "+ capacitorVal);
+            Debug.Log("Capacitor Val: " + capacitorVal);
             impedanceVal = 1 / ((2 * (float)Math.PI * 60) * capacitorVal);
             Debug.Log("Impedance value: " + impedanceVal);
         }

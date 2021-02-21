@@ -18,6 +18,8 @@ public class ItemClickHandler : MonoBehaviour
 
     [SerializeField] GameObject _breadboardUI = null;
     [SerializeField] GameObject _voltmeter = null;
+    [SerializeField] GameObject _currentmeter = null;
+
     [SerializeField] Image _wireImage = null;
     [SerializeField] Image _resistorImage = null;
     [SerializeField] Image _capacitorImage = null;
@@ -49,7 +51,9 @@ public class ItemClickHandler : MonoBehaviour
             var child = _breadboardUI.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
-                if(child.GetComponent<Slot>().slotType != Globals.SlotType.voltmeterSlot)
+                if (child.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot ||
+                child.GetComponent<Slot>().slotType == Globals.SlotType.groundSlot ||
+                child.GetComponent<Slot>().slotType == Globals.SlotType.startSlot)
                 {
                     breadboardSlots.Add(child.gameObject);
                     allSlots.Add(child.gameObject);
@@ -57,14 +61,23 @@ public class ItemClickHandler : MonoBehaviour
                     child.GetComponent<Slot>().slotID = breadboardSlotIDCounter++;
                     allSlotIDCounter++;
                 }
-
             }
         }
 
-        
+
         for (int i = 0; i < _voltmeter.transform.childCount; i++)
         {
             var child = _voltmeter.transform.GetChild(i);
+            if (child.CompareTag("BBSlot"))
+            {
+                allSlots.Add(child.gameObject);
+                child.GetComponent<Slot>().slotID = allSlotIDCounter++;
+            }
+        }
+
+        for (int i = 0; i < _currentmeter.transform.childCount; i++)
+        {
+            var child = _currentmeter.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
                 allSlots.Add(child.gameObject);
@@ -95,7 +108,7 @@ public class ItemClickHandler : MonoBehaviour
         {
             WaitForClick();
         }
-        if(Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1))
         {
             RemoveComponent();
         }
@@ -121,7 +134,7 @@ public class ItemClickHandler : MonoBehaviour
                     breadboardSlots[i + 3].GetComponent<Slot>());
 
                 slotColumns.Add(slotColumn);
-                if(!(slotColumns.Last().isGroundSlot || slotColumns.Last().isPowerSlot))
+                if (!(slotColumns.Last().isGroundSlot || slotColumns.Last().isPowerSlot))
                 {
                     slotColumns.Last().ChangeAllVoltages(-1.0f);
                 }
@@ -129,10 +142,10 @@ public class ItemClickHandler : MonoBehaviour
         }
 
         UpdateSuccessors();
-    do
-    {
-        RemoveDeadEnds();
-    }while(foundDeadEnd);
+        do
+        {
+            RemoveDeadEnds();
+        } while (foundDeadEnd);
 
         CalculateElectricalData();
         //  for (int i = 0; i < slotColumns.Count; i++)
@@ -220,33 +233,33 @@ public class ItemClickHandler : MonoBehaviour
                 continue;
             if (slotColumns[i].columnConnections.Count == 1)
             {
-                Debug.Log("Deadend: "+ slotColumns[i].columnID);
+                Debug.Log("Deadend: " + slotColumns[i].columnID);
                 slotColumns[i].columnConnections.Clear();
                 RemoveConnectionSlot(slotColumns[i].columnID);
                 slotColumns[i].isDeadEnd = true;
                 slotColumns[i].ChangeAllVoltages(-1.0f);
-                foundDeadEnd= true;
+                foundDeadEnd = true;
             }
         }
     }
 
     private void RemoveConnectionSlot(int slotIDToRemove)
     {
-        for(int i = 0; i < slotColumns.Count; i++)
+        for (int i = 0; i < slotColumns.Count; i++)
         {
-            if(slotColumns[i].columnConnections.Contains(slotIDToRemove))
+            if (slotColumns[i].columnConnections.Contains(slotIDToRemove))
             {
                 int elementIndex = slotColumns[i].columnConnections.IndexOf(slotIDToRemove);
                 // Debug.Log("Column: "+ slotColumns[i].columnID + " Removing connection: "+ slotIDToRemove);
                 slotColumns[i].columnConnections[elementIndex] = -1;
-            }              
+            }
         }
     }
 
     private void CalculateElectricalData()
     {
         float resistanceTotal = 0;
-        for(int i = 0 ; i < breadboardSlots.Count; i++)
+        for (int i = 0; i < breadboardSlots.Count; i++)
         {
             breadboardSlots[i].GetComponent<Slot>().componentAdded = false;
         }
@@ -258,11 +271,11 @@ public class ItemClickHandler : MonoBehaviour
                 float columnResistance = slotColumns[i].ResistorVal();
                 resistanceTotal += columnResistance;
                 // Debug.Log("DONE for column: "+ slotColumns[i].columnID + " Value of: " + columnResistance);
-               
+
             }
         }
         // Debug.Log("Res Total: " + resistanceTotal);
-        if(resistanceTotal > 0)
+        if (resistanceTotal > 0)
         {
             circuitCurrent = slotColumns[5].voltage / resistanceTotal;
         }
@@ -493,19 +506,19 @@ public class ItemClickHandler : MonoBehaviour
         }
     }
 
-    
+
     private void RemoveComponent()
     {
         GameObject itemToRemove;
         itemToRemove = CheckIfPlacedComponent();
-        if(itemToRemove != null)
+        if (itemToRemove != null)
         {
-            Debug.Log("Removing item between slots: "+ itemToRemove.GetComponent<PlacedImages>().slotA + " and " + itemToRemove.GetComponent<PlacedImages>().slotB);
+            Debug.Log("Removing item between slots: " + itemToRemove.GetComponent<PlacedImages>().slotA + " and " + itemToRemove.GetComponent<PlacedImages>().slotB);
             allSlots[itemToRemove.GetComponent<PlacedImages>().slotA].GetComponent<Slot>().RemoveItem();
             allSlots[itemToRemove.GetComponent<PlacedImages>().slotB].GetComponent<Slot>().RemoveItem();
             Globals.inventoryItems[itemToRemove.GetComponent<PlacedImages>().itemID].isPlaced = false;
         }
-        
+
         Destroy(itemToRemove);
     }
 
