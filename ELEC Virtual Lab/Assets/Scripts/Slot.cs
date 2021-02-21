@@ -8,7 +8,7 @@ public class Slot : MonoBehaviour
     public int slotID;
     public bool isFree = true;
     public Globals.SlotType slotType = default;
-    public bool resistorAdded = false;
+    public bool componentAdded = false;
     public SpawnableItem itemPlaced;
     [SerializeField] private Button button = null;
 

@@ -43,7 +43,7 @@ public class Voltmeter : MonoBehaviour
 
     private void UpdateText()
     {
-        textBox.text = voltageReading.ToString() + " V";
+        textBox.text = voltageReading.ToString("0.000") + " V";
     }
 
 }

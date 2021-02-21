@@ -23,7 +23,7 @@ public class SlotColumn
     public bool isDeadEnd = false;
 
     public float voltage;
-    public float resistance;
+    public float impedance;
 
     List<int> slotPairConnection = new List<int>();
     public List<int> columnConnections = new List<int>();
@@ -55,27 +55,27 @@ public class SlotColumn
         {
             isPowerSlot = true;
         }
-        
+
         foreach (Slot slot in slotList)
         {
             if (slot.slotPair != null)
             {
-                if(slot.slotPair.GetComponent<Slot>().slotType != Globals.SlotType.voltmeterSlot)
-                //Prevent connections to self
-                if (getSlotColumn(slot.slotPair.GetComponent<Slot>().slotID) != columnID)
-                {
-                    slotConnection.Add(slot.slotID);
-                    slotPairConnection.Add(slot.slotPair.GetComponent<Slot>().slotID);
-                    columnConnections.Add(getSlotColumn(slotPairConnection.Last()));
-                    if (columnConnections.Last() == 4)
+                if (slot.slotPair.GetComponent<Slot>().slotType != Globals.SlotType.voltmeterSlot)
+                    //Prevent connections to self
+                    if (getSlotColumn(slot.slotPair.GetComponent<Slot>().slotID) != columnID)
                     {
-                        connectedToGround = true;
+                        slotConnection.Add(slot.slotID);
+                        slotPairConnection.Add(slot.slotPair.GetComponent<Slot>().slotID);
+                        columnConnections.Add(getSlotColumn(slotPairConnection.Last()));
+                        if (columnConnections.Last() == 4)
+                        {
+                            connectedToGround = true;
+                        }
+                        if (columnConnections.Last() == 5)
+                        {
+                            connectedToPower = true;
+                        }
                     }
-                    if (columnConnections.Last() == 5)
-                    {
-                        connectedToPower = true;
-                    }
-                }
 
             }
         }
@@ -128,43 +128,51 @@ public class SlotColumn
 
     public float ResistorVal()
     {
-        float resistorVal = 0;
-        List<float> parallelResistors = new List<float>();
+        float impedanceValue = 0;
+        List<float> parallelComponents = new List<float>();
         for (int i = 0; i < slotList.Count; i++)
         {
             Slot slot = slotList[i];
             if (slot.itemPlaced != null)
             {
-                if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor && !slot.resistorAdded)
+                if (slot.itemPlaced.itemName != Globals.AvailableItems.Wire && !slot.componentAdded)
                 {
-                    resistorVal = GetResistorResistorValue(slot);
+                    impedanceValue = GetImpedanceValue(slot);
+                    parallelComponents = CheckIfInParallel(slot, i);
 
-                    parallelResistors = CheckIfInParallel(slot, i);
-
-                    slot.resistorAdded = true;
-                    slot.slotPair.GetComponent<Slot>().resistorAdded = true;
+                    slot.componentAdded = true;
+                    slot.slotPair.GetComponent<Slot>().componentAdded = true;
                 }
             }
         }
 
-        if (parallelResistors.Count > 1)
+        if (parallelComponents.Count > 1)
         {
-            resistorVal = CalculateParallelResistance(parallelResistors);
+            impedanceValue = CalculateParallelImpedance(parallelComponents);
         }
 
-        Debug.Log("Column : " + columnID + " Resistance : " + resistorVal);
-        resistance = resistorVal;
-        return resistorVal;
+        Debug.Log("Column : " + columnID + " Resistance : " + impedanceValue);
+        impedance = impedanceValue;
+        return impedanceValue;
     }
 
-    private float CalculateParallelResistance(List<float> parallelResistors)
+    private float CalculateCapacitorImpedance()
+    {
+        float impedance = 0;
+
+
+        return impedance;
+
+    }
+
+    private float CalculateParallelImpedance(List<float> parallelComponents)
     {
         float resistTot = 0;
-        Debug.Log("Found "+ parallelResistors.Count + " parallel resistors in column" + columnID);
-        for (int i = 0; i < parallelResistors.Count; i++)
+        Debug.Log("Found " + parallelComponents.Count + " parallel resistors in column" + columnID);
+        for (int i = 0; i < parallelComponents.Count; i++)
         {
-            Debug.Log(parallelResistors[i].ToString());
-            resistTot += (1 / parallelResistors[i]);
+            Debug.Log(parallelComponents[i].ToString());
+            resistTot += (1 / parallelComponents[i]);
         }
         resistTot = 1 / resistTot;
 
@@ -175,8 +183,7 @@ public class SlotColumn
     {
         List<float> parallelResistors = new List<float>();
 
-        parallelResistors.Add(GetResistorResistorValue(currentSlot));
-
+        parallelResistors.Add(GetImpedanceValue(currentSlot));
         int slotsEndSlot = getSlotColumn(currentSlot.slotPair.GetComponent<Slot>().slotID);
         for (int i = currentSlotNumber + 1; i < slotList.Count; i++)
         {
@@ -184,14 +191,14 @@ public class SlotColumn
             Slot slot = slotList[i];
             if (slot.itemPlaced != null)
             {
-                if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor)
+                if (slot.itemPlaced.itemName != Globals.AvailableItems.Wire)
                 {
                     int otherSlotEndSlot = getSlotColumn(slot.slotPair.GetComponent<Slot>().slotID);
                     if (slotsEndSlot == otherSlotEndSlot)
                     {
-                        parallelResistors.Add(GetResistorResistorValue(slot));
-                        slot.resistorAdded = true;
-                        slot.slotPair.GetComponent<Slot>().resistorAdded = true;
+                        parallelResistors.Add(GetImpedanceValue(slot));
+                        slot.componentAdded = true;
+                        slot.slotPair.GetComponent<Slot>().componentAdded = true;
                     }
                 }
             }
@@ -200,30 +207,78 @@ public class SlotColumn
     }
 
 
-    private float GetResistorResistorValue(Slot slot)
+    private float GetImpedanceValue(Slot slot)
     {
-        float impedanceResistorVal = 0;
-        switch (slot.itemPlaced.itemValue)
+        float impedanceVal = 0;
+        if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor)
         {
-            case (0):
-                impedanceResistorVal = 210;
-                break;
+            switch (slot.itemPlaced.itemValue)
+            {
+                case (0):
+                    impedanceVal = 210;
+                    break;
 
-            case (1):
-                impedanceResistorVal = 370;
-                break;
+                case (1):
+                    impedanceVal = 370;
+                    break;
 
-            case (2):
-                impedanceResistorVal = 480;
-                break;
+                case (2):
+                    impedanceVal = 480;
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
+        }
+        else if (slot.itemPlaced.itemName == Globals.AvailableItems.Capacitor)
+        {
+            float capacitorVal = 0;
+            
+            switch (slot.itemPlaced.itemValue)
+            {
+                case (0):
+                    capacitorVal = 0.0000001f;
+                    break;
+
+                case (1):
+                    capacitorVal = 0.000001f;
+                    break;
+
+                case (2):
+                    capacitorVal = 0.000004f;
+                    break;
+                case (3):
+                    capacitorVal = 0.000005f;
+                    break;
+
+                case (4):
+                    capacitorVal = 0.000009f;
+                    break;
+
+                case (5):
+                    capacitorVal = 0.000012f;
+                    break;
+                case (6):
+                    capacitorVal = 0.000015f;
+                    break;
+
+                case (7):
+                    capacitorVal = 0.000019f;
+                    break;
+
+                case (8):
+                    capacitorVal = 0.000020f;
+                    break;
+                default:
+                    break;
+            }
+            Debug.Log("Capacitor Val: "+ capacitorVal);
+            impedanceVal = 1 / ((2 * (float)Math.PI * 60) * capacitorVal);
+            Debug.Log("Impedance value: " + impedanceVal);
         }
 
-        
 
-        return impedanceResistorVal;
+        return impedanceVal;
     }
 
 }

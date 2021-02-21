@@ -70,39 +70,39 @@ public class CapacitorSpawn : SpawnableItemBase
             
             if (itemValue.value == 0)
             {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0;
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0.000001f;
             }
             else if (itemValue.value == 1)
             {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 1;
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0.00001f;
             }
             else if (itemValue.value == 2)
             {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 4;
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0.00004f;
             }
             else if (itemValue.value == 3)
             {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 5;
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0.00005f;
             }
             else if (itemValue.value == 4)
             {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 9;
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0.00009f;
             }
             else if (itemValue.value == 5)
             {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 12;
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0.00012f;
             }
             else if (itemValue.value == 6)
             {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 15;
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0.00015f;
             }
             else if (itemValue.value == 7)
             {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 19;
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0.00019f;
             }
             else
             {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 20;
+                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0.00020f;
             }
         }
     }

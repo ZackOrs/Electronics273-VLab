@@ -20,6 +20,7 @@ public class ItemClickHandler : MonoBehaviour
     [SerializeField] GameObject _voltmeter = null;
     [SerializeField] Image _wireImage = null;
     [SerializeField] Image _resistorImage = null;
+    [SerializeField] Image _capacitorImage = null;
 
     [SerializeField] GameObject _placedImages = null;
 
@@ -83,11 +84,6 @@ public class ItemClickHandler : MonoBehaviour
                 breadboardSlots[i + 3].GetComponent<Slot>());
                 slotColumns.Add(slotColumn);
             }
-            if(!(slotColumns[i].isGroundSlot ||  !slotColumns[i].isPowerSlot))
-            {
-                slotColumns[i].ChangeAllVoltages(-1.0f);
-            }
-            
         }
     }
 
@@ -115,14 +111,20 @@ public class ItemClickHandler : MonoBehaviour
         for (int i = 0; i < breadboardSlotIDCounter; i += 4)
         {
             var child = _breadboardUI.transform.GetChild(i);
-            child.GetComponent<Slot>().resistorAdded = false;
+            child.GetComponent<Slot>().componentAdded = false;
             if (child.CompareTag("BBSlot"))
             {
-                SlotColumn slotColumn = new SlotColumn(breadboardSlots[i].GetComponent<Slot>(),
-                breadboardSlots[i + 1].GetComponent<Slot>(),
-                breadboardSlots[i + 2].GetComponent<Slot>(),
-                breadboardSlots[i + 3].GetComponent<Slot>());
+                SlotColumn slotColumn = new SlotColumn(
+                    breadboardSlots[i].GetComponent<Slot>(),
+                    breadboardSlots[i + 1].GetComponent<Slot>(),
+                    breadboardSlots[i + 2].GetComponent<Slot>(),
+                    breadboardSlots[i + 3].GetComponent<Slot>());
+
                 slotColumns.Add(slotColumn);
+                if(!(slotColumns.Last().isGroundSlot || slotColumns.Last().isPowerSlot))
+                {
+                    slotColumns.Last().ChangeAllVoltages(-1.0f);
+                }
             }
         }
 
@@ -246,20 +248,20 @@ public class ItemClickHandler : MonoBehaviour
         float resistanceTotal = 0;
         for(int i = 0 ; i < breadboardSlots.Count; i++)
         {
-            breadboardSlots[i].GetComponent<Slot>().resistorAdded = false;
+            breadboardSlots[i].GetComponent<Slot>().componentAdded = false;
         }
         for (int i = 0; i < slotColumns.Count; i++)
         {
             if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround)
             {
-                Debug.Log("Checking res for column: "+ slotColumns[i].columnID);
+                // Debug.Log("Checking res for column: "+ slotColumns[i].columnID);
                 float columnResistance = slotColumns[i].ResistorVal();
                 resistanceTotal += columnResistance;
-                Debug.Log("DONE for column: "+ slotColumns[i].columnID + " Value of: " + columnResistance);
+                // Debug.Log("DONE for column: "+ slotColumns[i].columnID + " Value of: " + columnResistance);
                
             }
         }
-        Debug.Log("Res Total: " + resistanceTotal);
+        // Debug.Log("Res Total: " + resistanceTotal);
         if(resistanceTotal > 0)
         {
             circuitCurrent = slotColumns[5].voltage / resistanceTotal;
@@ -269,7 +271,7 @@ public class ItemClickHandler : MonoBehaviour
             circuitCurrent = 99999;
         }
 
-        Debug.Log("Current: "+ circuitCurrent);
+        // Debug.Log("Current: "+ circuitCurrent);
 
 
         float prevVoltage = slotColumns[5].voltage;
@@ -278,9 +280,9 @@ public class ItemClickHandler : MonoBehaviour
             if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround)
             {
                 slotColumns[i].ChangeAllVoltages(prevVoltage);
-                float voltageDrop = circuitCurrent * slotColumns[i].resistance;
+                float voltageDrop = circuitCurrent * slotColumns[i].impedance;
                 prevVoltage -= voltageDrop;
-                Debug.Log("voltage drop:" + voltageDrop);
+                // Debug.Log("voltage drop:" + voltageDrop);
             }
         }
     }
@@ -329,6 +331,7 @@ public class ItemClickHandler : MonoBehaviour
     private static void CapacitorClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
+        Globals.mouseClickAction = Globals.MouseClickAction.TwoClicks_FirstClick;
     }
 
     private void WaitForClick()
@@ -397,6 +400,10 @@ public class ItemClickHandler : MonoBehaviour
 
             case (Globals.AvailableItems.Resistor):
                 placeItem = Instantiate(_resistorImage, _placedImages.transform);
+                break;
+
+            case (Globals.AvailableItems.Capacitor):
+                placeItem = Instantiate(_capacitorImage, _placedImages.transform);
                 break;
 
             default:
