@@ -39,7 +39,8 @@ public class Globals : MonoBehaviour
         defaultSlot,
         startSlot,
         groundSlot,
-        voltmeterSlot
+        voltmeterSlot,
+        currentmeterSlot
     }
 
 }

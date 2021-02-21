@@ -18,51 +18,83 @@ public class ItemClickHandler : MonoBehaviour
 
     [SerializeField] GameObject _breadboardUI = null;
     [SerializeField] GameObject _voltmeter = null;
+    [SerializeField] GameObject _currentmeter = null;
+
     [SerializeField] Image _wireImage = null;
     [SerializeField] Image _resistorImage = null;
+    [SerializeField] Image _capacitorImage = null;
 
     [SerializeField] GameObject _placedImages = null;
 
     public static bool isBBSlotFree = false;
     private GameObject _pointA = null;
     private GameObject _pointB = null;
+    public static List<GameObject> breadboardSlots = new List<GameObject>();
     public static List<GameObject> allSlots = new List<GameObject>();
 
     private List<SlotColumn> slotColumns = new List<SlotColumn>();
 
-    int slotIDCounter = 0;
+    int breadboardSlotIDCounter = 0;
+    int allSlotIDCounter = 0;
 
     private bool foundDeadEnd = true;
 
     void Start()
     {
         Debug.Log("Adding slots");
+        breadboardSlots.Clear();
         allSlots.Clear();
-        slotIDCounter = 0;
+        breadboardSlotIDCounter = 0;
+        allSlotIDCounter = 0;
         for (int i = 0; i < _breadboardUI.transform.childCount; i++)
         {
             var child = _breadboardUI.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
-                if(child.GetComponent<Slot>().slotType != Globals.SlotType.voltmeterSlot)
+                if (child.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot ||
+                child.GetComponent<Slot>().slotType == Globals.SlotType.groundSlot ||
+                child.GetComponent<Slot>().slotType == Globals.SlotType.startSlot)
                 {
+                    breadboardSlots.Add(child.gameObject);
                     allSlots.Add(child.gameObject);
-                    child.GetComponent<Slot>().slotID = slotIDCounter++;
-                }
 
+                    child.GetComponent<Slot>().slotID = breadboardSlotIDCounter++;
+                    allSlotIDCounter++;
+                }
+            }
+        }
+
+
+        for (int i = 0; i < _voltmeter.transform.childCount; i++)
+        {
+            var child = _voltmeter.transform.GetChild(i);
+            if (child.CompareTag("BBSlot"))
+            {
+                allSlots.Add(child.gameObject);
+                child.GetComponent<Slot>().slotID = allSlotIDCounter++;
+            }
+        }
+
+        for (int i = 0; i < _currentmeter.transform.childCount; i++)
+        {
+            var child = _currentmeter.transform.GetChild(i);
+            if (child.CompareTag("BBSlot"))
+            {
+                allSlots.Add(child.gameObject);
+                child.GetComponent<Slot>().slotID = allSlotIDCounter++;
             }
         }
 
         slotColumns.Clear();
-        for (int i = 0; i < slotIDCounter; i += 4)
+        for (int i = 0; i < breadboardSlotIDCounter; i += 4)
         {
             var child = _breadboardUI.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
-                SlotColumn slotColumn = new SlotColumn(allSlots[i].GetComponent<Slot>(),
-                allSlots[i + 1].GetComponent<Slot>(),
-                allSlots[i + 2].GetComponent<Slot>(),
-                allSlots[i + 3].GetComponent<Slot>());
+                SlotColumn slotColumn = new SlotColumn(breadboardSlots[i].GetComponent<Slot>(),
+                breadboardSlots[i + 1].GetComponent<Slot>(),
+                breadboardSlots[i + 2].GetComponent<Slot>(),
+                breadboardSlots[i + 3].GetComponent<Slot>());
                 slotColumns.Add(slotColumn);
             }
         }
@@ -76,6 +108,10 @@ public class ItemClickHandler : MonoBehaviour
         {
             WaitForClick();
         }
+        if (Input.GetMouseButtonDown(1))
+        {
+            RemoveComponent();
+        }
         // // function attached to a button for testing
         // CalculateCircuit();
     }
@@ -85,25 +121,31 @@ public class ItemClickHandler : MonoBehaviour
 
         Debug.Log("Started Circuit Calculation");
         slotColumns.Clear();
-        for (int i = 0; i < slotIDCounter; i += 4)
+        for (int i = 0; i < breadboardSlotIDCounter; i += 4)
         {
             var child = _breadboardUI.transform.GetChild(i);
-            child.GetComponent<Slot>().resistorAdded = false;
+            child.GetComponent<Slot>().componentAdded = false;
             if (child.CompareTag("BBSlot"))
             {
-                SlotColumn slotColumn = new SlotColumn(allSlots[i].GetComponent<Slot>(),
-                allSlots[i + 1].GetComponent<Slot>(),
-                allSlots[i + 2].GetComponent<Slot>(),
-                allSlots[i + 3].GetComponent<Slot>());
+                SlotColumn slotColumn = new SlotColumn(
+                    breadboardSlots[i].GetComponent<Slot>(),
+                    breadboardSlots[i + 1].GetComponent<Slot>(),
+                    breadboardSlots[i + 2].GetComponent<Slot>(),
+                    breadboardSlots[i + 3].GetComponent<Slot>());
+
                 slotColumns.Add(slotColumn);
+                if (!(slotColumns.Last().isGroundSlot || slotColumns.Last().isPowerSlot))
+                {
+                    slotColumns.Last().ChangeAllVoltages(-1.0f);
+                }
             }
         }
 
         UpdateSuccessors();
-    do
-    {
-        RemoveDeadEnds();
-    }while(foundDeadEnd);
+        do
+        {
+            RemoveDeadEnds();
+        } while (foundDeadEnd);
 
         CalculateElectricalData();
         //  for (int i = 0; i < slotColumns.Count; i++)
@@ -191,48 +233,49 @@ public class ItemClickHandler : MonoBehaviour
                 continue;
             if (slotColumns[i].columnConnections.Count == 1)
             {
-                Debug.Log("Deadend: "+ slotColumns[i].columnID);
+                Debug.Log("Deadend: " + slotColumns[i].columnID);
                 slotColumns[i].columnConnections.Clear();
                 RemoveConnectionSlot(slotColumns[i].columnID);
                 slotColumns[i].isDeadEnd = true;
-                foundDeadEnd= true;
+                slotColumns[i].ChangeAllVoltages(-1.0f);
+                foundDeadEnd = true;
             }
         }
     }
 
     private void RemoveConnectionSlot(int slotIDToRemove)
     {
-        for(int i = 0; i < slotColumns.Count; i++)
+        for (int i = 0; i < slotColumns.Count; i++)
         {
-            if(slotColumns[i].columnConnections.Contains(slotIDToRemove))
+            if (slotColumns[i].columnConnections.Contains(slotIDToRemove))
             {
                 int elementIndex = slotColumns[i].columnConnections.IndexOf(slotIDToRemove);
                 // Debug.Log("Column: "+ slotColumns[i].columnID + " Removing connection: "+ slotIDToRemove);
                 slotColumns[i].columnConnections[elementIndex] = -1;
-            }              
+            }
         }
     }
 
     private void CalculateElectricalData()
     {
         float resistanceTotal = 0;
-        for(int i = 0 ; i < allSlots.Count; i++)
+        for (int i = 0; i < breadboardSlots.Count; i++)
         {
-            allSlots[i].GetComponent<Slot>().resistorAdded = false;
+            breadboardSlots[i].GetComponent<Slot>().componentAdded = false;
         }
         for (int i = 0; i < slotColumns.Count; i++)
         {
             if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround)
             {
-                Debug.Log("Checking res for column: "+ slotColumns[i].columnID);
+                // Debug.Log("Checking res for column: "+ slotColumns[i].columnID);
                 float columnResistance = slotColumns[i].ResistorVal();
                 resistanceTotal += columnResistance;
-                Debug.Log("DONE for column: "+ slotColumns[i].columnID + " Value of: " + columnResistance);
-               
+                // Debug.Log("DONE for column: "+ slotColumns[i].columnID + " Value of: " + columnResistance);
+
             }
         }
-        Debug.Log("Res Total: " + resistanceTotal);
-        if(resistanceTotal > 0)
+        // Debug.Log("Res Total: " + resistanceTotal);
+        if (resistanceTotal > 0)
         {
             circuitCurrent = slotColumns[5].voltage / resistanceTotal;
         }
@@ -241,7 +284,7 @@ public class ItemClickHandler : MonoBehaviour
             circuitCurrent = 99999;
         }
 
-        Debug.Log("Current: "+ circuitCurrent);
+        // Debug.Log("Current: "+ circuitCurrent);
 
 
         float prevVoltage = slotColumns[5].voltage;
@@ -250,9 +293,9 @@ public class ItemClickHandler : MonoBehaviour
             if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround)
             {
                 slotColumns[i].ChangeAllVoltages(prevVoltage);
-                float voltageDrop = circuitCurrent * slotColumns[i].resistance;
+                float voltageDrop = circuitCurrent * slotColumns[i].impedance;
                 prevVoltage -= voltageDrop;
-                Debug.Log("voltage drop:" + voltageDrop);
+                // Debug.Log("voltage drop:" + voltageDrop);
             }
         }
     }
@@ -301,6 +344,7 @@ public class ItemClickHandler : MonoBehaviour
     private static void CapacitorClicked()
     {
         Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
+        Globals.mouseClickAction = Globals.MouseClickAction.TwoClicks_FirstClick;
     }
 
     private void WaitForClick()
@@ -365,22 +409,27 @@ public class ItemClickHandler : MonoBehaviour
                 placeItem.GetComponent<Image>().color = Resources.Load<Image>(
                 spawnableItem.itemName.ToString() +
                 spawnableItem.itemValue.ToString()).color;
-
                 break;
 
             case (Globals.AvailableItems.Resistor):
                 placeItem = Instantiate(_resistorImage, _placedImages.transform);
                 break;
 
+            case (Globals.AvailableItems.Capacitor):
+                placeItem = Instantiate(_capacitorImage, _placedImages.transform);
+                break;
+
             default:
                 placeItem = Instantiate(_wireImage, _placedImages.transform);
                 break;
         }
-        if (spawnableItem.itemName == Globals.AvailableItems.Wire) // Will colour the wire
-        {
 
+        placeItem.gameObject.AddComponent<PlacedImages>();
+        placeItem.GetComponent<PlacedImages>().itemID = spawnableItem.itemID;
+        placeItem.GetComponent<PlacedImages>().slotA = _pointA.GetComponent<Slot>().slotID;
+        placeItem.GetComponent<PlacedImages>().slotB = _pointB.GetComponent<Slot>().slotID;
+        placeItem.tag = "PlacedItem";
 
-        }
 
         float distance = Vector2.Distance(_pointA.transform.position, _pointB.transform.position);
         Debug.Log("Distance: " + distance);
@@ -429,7 +478,6 @@ public class ItemClickHandler : MonoBehaviour
         return ((y1 + y2) / 2.0f);
     }
 
-
     private void CheckIfBBSlot()
     {
         isBBSlotFree = false;
@@ -456,5 +504,42 @@ public class ItemClickHandler : MonoBehaviour
                 }
             }
         }
+    }
+
+
+    private void RemoveComponent()
+    {
+        GameObject itemToRemove;
+        itemToRemove = CheckIfPlacedComponent();
+        if (itemToRemove != null)
+        {
+            Debug.Log("Removing item between slots: " + itemToRemove.GetComponent<PlacedImages>().slotA + " and " + itemToRemove.GetComponent<PlacedImages>().slotB);
+            allSlots[itemToRemove.GetComponent<PlacedImages>().slotA].GetComponent<Slot>().RemoveItem();
+            allSlots[itemToRemove.GetComponent<PlacedImages>().slotB].GetComponent<Slot>().RemoveItem();
+            Globals.inventoryItems[itemToRemove.GetComponent<PlacedImages>().itemID].isPlaced = false;
+        }
+
+        Destroy(itemToRemove);
+    }
+
+
+    private GameObject CheckIfPlacedComponent()
+    {
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        pointerEventData.position = Input.mousePosition;
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerEventData, results);
+        if (results.Count > 0)
+        {
+            for (int i = 0; i < results.Count; i++)
+            {
+                if (results[i].gameObject.transform.CompareTag("PlacedItem"))
+                {
+                    return results[i].gameObject;
+
+                }
+            }
+        }
+        return null;
     }
 }
