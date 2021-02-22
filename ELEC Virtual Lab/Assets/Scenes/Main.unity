@@ -7002,12 +7002,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71dc3a293b9b5437390132afd3447953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: {fileID: 1684883975}
-  itemValue: {fileID: 1880528973}
-  itemQuantity: {fileID: 419809560}
-  itemPrefab: {fileID: 5773015643123837137, guid: 030acad0983fc4816bad2505c3f6560a,
-    type: 3}
-  workBenchSpawnedItems: {fileID: 1571637788}
 --- !u!1 &399855847
 GameObject:
   m_ObjectHideFlags: 0
@@ -11936,13 +11930,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1366372280}
-        m_MethodName: ResumeGame
-        m_Mode: 1
+      - m_Target: {fileID: 1366372281}
+        m_MethodName: changeToScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -25405,6 +25399,7 @@ GameObject:
   - component: {fileID: 1366372277}
   - component: {fileID: 1366372276}
   - component: {fileID: 1366372280}
+  - component: {fileID: 1366372281}
   m_Layer: 5
   m_Name: PauseCanvas
   m_TagString: Untagged
@@ -25505,6 +25500,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 806727458}
+--- !u!114 &1366372281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366372275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83360dfab93eb4fca8ab0ac823c2e907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1369838795
 GameObject:
   m_ObjectHideFlags: 0
@@ -30001,6 +30008,7 @@ GameObject:
   - component: {fileID: 1488995254}
   - component: {fileID: 1488995253}
   - component: {fileID: 1488995252}
+  - component: {fileID: 1488995255}
   m_Layer: 5
   m_Name: SettingsButton
   m_TagString: Untagged
@@ -30119,6 +30127,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1488995250}
   m_CullTransparentMesh: 0
+--- !u!114 &1488995255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488995250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83360dfab93eb4fca8ab0ac823c2e907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1500975983
 GameObject:
   m_ObjectHideFlags: 0
@@ -39017,12 +39037,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d88e396d7bf4b63813a1fd5db35a00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: {fileID: 1454284453}
-  itemValue: {fileID: 901573441}
-  itemQuantity: {fileID: 1042395199}
-  itemPrefab: {fileID: 5773015643123837137, guid: 030acad0983fc4816bad2505c3f6560a,
-    type: 3}
-  workBenchSpawnedItems: {fileID: 1571637788}
 --- !u!1 &2000696871
 GameObject:
   m_ObjectHideFlags: 0
