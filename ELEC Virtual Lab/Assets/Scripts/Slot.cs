@@ -5,11 +5,36 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour
 {
+    public int slotID;
     public bool isFree = true;
+    public Globals.SlotType slotType = default;
+    public bool resistorAdded = false;
+    public SpawnableItem itemPlaced;
     [SerializeField] private Button button = null;
+
+    public GameObject slotPair;
+
+    public bool slotChecked = false;
+
+    public float voltage = -1.0f;
+
     void Start()
     {
 
+        switch (slotType)
+        {
+            case (Globals.SlotType.startSlot):
+                voltage = 5.0f;
+                break;
+
+            case (Globals.SlotType.groundSlot):
+                voltage = 0.0f;
+                break;
+
+            default:
+                voltage = -1.0f;
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -59,7 +84,7 @@ public class Slot : MonoBehaviour
         if (isFree)
         {
             ColorBlock colors = button.colors;
-            colors.highlightedColor = new Color( 0.3f, 0.4f, 1.0f, 1.0f);
+            colors.highlightedColor = new Color(0.3f, 0.4f, 1.0f, 1.0f);
             button.colors = colors;
         }
         else

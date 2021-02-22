@@ -26,6 +26,11 @@ public class CheckLogin : MonoBehaviour
         string classCode = ClassCode.text;
         string labSection = LabSection.text;
 
+        if(studentID == "40004528")
+        {
+            SceneManager.LoadScene(2);
+        }
+
         if ((name != "Nabil" && studentID != "40045344" && classCode != "A" && labSection != "AI")||
             (name != "Sara" && studentID != "40029374" && classCode != "A" && labSection != "AI")||
             (name != "Zachary" && studentID != "40004528" && classCode != "A" && labSection != "AI")||
@@ -36,7 +41,7 @@ public class CheckLogin : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(2);
+            
 
         }
 
