@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -50,12 +51,14 @@ public class PauseMenu : MonoBehaviour
     {
         //TODO: IMPLEMENT SETTINGS
         Debug.Log("Going to settings...");
+        SceneManager.LoadScene(3);
+        
     }
 
     public void QuitGame()
     {
         Debug.Log("Quitting Application...");
-        Application.Quit();
+        SceneManager.LoadScene(0);
 
     }
 }
