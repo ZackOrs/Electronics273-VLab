@@ -26,7 +26,7 @@ public class CheckLogin : MonoBehaviour
         string classCode = ClassCode.text;
         string labSection = LabSection.text;
 
-        if(studentID == "40004528")
+        if(studentID == "40045560")
         {
             SceneManager.LoadScene(2);
         }

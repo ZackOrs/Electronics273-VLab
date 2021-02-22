@@ -560,7 +560,7 @@ public class ItemClickHandler : MonoBehaviour
 
         float distance = Vector2.Distance(_pointA.transform.position, _pointB.transform.position);
         // Debug.Log("Distance: " + distance);
-        distance = distance * 0.71f; //Have it be slightly shorter so it gets the centers
+        distance = distance * 0.85f; //Have it be slightly shorter so it gets the centers
 
         float rotation = AngleBetweenVector2(_pointA.transform.position, _pointB.transform.position);
         float posX = PositionXForLine(_pointA.transform.position, _pointB.transform.position);

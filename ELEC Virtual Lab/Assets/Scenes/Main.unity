@@ -5983,7 +5983,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1493834001}
         m_MethodName: CancelButton
         m_Mode: 1
         m_Arguments:
@@ -24296,7 +24296,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1493834001}
         m_MethodName: ResetButton
         m_Mode: 1
         m_Arguments:
@@ -36900,7 +36900,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1493834001}
         m_MethodName: ConfirmButton
         m_Mode: 1
         m_Arguments:
