@@ -336,7 +336,6 @@ public class ItemClickHandler : MonoBehaviour
         {
             if (column.slotList[i].itemPlaced != null)
             {
-                Debug.Log("I is: " + i);
                 if (CheckIfValidSlotType(column.slotList[i].slotPair.GetComponent<Slot>()))
                 {
                     slotColumns[GetSlotColumn(column.slotList[i].slotPair.GetComponent<Slot>().slotID)].ignoreColumn = true;
@@ -388,8 +387,7 @@ public class ItemClickHandler : MonoBehaviour
             // }
             if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround && !slotColumns[i].ignoreColumn)
             {
-
-                Debug.Log("Checking res for column: " + slotColumns[i].columnID);
+                // Debug.Log("Checking res for column: " + slotColumns[i].columnID);
                 float columnResistance = slotColumns[i].ResistorVal();
                 resistanceTotal += columnResistance;
                 if (slotColumns[i].columnID == amMeterStart)
@@ -409,7 +407,7 @@ public class ItemClickHandler : MonoBehaviour
             circuitCurrent = 99999;
         }
 
-        Debug.Log("Current: " + circuitCurrent);
+        Debug.Log("Circuit Current: " + circuitCurrent);
 
 
         float prevVoltage = slotColumns[5].voltage;
