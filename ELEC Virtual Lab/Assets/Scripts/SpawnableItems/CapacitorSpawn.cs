@@ -66,44 +66,46 @@ public class CapacitorSpawn : SpawnableItemBase
             
             SpawnableItem capacitor = new SpawnableItem(ItemName, ItemValue);
             Globals.inventoryItems.Add(capacitor);
+            float capacitorVal = 0;
+            switch (itemValue.value)
+            {
+                case (0):
+                    capacitorVal = 0.0000001f;
+                    break;
 
-            
-            if (itemValue.value == 0)
-            {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 0;
+                case (1):
+                    capacitorVal = 0.000001f;
+                    break;
+
+                case (2):
+                    capacitorVal = 0.000004f;
+                    break;
+                case (3):
+                    capacitorVal = 0.000005f;
+                    break;
+
+                case (4):
+                    capacitorVal = 0.000009f;
+                    break;
+
+                case (5):
+                    capacitorVal = 0.000012f;
+                    break;
+                case (6):
+                    capacitorVal = 0.000015f;
+                    break;
+
+                case (7):
+                    capacitorVal = 0.000019f;
+                    break;
+
+                case (8):
+                    capacitorVal = 0.000020f;
+                    break;
+                default:
+                    break;
             }
-            else if (itemValue.value == 1)
-            {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 1;
-            }
-            else if (itemValue.value == 2)
-            {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 4;
-            }
-            else if (itemValue.value == 3)
-            {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 5;
-            }
-            else if (itemValue.value == 4)
-            {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 9;
-            }
-            else if (itemValue.value == 5)
-            {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 12;
-            }
-            else if (itemValue.value == 6)
-            {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 15;
-            }
-            else if (itemValue.value == 7)
-            {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 19;
-            }
-            else
-            {
-                spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = 20;
-            }
+            spawnObject.GetComponent<CapacitorSelect>().CapacitorValue = capacitorVal; 
         }
     }
 

@@ -8,7 +8,7 @@ public class CapacitorSelect : SelectableItemBase
     //[SerializeField] private List<Material> materialList = new List<Material>();
     [SerializeField] GameObject capacitor = null;
 
-    public int CapacitorValue;
+    public float CapacitorValue;
     public override string Name
     {
         get
