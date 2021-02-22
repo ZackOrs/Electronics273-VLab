@@ -37,6 +37,10 @@ public class ItemClickHandler : MonoBehaviour
     int breadboardSlotIDCounter = 0;
     int allSlotIDCounter = 0;
 
+
+    int amMeterStart = -1;
+    int amMeterEnd = -1;
+
     private bool foundDeadEnd = true;
 
     void Start()
@@ -158,10 +162,56 @@ public class ItemClickHandler : MonoBehaviour
         Debug.Log("Updating VoltMeter");
         _voltmeter.GetComponent<Voltmeter>().UpdateTerminals();
         Debug.Log("VOLTMETER UPDATED");
+
+        Debug.Log("UPDATING AmMETER");
+        _currentmeter.GetComponent<Currentmeter>().UpdateText(circuitCurrent);
+    }
+
+    private int GetSlotColumn(int slot)
+    {
+        int column = -1;
+
+        column = (int)Math.Floor((double)(slot / 4.0));
+
+        return column;
     }
 
     private void UpdateSuccessors()
     {
+        Debug.Log("UPDATING");
+        //Check if pos is connected to Ground or to VCC
+        if (_currentmeter.GetComponent<Currentmeter>().posSlot.GetComponent<Slot>().itemPlaced != null &&
+            _currentmeter.GetComponent<Currentmeter>().negSlot.GetComponent<Slot>().itemPlaced != null)
+        {
+            Debug.Log("NO NULLS");
+            Slot amPosSlot = _currentmeter.GetComponent<Currentmeter>().posSlot.GetComponent<Slot>();
+            Slot amNegSlot = _currentmeter.GetComponent<Currentmeter>().negSlot.GetComponent<Slot>();
+            if (amPosSlot.slotPair.GetComponent<Slot>().slotType == Globals.SlotType.groundSlot)
+            {
+                Debug.Log("yes1");
+                int updateGroundSlot = GetSlotColumn(amNegSlot.slotPair.GetComponent<Slot>().slotID);
+                slotColumns[updateGroundSlot].connectedToGround = true;
+            }
+            if (amPosSlot.slotPair.GetComponent<Slot>().slotType == Globals.SlotType.startSlot)
+            {
+                Debug.Log("yes2");
+                int updateStartSlot = GetSlotColumn(amNegSlot.slotPair.GetComponent<Slot>().slotID);
+                slotColumns[updateStartSlot].connectedToPower = true;
+            }
+            if (amNegSlot.slotPair.GetComponent<Slot>().slotType == Globals.SlotType.groundSlot)
+            {
+                Debug.Log("yes3");
+                int updateGroundSlot = GetSlotColumn(amPosSlot.slotPair.GetComponent<Slot>().slotID);
+                slotColumns[updateGroundSlot].connectedToGround = true;
+            }
+            if (amNegSlot.slotPair.GetComponent<Slot>().slotType == Globals.SlotType.startSlot)
+            {
+                Debug.Log("yes4");
+                int updateStartSlot = GetSlotColumn(amPosSlot.slotPair.GetComponent<Slot>().slotID);
+                slotColumns[updateStartSlot].connectedToPower = true;
+            }
+        }
+
         for (int i = 0; i < slotColumns.Count; i++)
         {
             SlotColumn currentSlot = slotColumns[i];
@@ -226,22 +276,76 @@ public class ItemClickHandler : MonoBehaviour
     private void RemoveDeadEnds()
     {
         foundDeadEnd = false;
+        amMeterStart = -1;
+        amMeterEnd = -1;
         for (int i = 0; i < slotColumns.Count; i++)
         {
             SlotColumn currentSlot = slotColumns[i];
             if (currentSlot.columnID == 4 || currentSlot.columnID == 5)
+            {
+                if (slotColumns[i].connectedToAmMeter)
+                {
+                    if (amMeterStart == -1)
+                    {
+                        amMeterStart = slotColumns[i].columnID;
+                        // Debug.Log("Start is: " + slotColumns[i].columnID);
+                    }
+                    else
+                    {
+                        amMeterEnd = slotColumns[i].columnID;
+                        // Debug.Log("End is: " + slotColumns[i].columnID);
+                    }
+                }
                 continue;
-            if (slotColumns[i].columnConnections.Count == 1)
+            }
+            if (slotColumns[i].columnConnections.Count == 1 && !slotColumns[i].connectedToAmMeter)
             {
                 Debug.Log("Deadend: " + slotColumns[i].columnID);
                 slotColumns[i].columnConnections.Clear();
+                RemovePairComponents(slotColumns[i]);
                 RemoveConnectionSlot(slotColumns[i].columnID);
                 slotColumns[i].isDeadEnd = true;
+                slotColumns[i].connectedToGround = false;
+                slotColumns[i].connectedToPower = false;
                 slotColumns[i].ChangeAllVoltages(-1.0f);
+                slotColumns[i].columnConnections = new List<int>();
                 foundDeadEnd = true;
+            }
+            else if (slotColumns[i].connectedToAmMeter)
+            {
+                if (slotColumns[i].connectedToAmMeter)
+                {
+
+                    if (amMeterStart == -1)
+                    {
+                        amMeterStart = slotColumns[i].columnID;
+                        // Debug.Log("Start is: " + slotColumns[i].columnID);
+                    }
+                    else
+                    {
+                        amMeterEnd = slotColumns[i].columnID;
+                        // Debug.Log("End is: " + slotColumns[i].columnID);
+                    }
+                }
             }
         }
     }
+    private void RemovePairComponents(SlotColumn column)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (column.slotList[i].itemPlaced != null)
+            {
+                Debug.Log("I is: " + i);
+                if (CheckIfValidSlotType(column.slotList[i].slotPair.GetComponent<Slot>()))
+                {
+                    slotColumns[GetSlotColumn(column.slotList[i].slotPair.GetComponent<Slot>().slotID)].ignoreColumn = true;
+                }
+                    
+            }
+        }
+    }
+
 
     private void RemoveConnectionSlot(int slotIDToRemove)
     {
@@ -251,7 +355,9 @@ public class ItemClickHandler : MonoBehaviour
             {
                 int elementIndex = slotColumns[i].columnConnections.IndexOf(slotIDToRemove);
                 // Debug.Log("Column: "+ slotColumns[i].columnID + " Removing connection: "+ slotIDToRemove);
-                slotColumns[i].columnConnections[elementIndex] = -1;
+                // slotColumns[i].columnConnections[elementIndex] = -1;
+                slotColumns[i].columnConnections.Remove(slotIDToRemove);
+                // slotColumns[i].columnConnections[slotColumns[i].columnConnections.FindIndex(ind => ind.Equals(slotIDToRemove))] = -1;
             }
         }
     }
@@ -259,19 +365,38 @@ public class ItemClickHandler : MonoBehaviour
     private void CalculateElectricalData()
     {
         float resistanceTotal = 0;
+        List<int> colsToIgnore = new List<int>();
+        Debug.Log("AM start: " + amMeterStart);
+        Debug.Log("AM End: " + amMeterEnd);
         for (int i = 0; i < breadboardSlots.Count; i++)
         {
             breadboardSlots[i].GetComponent<Slot>().componentAdded = false;
         }
         for (int i = 0; i < slotColumns.Count; i++)
         {
-            if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround)
+            // slotColumns[i].printAllColumnConnections();
+            // bool pairHasConnection = false;
+            // Debug.Log("Checking column for connection" + slotColumns[i].columnID);
+            // for(int j = 0 ; j < slotColumns[i].columnConnections.Count ; j++)
+            // {
+            //     Debug.Log("Checking connection" + slotColumns[i].columnConnections[j]);
+            //     if(slotColumns[i].columnConnections[j] != -1 && slotColumns[i].columnConnections[j] != slotColumns[i].columnID)
+            //     {
+            //         Debug.Log("Has valid connection");
+            //         pairHasConnection = true;
+            //     }
+            // }
+            if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround && !slotColumns[i].ignoreColumn)
             {
-                // Debug.Log("Checking res for column: "+ slotColumns[i].columnID);
+
+                Debug.Log("Checking res for column: " + slotColumns[i].columnID);
                 float columnResistance = slotColumns[i].ResistorVal();
                 resistanceTotal += columnResistance;
+                if (slotColumns[i].columnID == amMeterStart)
+                {
+                    i = amMeterEnd;
+                }
                 // Debug.Log("DONE for column: "+ slotColumns[i].columnID + " Value of: " + columnResistance);
-
             }
         }
         // Debug.Log("Res Total: " + resistanceTotal);
@@ -284,7 +409,7 @@ public class ItemClickHandler : MonoBehaviour
             circuitCurrent = 99999;
         }
 
-        // Debug.Log("Current: "+ circuitCurrent);
+        Debug.Log("Current: " + circuitCurrent);
 
 
         float prevVoltage = slotColumns[5].voltage;
@@ -292,6 +417,10 @@ public class ItemClickHandler : MonoBehaviour
         {
             if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround)
             {
+                if (slotColumns[i].columnID == amMeterStart)
+                {
+                    i = amMeterEnd;
+                }
                 slotColumns[i].ChangeAllVoltages(prevVoltage);
                 float voltageDrop = circuitCurrent * slotColumns[i].impedance;
                 prevVoltage -= voltageDrop;
@@ -305,7 +434,7 @@ public class ItemClickHandler : MonoBehaviour
     {
         if (Globals.mouseClickAction == Globals.MouseClickAction.NoClick && spawnableItem != null)
         {
-            Debug.Log("item clicked");
+            // Debug.Log("item clicked");
             ItemClickToHandle();
         }
     }
@@ -357,7 +486,7 @@ public class ItemClickHandler : MonoBehaviour
                     CheckIfBBSlot();
                     if (isBBSlotFree)
                     {
-                        Debug.Log("First Click GOOD");
+                        // Debug.Log("First Click GOOD");
                         _pointA.GetComponent<Slot>().PlaceItem();
                         _pointA.GetComponent<Slot>().itemPlaced = spawnableItem;
                     }
@@ -370,7 +499,7 @@ public class ItemClickHandler : MonoBehaviour
                     CheckIfBBSlot();
                     if (isBBSlotFree)
                     {
-                        Debug.Log("Second Click GOOD DRAWING LINE");
+                        // Debug.Log("Second Click GOOD DRAWING LINE");
 
                         _pointB.GetComponent<Slot>().PlaceItem();
                         _pointB.GetComponent<Slot>().itemPlaced = spawnableItem;
@@ -432,7 +561,7 @@ public class ItemClickHandler : MonoBehaviour
 
 
         float distance = Vector2.Distance(_pointA.transform.position, _pointB.transform.position);
-        Debug.Log("Distance: " + distance);
+        // Debug.Log("Distance: " + distance);
         distance = distance * 0.71f; //Have it be slightly shorter so it gets the centers
 
         float rotation = AngleBetweenVector2(_pointA.transform.position, _pointB.transform.position);
@@ -541,5 +670,17 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
         return null;
+    }
+
+
+    private bool CheckIfValidSlotType(Slot slot)
+    {
+        if (slot.slotType == Globals.SlotType.defaultSlot ||
+                slot.slotType == Globals.SlotType.groundSlot ||
+                slot.slotType == Globals.SlotType.startSlot)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -14,6 +14,9 @@ public class SlotColumn
     public Slot slot3;
     public Slot slot4;
 
+
+    public bool ignoreColumn = false;
+    public bool connectedToAmMeter;
     public bool connectedToGround = false;
     public bool connectedToPower = false;
 
@@ -25,13 +28,13 @@ public class SlotColumn
     public float voltage;
     public float impedance;
 
-    List<int> slotPairConnection = new List<int>();
+    public List<int> slotPairConnection = new List<int>();
     public List<int> columnConnections = new List<int>();
     List<int> slotConnection = new List<int>();
 
 
 
-    List<Slot> slotList = new List<Slot>();
+    public List<Slot> slotList = new List<Slot>();
 
     public SlotColumn(Slot _slot1, Slot _slot2, Slot _slot3, Slot _slot4)
     {
@@ -64,6 +67,7 @@ public class SlotColumn
                 if (slotpair.slotType == Globals.SlotType.defaultSlot ||
                      slotpair.slotType == Globals.SlotType.groundSlot ||
                       slotpair.slotType == Globals.SlotType.startSlot)
+                {
                     //Prevent connections to self
                     if (getSlotColumn(slot.slotPair.GetComponent<Slot>().slotID) != columnID)
                     {
@@ -79,7 +83,12 @@ public class SlotColumn
                             connectedToPower = true;
                         }
                     }
-
+                }
+                else if(slotpair.slotType == Globals.SlotType.currentmeterSlot)
+                {
+                    connectedToAmMeter = true;
+                }
+                    
             }
         }
     }
