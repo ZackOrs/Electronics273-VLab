@@ -6,6 +6,9 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using SpiceSharp;
+using SpiceSharp.Components;
+using SpiceSharp.Simulations;
 
 public class ItemClickHandler : MonoBehaviour
 {
@@ -120,51 +123,157 @@ public class ItemClickHandler : MonoBehaviour
         // CalculateCircuit();
     }
 
-    public void CalculateCircuit()
+    public void SpiceSharpCalculation()
     {
-
-        Debug.Log("Started Circuit Calculation");
         slotColumns.Clear();
-        for (int i = 0; i < breadboardSlotIDCounter; i += 4)
+        for (int i = 0; i < breadboardSlotIDCounter; i++)
         {
             var child = _breadboardUI.transform.GetChild(i);
             child.GetComponent<Slot>().componentAdded = false;
             if (child.CompareTag("BBSlot"))
             {
-                SlotColumn slotColumn = new SlotColumn(
-                    breadboardSlots[i].GetComponent<Slot>(),
-                    breadboardSlots[i + 1].GetComponent<Slot>(),
-                    breadboardSlots[i + 2].GetComponent<Slot>(),
-                    breadboardSlots[i + 3].GetComponent<Slot>());
-
-                slotColumns.Add(slotColumn);
-                if (!(slotColumns.Last().isGroundSlot || slotColumns.Last().isPowerSlot))
-                {
-                    slotColumns.Last().ChangeAllVoltages(-1.0f);
-                }
+                breadboardSlots[i].GetComponent<Slot>().slotChecked = false;
+                // breadboardSlots[i + 1].GetComponent<Slot>().slotChecked = false;
+                // breadboardSlots[i + 2].GetComponent<Slot>().slotChecked = false;
+                // breadboardSlots[i + 3].GetComponent<Slot>().slotChecked = false;
             }
         }
 
-        UpdateSuccessors();
-        do
+
+        List<String> list = new List<string>();
+
+        var ckt = new Circuit();
+        VoltageSource powerSupply = new VoltageSource("SLOTIDGOESHERE" , "C0" , "0" , 5);
+        ckt.Add(powerSupply);
+
+        for(int i = 0 ; i < breadboardSlotIDCounter; i++)
         {
-            RemoveDeadEnds();
-        } while (foundDeadEnd);
+            if(breadboardSlots[i].GetComponent<Slot>().itemPlaced != null && !breadboardSlots[i].GetComponent<Slot>().slotChecked)
+            {
+                getComponent(breadboardSlots[i].GetComponent<Slot>(), ckt);
+                breadboardSlots[i].GetComponent<Slot>().slotChecked = true;
+                breadboardSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
+            }
+                
+        }
+        Resistor resistor = new Resistor("R7","C3","0",0);
+        ckt.Add(resistor);
+        Debug.Log("Starting calculation ");
+        // Create a DC sweep and register to the event for exporting simulation data
+        var dc = new DC("dc", "SLOTIDGOESHERE", 5, 5, 1);
+        dc.ExportSimulationData += (sender, exportDataEventArgs) =>
+        {
+            
+            Debug.Log("Real voltage " + (new RealVoltageExport(dc, "C0", "C1")).Value);
+            // Debug.Log("Real voltage " + (new RealVoltageExport(dc, "in", "out")).Value);
+            // Debug.Log("in:  " + exportDataEventArgs.GetVoltage("in"));
+            // Debug.Log("out: " + exportDataEventArgs.GetVoltage("out"));
+            // Debug.Log("0:   " + exportDataEventArgs.GetVoltage("0"));
+        };
 
-        CalculateElectricalData();
-        //  for (int i = 0; i < slotColumns.Count; i++)
-        // {
-        //     Debug.Log(slotColumns[i].printAllColumnConnections());
-        // }
+        // Run the simulation
+        dc.Run(ckt);
+    }
 
-        Debug.Log("***** DONE CALCULATION *****");
+    private void getComponent(Slot slot, Circuit ckt)
+    {
+        string componentName = "S" + slot.slotID;
+        string componentStart = "C" + GetSlotColumn(slot.slotID);
+        string componentEnd = "C" + GetSlotColumn(slot.slotPair.GetComponent<Slot>().slotID);
+        float value = GetComponentValue(slot);
 
-        Debug.Log("Updating VoltMeter");
-        _voltmeter.GetComponent<Voltmeter>().UpdateTerminals();
-        Debug.Log("VOLTMETER UPDATED");
+        switch(slot.itemPlaced.itemName)
+        {
+            case(Globals.AvailableItems.Wire):
+            Resistor wire = new Resistor(componentName,componentStart,componentEnd,0);
+            Debug.Log("Adding Wire: " + componentName + " " + componentStart + " "  + componentEnd + " " + 0);
+            ckt.Add(wire);
+            break;
 
-        Debug.Log("UPDATING AmMETER");
-        _currentmeter.GetComponent<Currentmeter>().UpdateText(circuitCurrent);
+            case(Globals.AvailableItems.Resistor):
+            Resistor resistor = new Resistor(componentName,componentStart,componentEnd,value);
+            Debug.Log("Adding Resistor: " + componentName + " " + componentStart + " "  + componentEnd + " " + value);
+            ckt.Add(resistor);
+            break;
+
+            case(Globals.AvailableItems.Capacitor):
+            Capacitor capacitor = new Capacitor(componentName,componentStart,componentEnd,value);
+            Debug.Log("Adding Capacitor: " + componentName + " " + componentStart + " "  + componentEnd + " " + value);
+            break;
+
+            default:
+            break;            
+        }
+
+    }
+
+
+    private float GetComponentValue(Slot slot)
+    {   
+        float componentVal = 0;
+        if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor)
+        {
+            switch (slot.itemPlaced.itemValue)
+            {
+                case (0):
+                    componentVal = 210;
+                    break;
+
+                case (1):
+                    componentVal = 370;
+                    break;
+
+                case (2):
+                    componentVal = 480;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        else if (slot.itemPlaced.itemName == Globals.AvailableItems.Capacitor)
+        {
+            switch (slot.itemPlaced.itemValue)
+            {
+                case (0):
+                    componentVal = 0.0000001f;
+                    break;
+
+                case (1):
+                    componentVal = 0.000001f;
+                    break;
+
+                case (2):
+                    componentVal = 0.000004f;
+                    break;
+                case (3):
+                    componentVal = 0.000005f;
+                    break;
+
+                case (4):
+                    componentVal = 0.000009f;
+                    break;
+
+                case (5):
+                    componentVal = 0.000012f;
+                    break;
+                case (6):
+                    componentVal = 0.000015f;
+                    break;
+
+                case (7):
+                    componentVal = 0.000019f;
+                    break;
+
+                case (8):
+                    componentVal = 0.000020f;
+                    break;
+                default:
+                    break;
+            }
+            // componentVal = 1 / ((2 * (float)Math.PI * 60) * componentVal);
+        }
+        return componentVal;
     }
 
     private int GetSlotColumn(int slot)
@@ -175,258 +284,6 @@ public class ItemClickHandler : MonoBehaviour
 
         return column;
     }
-
-    private void UpdateSuccessors()
-    {
-        Debug.Log("UPDATING");
-        //Check if pos is connected to Ground or to VCC
-        if (_currentmeter.GetComponent<Currentmeter>().posSlot.GetComponent<Slot>().itemPlaced != null &&
-            _currentmeter.GetComponent<Currentmeter>().negSlot.GetComponent<Slot>().itemPlaced != null)
-        {
-            Debug.Log("NO NULLS");
-            Slot amPosSlot = _currentmeter.GetComponent<Currentmeter>().posSlot.GetComponent<Slot>();
-            Slot amNegSlot = _currentmeter.GetComponent<Currentmeter>().negSlot.GetComponent<Slot>();
-            if (amPosSlot.slotPair.GetComponent<Slot>().slotType == Globals.SlotType.groundSlot)
-            {
-                Debug.Log("yes1");
-                int updateGroundSlot = GetSlotColumn(amNegSlot.slotPair.GetComponent<Slot>().slotID);
-                slotColumns[updateGroundSlot].connectedToGround = true;
-            }
-            if (amPosSlot.slotPair.GetComponent<Slot>().slotType == Globals.SlotType.startSlot)
-            {
-                Debug.Log("yes2");
-                int updateStartSlot = GetSlotColumn(amNegSlot.slotPair.GetComponent<Slot>().slotID);
-                slotColumns[updateStartSlot].connectedToPower = true;
-            }
-            if (amNegSlot.slotPair.GetComponent<Slot>().slotType == Globals.SlotType.groundSlot)
-            {
-                Debug.Log("yes3");
-                int updateGroundSlot = GetSlotColumn(amPosSlot.slotPair.GetComponent<Slot>().slotID);
-                slotColumns[updateGroundSlot].connectedToGround = true;
-            }
-            if (amNegSlot.slotPair.GetComponent<Slot>().slotType == Globals.SlotType.startSlot)
-            {
-                Debug.Log("yes4");
-                int updateStartSlot = GetSlotColumn(amPosSlot.slotPair.GetComponent<Slot>().slotID);
-                slotColumns[updateStartSlot].connectedToPower = true;
-            }
-        }
-
-        for (int i = 0; i < slotColumns.Count; i++)
-        {
-            SlotColumn currentSlot = slotColumns[i];
-            if (currentSlot.columnID == 4 || currentSlot.columnID == 5)
-                continue;
-            if (slotColumns[i].connectedToPower)
-            {
-                for (int j = 0; j < slotColumns[i].columnConnections.Count; j++)
-                {
-                    // Debug.Log("Column connection is: " + slotColumns[currentSlot.columnConnections[j]].columnID);
-                    slotColumns[currentSlot.columnConnections[j]].connectedToPower = true;
-                }
-            }
-        }
-
-        for (int i = slotColumns.Count - 1; i > 0; i--)
-        {
-            SlotColumn currentSlot = slotColumns[i];
-            if (currentSlot.columnID == 4 || currentSlot.columnID == 5)
-                continue;
-            if (slotColumns[i].connectedToPower)
-            {
-                for (int j = 0; j < slotColumns[i].columnConnections.Count; j++)
-                {
-                    // Debug.Log("Column connection is: " + slotColumns[currentSlot.columnConnections[j]].columnID);
-                    slotColumns[currentSlot.columnConnections[j]].connectedToPower = true;
-                }
-            }
-        }
-
-        for (int i = 0; i < slotColumns.Count; i++)
-        {
-            SlotColumn currentSlot = slotColumns[i];
-            if (currentSlot.columnID == 4 || currentSlot.columnID == 5)
-                continue;
-            if (slotColumns[i].connectedToGround)
-            {
-                for (int j = 0; j < slotColumns[i].columnConnections.Count; j++)
-                {
-                    // Debug.Log("Column connection is: " + slotColumns[currentSlot.columnConnections[j]].columnID);
-                    slotColumns[currentSlot.columnConnections[j]].connectedToGround = true;
-                }
-            }
-        }
-
-        for (int i = slotColumns.Count - 1; i > 0; i--)
-        {
-            SlotColumn currentSlot = slotColumns[i];
-            if (currentSlot.columnID == 4 || currentSlot.columnID == 5)
-                continue;
-            if (slotColumns[i].connectedToGround)
-            {
-                for (int j = 0; j < slotColumns[i].columnConnections.Count; j++)
-                {
-                    // Debug.Log("Column connection is: " + slotColumns[currentSlot.columnConnections[j]].columnID);
-                    slotColumns[currentSlot.columnConnections[j]].connectedToGround = true;
-                }
-            }
-        }
-    }
-
-    private void RemoveDeadEnds()
-    {
-        foundDeadEnd = false;
-        amMeterStart = -1;
-        amMeterEnd = -1;
-        for (int i = 0; i < slotColumns.Count; i++)
-        {
-            SlotColumn currentSlot = slotColumns[i];
-            if (currentSlot.columnID == 4 || currentSlot.columnID == 5)
-            {
-                if (slotColumns[i].connectedToAmMeter)
-                {
-                    if (amMeterStart == -1)
-                    {
-                        amMeterStart = slotColumns[i].columnID;
-                        // Debug.Log("Start is: " + slotColumns[i].columnID);
-                    }
-                    else
-                    {
-                        amMeterEnd = slotColumns[i].columnID;
-                        // Debug.Log("End is: " + slotColumns[i].columnID);
-                    }
-                }
-                continue;
-            }
-            if (slotColumns[i].columnConnections.Count == 1 && !slotColumns[i].connectedToAmMeter)
-            {
-                Debug.Log("Deadend: " + slotColumns[i].columnID);
-                slotColumns[i].columnConnections.Clear();
-                RemovePairComponents(slotColumns[i]);
-                RemoveConnectionSlot(slotColumns[i].columnID);
-                slotColumns[i].isDeadEnd = true;
-                slotColumns[i].connectedToGround = false;
-                slotColumns[i].connectedToPower = false;
-                slotColumns[i].ChangeAllVoltages(-1.0f);
-                slotColumns[i].columnConnections = new List<int>();
-                foundDeadEnd = true;
-            }
-            else if (slotColumns[i].connectedToAmMeter)
-            {
-                if (slotColumns[i].connectedToAmMeter)
-                {
-
-                    if (amMeterStart == -1)
-                    {
-                        amMeterStart = slotColumns[i].columnID;
-                        // Debug.Log("Start is: " + slotColumns[i].columnID);
-                    }
-                    else
-                    {
-                        amMeterEnd = slotColumns[i].columnID;
-                        // Debug.Log("End is: " + slotColumns[i].columnID);
-                    }
-                }
-            }
-        }
-    }
-    private void RemovePairComponents(SlotColumn column)
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            if (column.slotList[i].itemPlaced != null)
-            {
-                if (CheckIfValidSlotType(column.slotList[i].slotPair.GetComponent<Slot>()))
-                {
-                    slotColumns[GetSlotColumn(column.slotList[i].slotPair.GetComponent<Slot>().slotID)].ignoreColumn = true;
-                }
-                    
-            }
-        }
-    }
-
-
-    private void RemoveConnectionSlot(int slotIDToRemove)
-    {
-        for (int i = 0; i < slotColumns.Count; i++)
-        {
-            if (slotColumns[i].columnConnections.Contains(slotIDToRemove))
-            {
-                int elementIndex = slotColumns[i].columnConnections.IndexOf(slotIDToRemove);
-                // Debug.Log("Column: "+ slotColumns[i].columnID + " Removing connection: "+ slotIDToRemove);
-                // slotColumns[i].columnConnections[elementIndex] = -1;
-                slotColumns[i].columnConnections.Remove(slotIDToRemove);
-                // slotColumns[i].columnConnections[slotColumns[i].columnConnections.FindIndex(ind => ind.Equals(slotIDToRemove))] = -1;
-            }
-        }
-    }
-
-    private void CalculateElectricalData()
-    {
-        float resistanceTotal = 0;
-        List<int> colsToIgnore = new List<int>();
-        Debug.Log("AM start: " + amMeterStart);
-        Debug.Log("AM End: " + amMeterEnd);
-        for (int i = 0; i < breadboardSlots.Count; i++)
-        {
-            breadboardSlots[i].GetComponent<Slot>().componentAdded = false;
-        }
-        for (int i = 0; i < slotColumns.Count; i++)
-        {
-            // slotColumns[i].printAllColumnConnections();
-            // bool pairHasConnection = false;
-            // Debug.Log("Checking column for connection" + slotColumns[i].columnID);
-            // for(int j = 0 ; j < slotColumns[i].columnConnections.Count ; j++)
-            // {
-            //     Debug.Log("Checking connection" + slotColumns[i].columnConnections[j]);
-            //     if(slotColumns[i].columnConnections[j] != -1 && slotColumns[i].columnConnections[j] != slotColumns[i].columnID)
-            //     {
-            //         Debug.Log("Has valid connection");
-            //         pairHasConnection = true;
-            //     }
-            // }
-            if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround && !slotColumns[i].ignoreColumn)
-            {
-                // Debug.Log("Checking res for column: " + slotColumns[i].columnID);
-                float columnResistance = slotColumns[i].ResistorVal();
-                resistanceTotal += columnResistance;
-                if (slotColumns[i].columnID == amMeterStart)
-                {
-                    i = amMeterEnd;
-                }
-                // Debug.Log("DONE for column: "+ slotColumns[i].columnID + " Value of: " + columnResistance);
-            }
-        }
-        // Debug.Log("Res Total: " + resistanceTotal);
-        if (resistanceTotal > 0)
-        {
-            circuitCurrent = slotColumns[5].voltage / resistanceTotal;
-        }
-        else
-        {
-            circuitCurrent = 99999;
-        }
-
-        Debug.Log("Circuit Current: " + circuitCurrent);
-
-
-        float prevVoltage = slotColumns[5].voltage;
-        for (int i = 0; i < slotColumns.Count; i++)
-        {
-            if (slotColumns[i].connectedToPower && slotColumns[i].connectedToGround)
-            {
-                if (slotColumns[i].columnID == amMeterStart)
-                {
-                    i = amMeterEnd;
-                }
-                slotColumns[i].ChangeAllVoltages(prevVoltage);
-                float voltageDrop = circuitCurrent * slotColumns[i].impedance;
-                prevVoltage -= voltageDrop;
-                // Debug.Log("voltage drop:" + voltageDrop);
-            }
-        }
-    }
-
 
     public static void ItemClicked()
     {
