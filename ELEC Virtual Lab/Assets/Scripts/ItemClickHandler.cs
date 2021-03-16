@@ -6,6 +6,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
@@ -103,9 +104,8 @@ public class ItemClickHandler : MonoBehaviour
     public void SpiceSharpCalculation()
     {
         ClearAllSlots();
-
         var ckt = new Circuit();
-        
+
         for (int i = 0; i < breadboardSlotIDCounter; i++)
         {
             if (breadboardSlots[i].GetComponent<Slot>().itemPlaced != null && !breadboardSlots[i].GetComponent<Slot>().slotChecked)
@@ -125,12 +125,9 @@ public class ItemClickHandler : MonoBehaviour
         Debug.Log("Starting calculation ");
 
         // Create a DC sweep and register to the event for exporting simulation data
-
         var dc = new DC("dc", "PS", 5, 5, 1);
-        dc.ExportSimulationData += (sender, exportDataEventArgs) =>
-        {
-            Debug.Log("Real voltage " + (new RealVoltageExport(dc, "C0", "C1")).Value);
-        };
+        GetCircuitToolsReading(dc);
+
         // Run the simulation
         dc.Run(ckt);
     }
@@ -386,6 +383,59 @@ public class ItemClickHandler : MonoBehaviour
                 break;
             default:
                 Debug.Log("Click not recognized");
+                break;
+        }
+    }
+
+    private void GetCircuitToolsReading(DC dc)
+    {
+        string posToolSlot = "+";
+        string negToolSlot = "-";
+        var meterMode = _currentmeter.GetComponentInChildren<TMP_Dropdown>().value;
+        Transform meterVal = null;
+
+        for (int i = 0; i < _currentmeter.transform.childCount; i++)
+        {
+            var child = _currentmeter.transform.GetChild(i);
+            if (child.CompareTag("BBSlot"))
+            {
+                if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked)
+                {
+                    if (child.name.Equals("Pos Slot"))
+                    {
+                        posToolSlot = "C" + GetSlotColumn(child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotID).ToString();
+                    }
+                    else if (child.name.Equals("Neg Slot"))
+                    {
+                        negToolSlot = "C" + GetSlotColumn(child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotID).ToString();
+                    }
+                }
+            }
+            else if(child.name.Equals("Meter Val"))
+            {
+                meterVal = child;
+            }
+        }
+        Debug.Log("Pos slot: " + posToolSlot);
+        Debug.Log("Neg slot: " + negToolSlot);
+        switch (meterMode)
+        {
+            case 0: //VoltMeter
+                dc.ExportSimulationData += (sender, exportDataEventArgs) =>
+                {
+                    Debug.Log("Real voltage " + (new RealVoltageExport(dc, posToolSlot, negToolSlot)).Value);
+                    meterVal.GetComponent<TMP_Text>().text = new RealVoltageExport(dc, posToolSlot, negToolSlot).Value.ToString();
+                };
+                break;
+
+            case 1: //Ammeter
+                dc.ExportSimulationData += (sender, exportDataEventArgs) =>
+                {
+                    Debug.Log("Real Current " + (new RealCurrentExport(dc, posToolSlot)).Value);
+                    meterVal.GetComponent<TMP_Text>().text = new RealCurrentExport(dc, posToolSlot).Value.ToString();
+                };
+                break;
+            default:
                 break;
         }
     }

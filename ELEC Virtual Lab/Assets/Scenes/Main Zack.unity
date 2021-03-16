@@ -1248,7 +1248,6 @@ MonoBehaviour:
   button: {fileID: 667082924}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &30810089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6946,7 +6945,6 @@ MonoBehaviour:
   button: {fileID: 1124788877}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &329325954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7507,7 +7505,6 @@ MonoBehaviour:
   button: {fileID: 213461952}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &386850007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7886,7 +7883,6 @@ MonoBehaviour:
   button: {fileID: 1911239609}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: -1
 --- !u!114 &405744764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9203,7 +9199,6 @@ MonoBehaviour:
   button: {fileID: 74920790}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &486886217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9711,7 +9706,6 @@ MonoBehaviour:
   button: {fileID: 263093209}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &536602129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10578,7 +10572,6 @@ MonoBehaviour:
   button: {fileID: 981856174}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 5
 --- !u!114 &563599513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10674,7 +10667,6 @@ MonoBehaviour:
   button: {fileID: 843078326}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &578268974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11580,7 +11572,6 @@ MonoBehaviour:
   button: {fileID: 2016024929}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: -1
 --- !u!1 &625472801
 GameObject:
   m_ObjectHideFlags: 0
@@ -11772,7 +11763,6 @@ MonoBehaviour:
   button: {fileID: 785039212}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &630816909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13030,7 +13020,6 @@ MonoBehaviour:
   button: {fileID: 1914906599}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &670556322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15279,7 +15268,6 @@ MonoBehaviour:
   button: {fileID: 7088434}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &760237497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19458,7 +19446,6 @@ MonoBehaviour:
   button: {fileID: 2047691562}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &922679937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22583,7 +22570,6 @@ MonoBehaviour:
   button: {fileID: 1659381802}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: -1
 --- !u!114 &1036420359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26450,7 +26436,6 @@ MonoBehaviour:
   button: {fileID: 1111203927}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!1 &1274047587
 GameObject:
   m_ObjectHideFlags: 0
@@ -26741,7 +26726,6 @@ GameObject:
   - component: {fileID: 1290287095}
   - component: {fileID: 1290287097}
   - component: {fileID: 1290287096}
-  - component: {fileID: 1290287098}
   m_Layer: 5
   m_Name: VoltMeter
   m_TagString: Untagged
@@ -26809,21 +26793,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290287094}
   m_CullTransparentMesh: 0
---- !u!114 &1290287098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1290287094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3225dbef7af46c42961ebe1eb847b40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  posSlot: {fileID: 1373093342}
-  negSlot: {fileID: 612163764}
-  textBox: {fileID: 1137330751}
 --- !u!1 &1293267806
 GameObject:
   m_ObjectHideFlags: 0
@@ -27716,7 +27685,6 @@ MonoBehaviour:
   button: {fileID: 1880167811}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &1320397583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28209,7 +28177,6 @@ GameObject:
   - component: {fileID: 1352697004}
   - component: {fileID: 1352697007}
   - component: {fileID: 1352697006}
-  - component: {fileID: 1352697005}
   m_Layer: 5
   m_Name: CurrentMeter
   m_TagString: Untagged
@@ -28240,21 +28207,6 @@ RectTransform:
   m_AnchoredPosition: {x: 75, y: 216.5}
   m_SizeDelta: {x: -630, y: -467}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1352697005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1352697003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71f0604d4d2de5f4591d1411b729a103, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  posSlot: {fileID: 1036420356}
-  negSlot: {fileID: 405744761}
-  textBox: {fileID: 832596510}
 --- !u!114 &1352697006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29405,7 +29357,6 @@ MonoBehaviour:
   button: {fileID: 969660886}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: -1
 --- !u!1 &1375435391
 GameObject:
   m_ObjectHideFlags: 0
@@ -30345,7 +30296,6 @@ MonoBehaviour:
   button: {fileID: 3317250}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &1406660163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33576,7 +33526,6 @@ MonoBehaviour:
   button: {fileID: 361298547}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &1478455597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35481,7 +35430,6 @@ MonoBehaviour:
   button: {fileID: 1027010577}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 5
 --- !u!114 &1579708996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35577,7 +35525,6 @@ MonoBehaviour:
   button: {fileID: 551729579}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 5
 --- !u!114 &1580823609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35948,7 +35895,6 @@ MonoBehaviour:
   button: {fileID: 1219038925}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &1585296668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39054,7 +39000,6 @@ MonoBehaviour:
   button: {fileID: 1193226320}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &1718007659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39557,7 +39502,6 @@ MonoBehaviour:
   button: {fileID: 607061303}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 5
 --- !u!114 &1741115171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39727,7 +39671,6 @@ MonoBehaviour:
   button: {fileID: 51848127}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 5
 --- !u!114 &1746921452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40222,7 +40165,6 @@ MonoBehaviour:
   button: {fileID: 1913074429}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &1765384873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41697,7 +41639,6 @@ MonoBehaviour:
   button: {fileID: 1721039498}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 5
 --- !u!114 &1867742976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43258,7 +43199,6 @@ MonoBehaviour:
   button: {fileID: 1375959084}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &1920552149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44738,7 +44678,6 @@ MonoBehaviour:
   button: {fileID: 647779117}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &2008186100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46341,7 +46280,6 @@ MonoBehaviour:
   button: {fileID: 1314141289}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 0
 --- !u!114 &2090132932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46736,7 +46674,6 @@ MonoBehaviour:
   button: {fileID: 856226071}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 5
 --- !u!114 &2105207853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47042,7 +46979,6 @@ MonoBehaviour:
   button: {fileID: 1353122653}
   slotPair: {fileID: 0}
   slotChecked: 0
-  voltage: 5
 --- !u!114 &2111385264
 MonoBehaviour:
   m_ObjectHideFlags: 0
