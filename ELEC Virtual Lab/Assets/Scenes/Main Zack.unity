@@ -6941,7 +6941,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotID: 0
   isFree: 1
-  slotType: 2
+  slotType: 0
   componentAdded: 0
   button: {fileID: 1124788877}
   slotPair: {fileID: 0}
@@ -10573,7 +10573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotID: 0
   isFree: 1
-  slotType: 1
+  slotType: 0
   componentAdded: 0
   button: {fileID: 981856174}
   slotPair: {fileID: 0}
@@ -34836,6 +34836,7 @@ MonoBehaviour:
   _breadboardUI: {fileID: 873207304}
   _voltmeter: {fileID: 1290287094}
   _currentmeter: {fileID: 1352697003}
+  _powerSupply: {fileID: 0}
   _wireImage: {fileID: 8561823322331990391, guid: 6f7274fdd8056684d8eeb3c144f42e1c,
     type: 3}
   _resistorImage: {fileID: 3220167450444337859, guid: 791011f42e2b3834cb48cebedef62a6a,
@@ -35475,7 +35476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotID: 0
   isFree: 1
-  slotType: 1
+  slotType: 0
   componentAdded: 0
   button: {fileID: 1027010577}
   slotPair: {fileID: 0}
@@ -35571,7 +35572,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotID: 0
   isFree: 1
-  slotType: 1
+  slotType: 0
   componentAdded: 0
   button: {fileID: 551729579}
   slotPair: {fileID: 0}
@@ -35942,7 +35943,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotID: 0
   isFree: 1
-  slotType: 2
+  slotType: 0
   componentAdded: 0
   button: {fileID: 1219038925}
   slotPair: {fileID: 0}
@@ -39048,7 +39049,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotID: 0
   isFree: 1
-  slotType: 2
+  slotType: 0
   componentAdded: 0
   button: {fileID: 1193226320}
   slotPair: {fileID: 0}
@@ -39721,7 +39722,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotID: 0
   isFree: 1
-  slotType: 1
+  slotType: 0
   componentAdded: 0
   button: {fileID: 51848127}
   slotPair: {fileID: 0}
@@ -43252,7 +43253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotID: 0
   isFree: 1
-  slotType: 2
+  slotType: 0
   componentAdded: 0
   button: {fileID: 1375959084}
   slotPair: {fileID: 0}

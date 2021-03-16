@@ -17,11 +17,10 @@ public class ItemClickHandler : MonoBehaviour
 
     public static GameObject buttonClicked;
 
-    float circuitCurrent;
-
     [SerializeField] GameObject _breadboardUI = null;
     [SerializeField] GameObject _voltmeter = null;
     [SerializeField] GameObject _currentmeter = null;
+    [SerializeField] GameObject _powerSupply = null;
 
     [SerializeField] Image _wireImage = null;
     [SerializeField] Image _resistorImage = null;
@@ -35,16 +34,8 @@ public class ItemClickHandler : MonoBehaviour
     public static List<GameObject> breadboardSlots = new List<GameObject>();
     public static List<GameObject> allSlots = new List<GameObject>();
 
-    private List<SlotColumn> slotColumns = new List<SlotColumn>();
-
     int breadboardSlotIDCounter = 0;
     int allSlotIDCounter = 0;
-
-
-    int amMeterStart = -1;
-    int amMeterEnd = -1;
-
-    private bool foundDeadEnd = true;
 
     void Start()
     {
@@ -91,20 +82,6 @@ public class ItemClickHandler : MonoBehaviour
                 child.GetComponent<Slot>().slotID = allSlotIDCounter++;
             }
         }
-
-        slotColumns.Clear();
-        for (int i = 0; i < breadboardSlotIDCounter; i += 4)
-        {
-            var child = _breadboardUI.transform.GetChild(i);
-            if (child.CompareTag("BBSlot"))
-            {
-                SlotColumn slotColumn = new SlotColumn(breadboardSlots[i].GetComponent<Slot>(),
-                breadboardSlots[i + 1].GetComponent<Slot>(),
-                breadboardSlots[i + 2].GetComponent<Slot>(),
-                breadboardSlots[i + 3].GetComponent<Slot>());
-                slotColumns.Add(slotColumn);
-            }
-        }
     }
 
     // Update is called once per frame
@@ -125,91 +102,191 @@ public class ItemClickHandler : MonoBehaviour
 
     public void SpiceSharpCalculation()
     {
-        slotColumns.Clear();
-        for (int i = 0; i < breadboardSlotIDCounter; i++)
-        {
-            var child = _breadboardUI.transform.GetChild(i);
-            child.GetComponent<Slot>().componentAdded = false;
-            if (child.CompareTag("BBSlot"))
-            {
-                breadboardSlots[i].GetComponent<Slot>().slotChecked = false;
-                // breadboardSlots[i + 1].GetComponent<Slot>().slotChecked = false;
-                // breadboardSlots[i + 2].GetComponent<Slot>().slotChecked = false;
-                // breadboardSlots[i + 3].GetComponent<Slot>().slotChecked = false;
-            }
-        }
-
-
-        List<String> list = new List<string>();
+        ClearAllSlots();
 
         var ckt = new Circuit();
-        VoltageSource powerSupply = new VoltageSource("SLOTIDGOESHERE" , "C0" , "0" , 5);
+        
+        for (int i = 0; i < breadboardSlotIDCounter; i++)
+        {
+            if (breadboardSlots[i].GetComponent<Slot>().itemPlaced != null && !breadboardSlots[i].GetComponent<Slot>().slotChecked)
+            {
+                if (breadboardSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot)
+                {
+                    AddElectricalElement(breadboardSlots[i].GetComponent<Slot>(), ckt);
+                    breadboardSlots[i].GetComponent<Slot>().slotChecked = true;
+                    breadboardSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
+                }
+            }
+        }
+
+        VoltageSource powerSupply = AddVoltageSource(ckt);
         ckt.Add(powerSupply);
 
-        for(int i = 0 ; i < breadboardSlotIDCounter; i++)
-        {
-            if(breadboardSlots[i].GetComponent<Slot>().itemPlaced != null && !breadboardSlots[i].GetComponent<Slot>().slotChecked)
-            {
-                getComponent(breadboardSlots[i].GetComponent<Slot>(), ckt);
-                breadboardSlots[i].GetComponent<Slot>().slotChecked = true;
-                breadboardSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
-            }
-                
-        }
-        Resistor resistor = new Resistor("R7","C3","0",0);
-        ckt.Add(resistor);
         Debug.Log("Starting calculation ");
+
         // Create a DC sweep and register to the event for exporting simulation data
-        var dc = new DC("dc", "SLOTIDGOESHERE", 5, 5, 1);
+
+        var dc = new DC("dc", "PS", 5, 5, 1);
         dc.ExportSimulationData += (sender, exportDataEventArgs) =>
         {
-            
             Debug.Log("Real voltage " + (new RealVoltageExport(dc, "C0", "C1")).Value);
-            // Debug.Log("Real voltage " + (new RealVoltageExport(dc, "in", "out")).Value);
-            // Debug.Log("in:  " + exportDataEventArgs.GetVoltage("in"));
-            // Debug.Log("out: " + exportDataEventArgs.GetVoltage("out"));
-            // Debug.Log("0:   " + exportDataEventArgs.GetVoltage("0"));
         };
-
         // Run the simulation
         dc.Run(ckt);
     }
 
-    private void getComponent(Slot slot, Circuit ckt)
+    private void ClearAllSlots()
+    {
+        for (int i = 0; i < breadboardSlotIDCounter; i++)
+        {
+            var child = _breadboardUI.transform.GetChild(i);
+
+            if (child.CompareTag("BBSlot"))
+            {
+                child.GetComponent<Slot>().slotChecked = false;
+            }
+        }
+
+        for (int i = 0; i < _voltmeter.transform.childCount; i++)
+        {
+            var child = _voltmeter.transform.GetChild(i);
+            if (child.CompareTag("BBSlot"))
+            {
+                child.GetComponent<Slot>().slotChecked = false;
+            }
+        }
+
+        for (int i = 0; i < _currentmeter.transform.childCount; i++)
+        {
+            var child = _currentmeter.transform.GetChild(i);
+            if (child.CompareTag("BBSlot"))
+            {
+                child.GetComponent<Slot>().slotChecked = false;
+            }
+        }
+
+        // for (int i = 0; i < _powerSupply.transform.childCount; i++)
+        // {
+        //     var child = _powerSupply.transform.GetChild(i);
+        //     if (child.CompareTag("BBSlot"))
+        //     {
+        //        child.GetComponent<Slot>().slotChecked = false;
+        //     }
+        // }
+
+    }
+
+    private VoltageSource AddVoltageSource(Circuit ckt)
+    {
+        VoltageSource source = new VoltageSource("PS", "POS", "0", 5);
+
+
+        for (int i = 0; i < _voltmeter.transform.childCount; i++)
+        {
+            var child = _voltmeter.transform.GetChild(i);
+            if (child.CompareTag("BBSlot"))
+            {
+                if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked)
+                {
+                    AttachPowerSupply(child, ckt);
+                }
+            }
+        }
+
+        return source;
+    }
+
+    private void AttachPowerSupply(Transform slot, Circuit ckt)
+    {
+
+        if (slot.name.Equals("VM Pos Slot"))
+        {
+            if (slot.GetComponent<Slot>().itemPlaced != null && !slot.GetComponent<Slot>().slotChecked)
+            {
+                AddElectricalElement(slot.GetComponent<Slot>(), ckt, "POS",
+                    "C" + GetSlotColumn(slot.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotID).ToString());
+                slot.GetComponent<Slot>().slotChecked = true;
+                slot.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
+            }
+        }
+        if (slot.name.Equals("VM Neg Slot"))
+        {
+            if (slot.GetComponent<Slot>().itemPlaced != null && !slot.GetComponent<Slot>().slotChecked)
+            {
+                AddElectricalElement(slot.GetComponent<Slot>(), ckt, "C" + GetSlotColumn(slot.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotID).ToString(),
+                    "0");
+                slot.GetComponent<Slot>().slotChecked = true;
+                slot.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
+            }
+        }
+
+    }
+    private void AddElectricalElement(Slot slot, Circuit ckt)
     {
         string componentName = "S" + slot.slotID;
         string componentStart = "C" + GetSlotColumn(slot.slotID);
         string componentEnd = "C" + GetSlotColumn(slot.slotPair.GetComponent<Slot>().slotID);
         float value = GetComponentValue(slot);
 
-        switch(slot.itemPlaced.itemName)
+        switch (slot.itemPlaced.itemName)
         {
-            case(Globals.AvailableItems.Wire):
-            Resistor wire = new Resistor(componentName,componentStart,componentEnd,0);
-            Debug.Log("Adding Wire: " + componentName + " " + componentStart + " "  + componentEnd + " " + 0);
-            ckt.Add(wire);
-            break;
+            case (Globals.AvailableItems.Wire):
+                Resistor wire = new Resistor(componentName, componentStart, componentEnd, 0);
+                Debug.Log("Adding Wire: " + componentName + " " + componentStart + " " + componentEnd + " " + 0);
+                ckt.Add(wire);
+                break;
 
-            case(Globals.AvailableItems.Resistor):
-            Resistor resistor = new Resistor(componentName,componentStart,componentEnd,value);
-            Debug.Log("Adding Resistor: " + componentName + " " + componentStart + " "  + componentEnd + " " + value);
-            ckt.Add(resistor);
-            break;
+            case (Globals.AvailableItems.Resistor):
+                Resistor resistor = new Resistor(componentName, componentStart, componentEnd, value);
+                Debug.Log("Adding Resistor: " + componentName + " " + componentStart + " " + componentEnd + " " + value);
+                ckt.Add(resistor);
+                break;
 
-            case(Globals.AvailableItems.Capacitor):
-            Capacitor capacitor = new Capacitor(componentName,componentStart,componentEnd,value);
-            Debug.Log("Adding Capacitor: " + componentName + " " + componentStart + " "  + componentEnd + " " + value);
-            break;
+            case (Globals.AvailableItems.Capacitor):
+                Capacitor capacitor = new Capacitor(componentName, componentStart, componentEnd, value);
+                Debug.Log("Adding Capacitor: " + componentName + " " + componentStart + " " + componentEnd + " " + value);
+                ckt.Add(capacitor);
+                break;
 
             default:
-            break;            
+                break;
         }
 
     }
 
+    private void AddElectricalElement(Slot slot, Circuit ckt, string componentStart, string componentEnd)
+    {
+        string componentName = "S" + slot.slotID;
+        float value = GetComponentValue(slot);
+
+        switch (slot.itemPlaced.itemName)
+        {
+            case (Globals.AvailableItems.Wire):
+                Resistor wire = new Resistor(componentName, componentStart, componentEnd, 0);
+                Debug.Log("Adding Wire: " + componentName + " " + componentStart + " " + componentEnd + " " + 0);
+                ckt.Add(wire);
+                break;
+
+            case (Globals.AvailableItems.Resistor):
+                Resistor resistor = new Resistor(componentName, componentStart, componentEnd, value);
+                Debug.Log("Adding Resistor: " + componentName + " " + componentStart + " " + componentEnd + " " + value);
+                ckt.Add(resistor);
+                break;
+
+            case (Globals.AvailableItems.Capacitor):
+                Capacitor capacitor = new Capacitor(componentName, componentStart, componentEnd, value);
+                Debug.Log("Adding Capacitor: " + componentName + " " + componentStart + " " + componentEnd + " " + value);
+                ckt.Add(capacitor);
+                break;
+
+            default:
+                break;
+        }
+
+    }
 
     private float GetComponentValue(Slot slot)
-    {   
+    {
         float componentVal = 0;
         if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor)
         {
@@ -490,7 +567,6 @@ public class ItemClickHandler : MonoBehaviour
         }
     }
 
-
     private void RemoveComponent()
     {
         GameObject itemToRemove;
@@ -502,10 +578,8 @@ public class ItemClickHandler : MonoBehaviour
             allSlots[itemToRemove.GetComponent<PlacedImages>().slotB].GetComponent<Slot>().RemoveItem();
             Globals.inventoryItems[itemToRemove.GetComponent<PlacedImages>().itemID].isPlaced = false;
         }
-
         Destroy(itemToRemove);
     }
-
 
     private GameObject CheckIfPlacedComponent()
     {
@@ -525,17 +599,5 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
         return null;
-    }
-
-
-    private bool CheckIfValidSlotType(Slot slot)
-    {
-        if (slot.slotType == Globals.SlotType.defaultSlot ||
-                slot.slotType == Globals.SlotType.groundSlot ||
-                slot.slotType == Globals.SlotType.startSlot)
-        {
-            return true;
-        }
-        return false;
     }
 }
