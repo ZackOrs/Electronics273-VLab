@@ -98,7 +98,7 @@ public class ItemClickHandler : MonoBehaviour
             RemoveComponent();
         }
         // // function attached to a button for testing
-        // CalculateCircuit();
+        // SpiceSharpCalculation();
     }
 
     public void SpiceSharpCalculation()
@@ -119,9 +119,9 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
 
+
         VoltageSource powerSupply = AddVoltageSource(ckt);
         ckt.Add(powerSupply);
-
         Debug.Log("Starting calculation ");
 
         // Create a DC sweep and register to the event for exporting simulation data
@@ -175,7 +175,7 @@ public class ItemClickHandler : MonoBehaviour
 
     private VoltageSource AddVoltageSource(Circuit ckt)
     {
-        VoltageSource source = new VoltageSource("PS", "POS", "0", 5);
+        VoltageSource source = new VoltageSource("PS", "PSPOS", "0", 5);
 
 
         for (int i = 0; i < _voltmeter.transform.childCount; i++)
@@ -200,7 +200,7 @@ public class ItemClickHandler : MonoBehaviour
         {
             if (slot.GetComponent<Slot>().itemPlaced != null && !slot.GetComponent<Slot>().slotChecked)
             {
-                AddElectricalElement(slot.GetComponent<Slot>(), ckt, "POS",
+                AddElectricalElement(slot.GetComponent<Slot>(), ckt, "PSPOS",
                     "C" + GetSlotColumn(slot.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotID).ToString());
                 slot.GetComponent<Slot>().slotChecked = true;
                 slot.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
@@ -282,74 +282,6 @@ public class ItemClickHandler : MonoBehaviour
 
     }
 
-    private float GetComponentValue(Slot slot)
-    {
-        float componentVal = 0;
-        if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor)
-        {
-            switch (slot.itemPlaced.itemValue)
-            {
-                case (0):
-                    componentVal = 210;
-                    break;
-
-                case (1):
-                    componentVal = 370;
-                    break;
-
-                case (2):
-                    componentVal = 480;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        else if (slot.itemPlaced.itemName == Globals.AvailableItems.Capacitor)
-        {
-            switch (slot.itemPlaced.itemValue)
-            {
-                case (0):
-                    componentVal = 0.0000001f;
-                    break;
-
-                case (1):
-                    componentVal = 0.000001f;
-                    break;
-
-                case (2):
-                    componentVal = 0.000004f;
-                    break;
-                case (3):
-                    componentVal = 0.000005f;
-                    break;
-
-                case (4):
-                    componentVal = 0.000009f;
-                    break;
-
-                case (5):
-                    componentVal = 0.000012f;
-                    break;
-                case (6):
-                    componentVal = 0.000015f;
-                    break;
-
-                case (7):
-                    componentVal = 0.000019f;
-                    break;
-
-                case (8):
-                    componentVal = 0.000020f;
-                    break;
-                default:
-                    break;
-            }
-            // componentVal = 1 / ((2 * (float)Math.PI * 60) * componentVal);
-        }
-        return componentVal;
-    }
-
     private int GetSlotColumn(int slot)
     {
         int column = -1;
@@ -424,15 +356,15 @@ public class ItemClickHandler : MonoBehaviour
                 dc.ExportSimulationData += (sender, exportDataEventArgs) =>
                 {
                     Debug.Log("Real voltage " + (new RealVoltageExport(dc, posToolSlot, negToolSlot)).Value);
-                    meterVal.GetComponent<TMP_Text>().text = new RealVoltageExport(dc, posToolSlot, negToolSlot).Value.ToString();
+                    meterVal.GetComponent<TMP_Text>().text = new RealVoltageExport(dc, posToolSlot, negToolSlot).Value.ToString("0.0000") + " V";
                 };
                 break;
 
             case 1: //Ammeter
                 dc.ExportSimulationData += (sender, exportDataEventArgs) =>
                 {
-                    Debug.Log("Real Current " + (new RealCurrentExport(dc, posToolSlot)).Value);
-                    meterVal.GetComponent<TMP_Text>().text = new RealCurrentExport(dc, posToolSlot).Value.ToString();
+                    Debug.Log("Real Current " + (new RealCurrentExport(dc, "PS")).Value);
+                    meterVal.GetComponent<TMP_Text>().text = new RealCurrentExport(dc, posToolSlot).Value.ToString("0.0000") + " A";
                 };
                 break;
             default:
@@ -442,19 +374,19 @@ public class ItemClickHandler : MonoBehaviour
 
     private static void WireClicked()
     {
-        Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
+        // Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
         Globals.mouseClickAction = Globals.MouseClickAction.TwoClicks_FirstClick;
     }
 
     private static void ResistorClicked()
     {
-        Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
+        // Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
         Globals.mouseClickAction = Globals.MouseClickAction.TwoClicks_FirstClick;
     }
 
     private static void CapacitorClicked()
     {
-        Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
+        // Debug.Log("I clicked: " + spawnableItem.itemValue + " " + spawnableItem.itemName + " with ID: " + spawnableItem.itemID);
         Globals.mouseClickAction = Globals.MouseClickAction.TwoClicks_FirstClick;
     }
 
@@ -470,7 +402,7 @@ public class ItemClickHandler : MonoBehaviour
                     {
                         // Debug.Log("First Click GOOD");
                         _pointA.GetComponent<Slot>().PlaceItem();
-                        _pointA.GetComponent<Slot>().itemPlaced = spawnableItem;
+                        
                     }
                 }
                 break;
@@ -485,7 +417,7 @@ public class ItemClickHandler : MonoBehaviour
 
                         _pointB.GetComponent<Slot>().PlaceItem();
                         _pointB.GetComponent<Slot>().itemPlaced = spawnableItem;
-
+                        _pointA.GetComponent<Slot>().itemPlaced = spawnableItem;
 
                         _pointB.GetComponent<Slot>().slotPair = _pointA;
                         _pointA.GetComponent<Slot>().slotPair = _pointB;
@@ -649,5 +581,73 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
         return null;
+    }
+
+    private float GetComponentValue(Slot slot)
+    {
+        float componentVal = 0;
+        if (slot.itemPlaced.itemName == Globals.AvailableItems.Resistor)
+        {
+            switch (slot.itemPlaced.itemValue)
+            {
+                case (0):
+                    componentVal = 210;
+                    break;
+
+                case (1):
+                    componentVal = 370;
+                    break;
+
+                case (2):
+                    componentVal = 480;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        else if (slot.itemPlaced.itemName == Globals.AvailableItems.Capacitor)
+        {
+            switch (slot.itemPlaced.itemValue)
+            {
+                case (0):
+                    componentVal = 0.0000001f;
+                    break;
+
+                case (1):
+                    componentVal = 0.000001f;
+                    break;
+
+                case (2):
+                    componentVal = 0.000004f;
+                    break;
+                case (3):
+                    componentVal = 0.000005f;
+                    break;
+
+                case (4):
+                    componentVal = 0.000009f;
+                    break;
+
+                case (5):
+                    componentVal = 0.000012f;
+                    break;
+                case (6):
+                    componentVal = 0.000015f;
+                    break;
+
+                case (7):
+                    componentVal = 0.000019f;
+                    break;
+
+                case (8):
+                    componentVal = 0.000020f;
+                    break;
+                default:
+                    break;
+            }
+            // componentVal = 1 / ((2 * (float)Math.PI * 60) * componentVal);
+        }
+        return componentVal;
     }
 }
