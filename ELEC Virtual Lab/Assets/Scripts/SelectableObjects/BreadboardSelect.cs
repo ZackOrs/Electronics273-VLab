@@ -80,8 +80,8 @@ public class BreadboardSelect : SelectableItemBase
             if (!(Globals.inventoryItems[i] as SpawnableItem).isPlaced)
             {
                 InventoryItemButton.GetComponentInChildren<TMP_Text>().text = (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString();
-                Debug.Log("Item is: " + (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() +
-                (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString());
+                // Debug.Log("Item is: " + (Globals.inventoryItems[i] as SpawnableItem).itemName.ToString() +
+                // (Globals.inventoryItems[i] as SpawnableItem).itemValue.ToString());
 
 
                 switch ((Globals.inventoryItems[i] as SpawnableItem).itemName)
