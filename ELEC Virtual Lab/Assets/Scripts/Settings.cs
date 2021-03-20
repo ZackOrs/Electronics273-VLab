@@ -50,7 +50,7 @@ public class Settings : MonoBehaviour
     public void RestoreDefaults()
     {
         PlayerPrefs.DeleteAll();
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene(2);
     }
 
     void Awake()
