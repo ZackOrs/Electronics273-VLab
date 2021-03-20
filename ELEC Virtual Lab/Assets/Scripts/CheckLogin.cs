@@ -8,16 +8,16 @@ using UnityEngine.SceneManagement;
 public class CheckLogin : MonoBehaviour
 {
     [SerializeField]
-    private TMP_InputField Name;
+    private TMP_InputField Name = null;
 
     [SerializeField]
-    private TMP_InputField StudentID;
+    private TMP_InputField StudentID = null;
 
     [SerializeField]
-    private TMP_InputField ClassCode;
+    private TMP_InputField ClassCode = null;
 
     [SerializeField]
-    private TMP_InputField LabSection;
+    private TMP_InputField LabSection = null;
 
     public void checkLoginInfo()
     {
