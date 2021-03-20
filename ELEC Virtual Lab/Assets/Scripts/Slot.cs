@@ -16,25 +16,9 @@ public class Slot : MonoBehaviour
 
     public bool slotChecked = false;
 
-    public float voltage = -1.0f;
-
     void Start()
     {
-
-        switch (slotType)
-        {
-            case (Globals.SlotType.startSlot):
-                voltage = 5.0f;
-                break;
-
-            case (Globals.SlotType.groundSlot):
-                voltage = 0.0f;
-                break;
-
-            default:
-                voltage = -1.0f;
-                break;
-        }
+        
     }
 
     // Update is called once per frame
