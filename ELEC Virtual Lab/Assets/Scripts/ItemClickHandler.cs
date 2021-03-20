@@ -19,8 +19,7 @@ public class ItemClickHandler : MonoBehaviour
     public static GameObject buttonClicked;
 
     [SerializeField] GameObject _breadboardUI = null;
-    [SerializeField] GameObject _voltmeter = null;
-    [SerializeField] GameObject _currentmeter = null;
+    [SerializeField] GameObject _toolsMeter = null;
     [SerializeField] GameObject _powerSupply = null;
 
     [SerializeField] Image _wireImage = null;
@@ -63,10 +62,9 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
 
-
-        for (int i = 0; i < _voltmeter.transform.childCount; i++)
+        for (int i = 0; i < _powerSupply.transform.childCount; i++)
         {
-            var child = _voltmeter.transform.GetChild(i);
+            var child = _powerSupply.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
                 allSlots.Add(child.gameObject);
@@ -74,9 +72,9 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < _currentmeter.transform.childCount; i++)
+        for (int i = 0; i < _toolsMeter.transform.childCount; i++)
         {
-            var child = _currentmeter.transform.GetChild(i);
+            var child = _toolsMeter.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
                 allSlots.Add(child.gameObject);
@@ -125,7 +123,7 @@ public class ItemClickHandler : MonoBehaviour
         Debug.Log("Starting calculation ");
 
         // Create a DC sweep and register to the event for exporting simulation data
-        var dc = new DC("dc", "PS", 5, 5, 1);
+        var dc = new DC("dc", "PS", _powerSupply.GetComponent<PowerSupply>().powerReading, _powerSupply.GetComponent<PowerSupply>().powerReading, 1);
         GetCircuitToolsReading(dc);
 
         // Run the simulation
@@ -144,18 +142,18 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < _voltmeter.transform.childCount; i++)
+        for (int i = 0; i < _powerSupply.transform.childCount; i++)
         {
-            var child = _voltmeter.transform.GetChild(i);
+            var child = _powerSupply.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
                 child.GetComponent<Slot>().slotChecked = false;
             }
         }
 
-        for (int i = 0; i < _currentmeter.transform.childCount; i++)
+        for (int i = 0; i < _toolsMeter.transform.childCount; i++)
         {
-            var child = _currentmeter.transform.GetChild(i);
+            var child = _toolsMeter.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
                 child.GetComponent<Slot>().slotChecked = false;
@@ -178,9 +176,9 @@ public class ItemClickHandler : MonoBehaviour
         VoltageSource source = new VoltageSource("PS", "PSPOS", "0", 5);
 
 
-        for (int i = 0; i < _voltmeter.transform.childCount; i++)
+        for (int i = 0; i < _powerSupply.transform.childCount; i++)
         {
-            var child = _voltmeter.transform.GetChild(i);
+            var child = _powerSupply.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
                 if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked)
@@ -196,7 +194,7 @@ public class ItemClickHandler : MonoBehaviour
     private void AttachPowerSupply(Transform slot, Circuit ckt)
     {
 
-        if (slot.name.Equals("VM Pos Slot"))
+        if (slot.name.Equals("PS Pos Slot"))
         {
             if (slot.GetComponent<Slot>().itemPlaced != null && !slot.GetComponent<Slot>().slotChecked)
             {
@@ -206,7 +204,7 @@ public class ItemClickHandler : MonoBehaviour
                 slot.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
             }
         }
-        if (slot.name.Equals("VM Neg Slot"))
+        if (slot.name.Equals("PS Neg Slot"))
         {
             if (slot.GetComponent<Slot>().itemPlaced != null && !slot.GetComponent<Slot>().slotChecked)
             {
@@ -323,12 +321,12 @@ public class ItemClickHandler : MonoBehaviour
     {
         string posToolSlot = "+";
         string negToolSlot = "-";
-        var meterMode = _currentmeter.GetComponentInChildren<TMP_Dropdown>().value;
+        var meterMode = _toolsMeter.GetComponentInChildren<TMP_Dropdown>().value;
         Transform meterVal = null;
 
-        for (int i = 0; i < _currentmeter.transform.childCount; i++)
+        for (int i = 0; i < _toolsMeter.transform.childCount; i++)
         {
-            var child = _currentmeter.transform.GetChild(i);
+            var child = _toolsMeter.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
                 if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked)
