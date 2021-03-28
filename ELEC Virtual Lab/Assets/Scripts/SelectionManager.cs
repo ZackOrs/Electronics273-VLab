@@ -15,6 +15,8 @@ public class SelectionManager : MonoBehaviour {
  
     void HighlightObject(GameObject gameObject, Transform selection)
     {
+
+        
         if (lastHighlightedObject != gameObject)
         {
             ClearHighlighted();
@@ -76,11 +78,13 @@ public class SelectionManager : MonoBehaviour {
             else
             {
                 ClearHighlighted();
+                Globals.lookingAtFocusableObject = false;
             }
                 
         }
         else
         {
+            Globals.lookingAtFocusableObject = false;
             ClearHighlighted();
         }
         

@@ -8,8 +8,10 @@ public class Globals : MonoBehaviour
     public static bool gamePaused = false;
     public static bool menuOpened = false;
     public static bool showCrosshair = true;
-
+    public static bool cameraAttachedToPlayer = true;
     public static int itemIDCount = 0;
+
+    public static bool lookingAtFocusableObject = false;
 
     public static MouseClickAction mouseClickAction;
 
