@@ -9,7 +9,8 @@ public class AgilentSelect : SelectableItemBase
 {
     // [SerializeField] private string spawnableTag = "Spawnable";
 
-    public GameObject AgilentPanel;
+    public GameObject Camera;
+    [SerializeField] GameObject focusPoint = null;
 
     public override string Name
     {
@@ -21,49 +22,28 @@ public class AgilentSelect : SelectableItemBase
     
     public override void onInteract()
     {
-        OpenAgilentPanel();
+        Globals.lookingAtFocusableObject = true;
+        Camera.GetComponent<AnimateCamera>().targetObject = focusPoint;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown("p") || Input.GetKeyDown(KeyCode.Escape))
-        {
 
-        }
     }
 
     public void OpenAgilentPanel()
     {
-        AgilentPanel.SetActive(true);
-
-        Globals.showCrosshair = false;
-        Globals.menuOpened = true;
-        Globals.showCrosshair = false;
-
-        Time.timeScale = 0.0f;
-        UnityEngine.Cursor.lockState = CursorLockMode.None;
-        UnityEngine.Cursor.visible = true;
-
+    
     }
     
     public void CloseAgilentPanel()
     {
 
-        AgilentPanel.SetActive(false);
-
-        Globals.showCrosshair = true;
-        Globals.menuOpened = false;
-        Globals.mouseClickAction = Globals.MouseClickAction.NoClick;
-
-        Time.timeScale = 1.0f;
-        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-        UnityEngine.Cursor.visible = false;
-
     }
 
     public void CancelButton()
     {
-        CloseAgilentPanel();
+    
     }
 
 }
