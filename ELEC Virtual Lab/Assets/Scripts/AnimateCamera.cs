@@ -8,7 +8,7 @@ public class AnimateCamera : MonoBehaviour
     //MoveTowardsTarget variables
     public float moveSpeed = 35.0f;
     public GameObject targetObject = null;
-    [SerializeField] GameObject player;
+    [SerializeField] GameObject player = null;
     private bool focusOnTarget = false;
     private bool focusOnPlayer = false;
     private float lerpSpeed = 0.025f;
@@ -26,7 +26,7 @@ public class AnimateCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Globals.lookingAtObject)
+        if (Globals.lookingAtFocusableObject)
         {
             if (Input.GetKeyDown("f"))
             {

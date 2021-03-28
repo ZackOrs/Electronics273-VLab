@@ -10,7 +10,7 @@ public class AgilentSelect : SelectableItemBase
     // [SerializeField] private string spawnableTag = "Spawnable";
 
     public GameObject Camera;
-    [SerializeField] GameObject focusPoint;
+    [SerializeField] GameObject focusPoint = null;
 
     public override string Name
     {
@@ -22,12 +22,13 @@ public class AgilentSelect : SelectableItemBase
     
     public override void onInteract()
     {
+        Globals.lookingAtFocusableObject = true;
         Camera.GetComponent<AnimateCamera>().targetObject = focusPoint;
     }
 
     void Update()
     {
-        
+
     }
 
     public void OpenAgilentPanel()

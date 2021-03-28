@@ -11,7 +11,7 @@ public class Globals : MonoBehaviour
     public static bool cameraAttachedToPlayer = true;
     public static int itemIDCount = 0;
 
-    public static bool lookingAtObject = false;
+    public static bool lookingAtFocusableObject = false;
 
     public static MouseClickAction mouseClickAction;
 
