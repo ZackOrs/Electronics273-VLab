@@ -41,15 +41,15 @@ public class PlayerController : MonoBehaviour
     {
         if(Globals.cameraAttachedToPlayer)
         {
-        UpdateMouseLook();
-        UpdateMovement();
-        CheckPosition();
+            UpdateMouseLook();
+            UpdateMovement();
+            CheckPosition();
         }
     }
     void UpdateMouseLook()
     {
 
-        if(! (Globals.gamePaused || Globals.menuOpened) )
+        if(!(Globals.gamePaused || Globals.menuOpened) )
         {
             Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
             
