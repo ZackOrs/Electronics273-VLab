@@ -8,8 +8,9 @@ public class AnimateCamera : MonoBehaviour
     //MoveTowardsTarget variables
     public float moveSpeed = 35.0f;
     public GameObject targetObject;
-    public GameObject targetPlayer;
-    private bool movingTowardsTarget = false;
+    [SerializeField] GameObject player;
+    private bool focusOnTarget = false;
+    private bool focusOnPlayer = false;
     private float lerpSpeed = 0.025f;
     private Transform fromRot;
     private Transform toRot;
@@ -19,30 +20,47 @@ public class AnimateCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
         //MoveTowards
-        if(Input.GetKeyDown("f") && Globals.cameraAttachedToPlayer)
+        if(Input.GetKeyDown("f"))
         {
-            if(movingTowardsTarget == true)
+            Debug.Log("F is pressed: " + focusOnTarget.ToString());
+            if(Globals.cameraAttachedToPlayer)
             {
-                movingTowardsTarget = false;
+                fromRot = gameObject.transform;
+                toRot = targetObject.transform;
+                
+                inPosition = false;
+                focusOnTarget = true;
+                focusOnPlayer = false;
             }
             else
             {
                 fromRot = gameObject.transform;
-                toRot = targetObject.transform;
-                movingTowardsTarget = true;
+                toRot = player.transform;
+
+                inPosition = false;
+                focusOnTarget = false;
+                focusOnPlayer = true;
             }
         }
 
-        if(movingTowardsTarget)
+        if(focusOnTarget)
         {
+            Globals.cameraAttachedToPlayer = false;
             MoveTowardsTarget(targetObject);
+            EnableMouse();
+        }
+        if(focusOnPlayer)
+        {
+            Globals.cameraAttachedToPlayer = true;
+            MoveTowardsTarget(player);
+            DisableMouse();
         }
     }
 
@@ -59,11 +77,13 @@ public class AnimateCamera : MonoBehaviour
 
         if(inPosition)
         {
+            
             if(Mathf.Abs(fromRot.localEulerAngles.y - toRot.localEulerAngles.y) < 3)
             {
                 //reset boolean variables
                 transform.rotation = target.transform.rotation;
-                movingTowardsTarget = false;
+                focusOnTarget = false;
+                focusOnPlayer = false;
                 inPosition = false;
             }
             else
@@ -72,10 +92,15 @@ public class AnimateCamera : MonoBehaviour
             }
         }
     }
-
-    public void ReturnToPlayer(GameObject player)
+    private void EnableMouse()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
 
-
+    private void DisableMouse()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }
