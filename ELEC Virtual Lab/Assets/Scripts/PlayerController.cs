@@ -39,9 +39,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Globals.cameraAttachedToPlayer)
+        {
         UpdateMouseLook();
         UpdateMovement();
         CheckPosition();
+        }
     }
     void UpdateMouseLook()
     {
