@@ -11,6 +11,8 @@ public class Globals : MonoBehaviour
     public static bool cameraAttachedToPlayer = true;
     public static int itemIDCount = 0;
 
+    public static bool lookingAtObject = false;
+
     public static MouseClickAction mouseClickAction;
 
     public static List<SpawnableItem> inventoryItems = new List<SpawnableItem>();

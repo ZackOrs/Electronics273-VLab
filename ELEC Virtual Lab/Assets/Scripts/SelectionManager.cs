@@ -11,10 +11,14 @@ public class SelectionManager : MonoBehaviour {
     [SerializeField] float rayDistance = 4.0f;
     [SerializeField] private string selectableTag = "Selectable";
 
+    [SerializeField] private string focusableTag = "Focusable";
+
     public HUD Hud;
  
     void HighlightObject(GameObject gameObject, Transform selection)
     {
+
+        Globals.lookingAtObject = true;
         if (lastHighlightedObject != gameObject)
         {
             ClearHighlighted();
@@ -76,11 +80,13 @@ public class SelectionManager : MonoBehaviour {
             else
             {
                 ClearHighlighted();
+                Globals.lookingAtObject = false;
             }
                 
         }
         else
         {
+            Globals.lookingAtObject = false;
             ClearHighlighted();
         }
         

@@ -7,7 +7,7 @@ public class AnimateCamera : MonoBehaviour
 
     //MoveTowardsTarget variables
     public float moveSpeed = 35.0f;
-    public GameObject targetObject;
+    public GameObject targetObject = null;
     [SerializeField] GameObject player;
     private bool focusOnTarget = false;
     private bool focusOnPlayer = false;
@@ -26,37 +26,40 @@ public class AnimateCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //MoveTowards
-        if(Input.GetKeyDown("f"))
+        if (Globals.lookingAtObject)
         {
-            Debug.Log("F is pressed: " + focusOnTarget.ToString());
-            if(Globals.cameraAttachedToPlayer)
+            if (Input.GetKeyDown("f"))
             {
-                fromRot = gameObject.transform;
-                toRot = targetObject.transform;
-                
-                inPosition = false;
-                focusOnTarget = true;
-                focusOnPlayer = false;
-            }
-            else
-            {
-                fromRot = gameObject.transform;
-                toRot = player.transform;
+                Debug.Log("F is pressed: " + focusOnTarget.ToString());
+                if (Globals.cameraAttachedToPlayer)
+                {
+                    fromRot = gameObject.transform;
+                    toRot = targetObject.transform;
 
-                inPosition = false;
-                focusOnTarget = false;
-                focusOnPlayer = true;
+                    inPosition = false;
+                    focusOnTarget = true;
+                    focusOnPlayer = false;
+                }
+                else
+                {
+                    fromRot = gameObject.transform;
+                    toRot = player.transform;
+
+                    inPosition = false;
+                    focusOnTarget = false;
+                    focusOnPlayer = true;
+                }
             }
         }
 
-        if(focusOnTarget)
+
+        if (focusOnTarget)
         {
             Globals.cameraAttachedToPlayer = false;
             MoveTowardsTarget(targetObject);
             EnableMouse();
         }
-        if(focusOnPlayer)
+        if (focusOnPlayer)
         {
             Globals.cameraAttachedToPlayer = true;
             MoveTowardsTarget(player);
@@ -68,17 +71,17 @@ public class AnimateCamera : MonoBehaviour
     {
         transform.position = Vector3.MoveTowards(transform.position, target.transform.position, moveSpeed * Time.deltaTime);
 
-        if(Vector3.Distance(transform.position, target.transform.position) < 0.1)
+        if (Vector3.Distance(transform.position, target.transform.position) < 0.1)
         {
             transform.position = target.transform.position;
             inPosition = true;
             //movingTowardsTarget = false;
         }
 
-        if(inPosition)
+        if (inPosition)
         {
-            
-            if(Mathf.Abs(fromRot.localEulerAngles.y - toRot.localEulerAngles.y) < 3)
+
+            if (Mathf.Abs(fromRot.localEulerAngles.y - toRot.localEulerAngles.y) < 3)
             {
                 //reset boolean variables
                 transform.rotation = target.transform.rotation;
