@@ -49,18 +49,22 @@ public class BreadboardSelect : SelectableItemBase
 
     public void CloseBreadboardPanel()
     {
-        ClearInventoryList();
-        BreadboardPanel.SetActive(false);
+        if(BreadboardPanel.activeSelf)
+        {
+            ClearInventoryList();
+            BreadboardPanel.SetActive(false);
 
-        Globals.showCrosshair = true;
-        Globals.menuOpened = false;
-        Globals.mouseClickAction = Globals.MouseClickAction.NoClick;
+            Globals.showCrosshair = true;
+            Globals.menuOpened = false;
+            Globals.mouseClickAction = Globals.MouseClickAction.NoClick;
 
-        Time.timeScale = 1.0f;
-        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-        UnityEngine.Cursor.visible = false;
+            Time.timeScale = 1.0f;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
 
-        CursorStyle.breadbBoardItemSelectedClickCount = 0;
+            CursorStyle.breadbBoardItemSelectedClickCount = 0;
+        }
+        
     }
 
 
