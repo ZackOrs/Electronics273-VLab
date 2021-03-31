@@ -10,7 +10,7 @@ public class ClosetSelect : SelectableItemBase
     [SerializeField] private GameObject ClosetPanel = null;
     [SerializeField] private GameObject ClosetListContent = null;
     [SerializeField] private GameObject WorkBenchSpawnedItems = null;
-    
+
 
     public override string Name
     {
@@ -24,19 +24,19 @@ public class ClosetSelect : SelectableItemBase
     {
         if (Input.GetKeyDown("p") || Input.GetKeyDown(KeyCode.Escape))
         {
-            ClosePanel();
+            CloseClosetPanel();
         }
     }
 
     public override void onInteract()
-    { 
+    {
         OpenClosetPanel();
     }
 
     public void OpenClosetPanel()
     {
         ClosetPanel.SetActive(true);
-        
+
         Globals.showCrosshair = false;
         Globals.menuOpened = true;
         Globals.showCrosshair = false;
@@ -44,24 +44,32 @@ public class ClosetSelect : SelectableItemBase
         Time.timeScale = 0.0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        
-        for(int i = 0 ; i < ClosetListContent.transform.childCount ; i++ )
+
+        for (int i = 0; i < ClosetListContent.transform.childCount; i++)
         {
             var child = ClosetListContent.transform.GetChild(i);
             child.Find("ItemValue").GetComponentInChildren<TMP_Dropdown>().value = 0;
             child.Find("ItemQuantity").GetComponentInChildren<TMP_InputField>().text = "0";
         }
-    }       
+    }
     public void CloseClosetPanel()
     {
-        ClosetPanel.SetActive(false);
+        if (ClosetPanel.activeSelf)
+        {
+            ClosetPanel.SetActive(false);
 
-        Globals.showCrosshair = true;
-        Globals.menuOpened = false;
+            Globals.showCrosshair = true;
+            Globals.menuOpened = false;
 
-        Time.timeScale = 1.0f;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+            Globals.mouseClickAction = Globals.MouseClickAction.NoClick;
+
+            Time.timeScale = 1.0f;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            CursorStyle.breadbBoardItemSelectedClickCount = 0;
+        }
+
     }
 
     //Button functions
@@ -70,15 +78,10 @@ public class ClosetSelect : SelectableItemBase
         CloseClosetPanel();
     }
 
-    private void ClosePanel()
-    {
-        ClosetPanel.SetActive(false);
-    }
-
     public void ResetButton()
     {
         Debug.Log("Clearing table");
-        for(int i=0 ; i < WorkBenchSpawnedItems.transform.childCount; i++)
+        for (int i = 0; i < WorkBenchSpawnedItems.transform.childCount; i++)
         {
             Destroy(WorkBenchSpawnedItems.transform.GetChild(i).gameObject);
             Globals.inventoryItems.Clear();
@@ -101,10 +104,10 @@ public class ClosetSelect : SelectableItemBase
 
     private void SpawnSelectedObects()
     {
-        for (int i = 0 ; i < ClosetListContent.transform.childCount ; i ++)
+        for (int i = 0; i < ClosetListContent.transform.childCount; i++)
         {
             var child = ClosetListContent.transform.GetChild(i);
-            if(child.CompareTag(spawnableTag))
+            if (child.CompareTag(spawnableTag))
             {
                 Debug.Log("Getting item :" + child.ToString());
                 ISpawnableItem item = child.GetComponent<ISpawnableItem>();

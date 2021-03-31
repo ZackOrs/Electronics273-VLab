@@ -28,12 +28,12 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         Globals.gamePaused = false;
 
-        if(!Globals.menuOpened)
-        {
+        // if(!Globals.menuOpened)
+        // {
             Time.timeScale = 1.0f;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        }
+        // }
 
         
     }
