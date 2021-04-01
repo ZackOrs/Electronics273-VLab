@@ -135,7 +135,7 @@ public class ItemClickHandler : MonoBehaviour
             {
                 if (breadboardSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot)
                 {
-                    Debug.Log("Adding Element");
+
                     AddElectricalElement(breadboardSlots[i].GetComponent<Slot>(), ckt);
                     breadboardSlots[i].GetComponent<Slot>().slotChecked = true;
                     breadboardSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
@@ -206,7 +206,7 @@ public class ItemClickHandler : MonoBehaviour
 
     private VoltageSource AddVoltageSource(Circuit ckt)
     {
-        VoltageSource source = new VoltageSource("PS", "PSPOS", "0", 5);
+        VoltageSource source = new VoltageSource("PS", "PSPOS", "0", 0);
 
 
         for (int i = 0; i < _powerSupply.transform.childCount; i++)
@@ -258,7 +258,7 @@ public class ItemClickHandler : MonoBehaviour
 
         if(slot.slotType == Globals.SlotType.BananaPlugSlot)
         {
-            componentStart = "ABC" + slot.slotID;
+            componentStart = "B" + slot.slotID;
         }
 
         float value = GetComponentValue(slot);
@@ -322,15 +322,15 @@ public class ItemClickHandler : MonoBehaviour
     private int GetSlotColumn(int slot)
     {
         int column = -1;
-        slot -= 5;
+        slot -= 9;
         column = (int)Math.Floor((double)(slot / 4.0));
 
         //VCC Slots are all considered the same
-        if(column < 4)
+        if(column < 5)
         {
             column = 0;
         }
-        else if(column < 9)
+        else if(column < 10)
         {
             column = 5;
         }
