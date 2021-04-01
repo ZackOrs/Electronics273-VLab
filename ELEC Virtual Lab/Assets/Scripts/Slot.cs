@@ -16,6 +16,9 @@ public class Slot : MonoBehaviour
 
     public bool slotChecked = false;
 
+    public bool permaSlot = false;
+
+    public List<string> machineConnections = null;
     void Start()
     {
         
@@ -24,7 +27,12 @@ public class Slot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(permaSlot == true)
+        { 
+            itemPlaced = new SpawnableItem(Globals.AvailableItems.Wire, 0);
+            isFree = false;
+            ChangeHighlightColor();
+        }
     }
 
     public void PlaceItem()

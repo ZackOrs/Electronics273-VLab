@@ -17,6 +17,19 @@ public class Globals : MonoBehaviour
 
     public static List<SpawnableItem> inventoryItems = new List<SpawnableItem>();
 
+    public static List<AvailableMachines> bananaSlot1Connections = new List<AvailableMachines>();
+    public static List<AvailableMachines> bananaSlot2Connections = new List<AvailableMachines>();
+    public static List<AvailableMachines> bananaSlot3Connections = new List<AvailableMachines>();
+    public static List<AvailableMachines> bananaSlot4Connections = new List<AvailableMachines>();
+    public static List<AvailableMachines> bananaSlot5Connections = new List<AvailableMachines>();
+
+
+    public enum AvailableMachines
+    {
+        Agilent,
+        PowerSuplly,
+        Oscilloscope
+    }
     public enum AvailableItems
     {
         Wire,
@@ -33,9 +46,9 @@ public class Globals : MonoBehaviour
 
     public static IEnumerator WaitForTimeInSeconds(float seconds)
     {
-        yield return new WaitForSeconds(seconds);        
+        yield return new WaitForSeconds(seconds);
     }
-    
+
     public enum SlotType
     {
         defaultSlot,
@@ -43,7 +56,8 @@ public class Globals : MonoBehaviour
         groundSlot,
         voltmeterSlot,
         currentmeterSlot,
-        powerSupplySlot
+        powerSupplySlot,
+        BananaPlugSlot
     }
 
 }
