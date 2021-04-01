@@ -17,18 +17,35 @@ public class Globals : MonoBehaviour
 
     public static List<SpawnableItem> inventoryItems = new List<SpawnableItem>();
 
-    public static List<AvailableMachines> bananaSlot1Connections = new List<AvailableMachines>();
-    public static List<AvailableMachines> bananaSlot2Connections = new List<AvailableMachines>();
-    public static List<AvailableMachines> bananaSlot3Connections = new List<AvailableMachines>();
-    public static List<AvailableMachines> bananaSlot4Connections = new List<AvailableMachines>();
-    public static List<AvailableMachines> bananaSlot5Connections = new List<AvailableMachines>();
+    public static Dictionary<AgilentPlugs,BananaPlugs> AgilentConnections = new Dictionary<AgilentPlugs,BananaPlugs>();
+    // public static List<AvailableMachines> bananaSlot2Connections = new List<AvailableMachines>();
+    // public static List<AvailableMachines> bananaSlot3Connections = new List<AvailableMachines>();
+    // public static List<AvailableMachines> bananaSlot4Connections = new List<AvailableMachines>();
+    // public static List<AvailableMachines> bananaSlot5Connections = new List<AvailableMachines>();
 
 
     public enum AvailableMachines
     {
-        Agilent,
+        AgilentPos,
+        AgilentNeg,
         PowerSuplly,
         Oscilloscope
+    }
+
+    public enum AgilentPlugs
+    {
+        currentInput,
+        groundInput,
+        voltageInput
+    }
+
+    public enum BananaPlugs
+    {
+        B0,
+        B1,
+        B2,
+        B3,
+        B4,
     }
     public enum AvailableItems
     {

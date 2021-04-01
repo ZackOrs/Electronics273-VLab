@@ -10,6 +10,7 @@ using TMPro;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 
 public class ItemClickHandler : MonoBehaviour
 {
@@ -44,21 +45,14 @@ public class ItemClickHandler : MonoBehaviour
         allSlots.Clear();
         breadboardSlotIDCounter = 0;
         allSlotIDCounter = 0;
-        for (int i = 0; i < _breadboardUI.transform.childCount; i++)
+        
+        for (int i = 0; i < _bananaPlugs.transform.childCount; i++)
         {
-            var child = _breadboardUI.transform.GetChild(i);
+            var child = _bananaPlugs.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
-                if (child.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot ||
-                child.GetComponent<Slot>().slotType == Globals.SlotType.groundSlot ||
-                child.GetComponent<Slot>().slotType == Globals.SlotType.startSlot)
-                {
-                    breadboardSlots.Add(child.gameObject);
-                    allSlots.Add(child.gameObject);
-
-                    child.GetComponent<Slot>().slotID = breadboardSlotIDCounter++;
-                    allSlotIDCounter++;
-                }
+                allSlots.Add(child.gameObject);
+                child.GetComponent<Slot>().slotID = allSlotIDCounter++;
             }
         }
 
@@ -81,16 +75,24 @@ public class ItemClickHandler : MonoBehaviour
                 child.GetComponent<Slot>().slotID = allSlotIDCounter++;
             }
         }
-
-        for (int i = 0; i < _bananaPlugs.transform.childCount; i++)
+        
+        for (int i = 0; i < _breadboardUI.transform.childCount; i++)
         {
-            var child = _bananaPlugs.transform.GetChild(i);
+            var child = _breadboardUI.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
-                allSlots.Add(child.gameObject);
-                child.GetComponent<Slot>().slotID = allSlotIDCounter++;
+                if (child.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot)
+                {
+                    breadboardSlots.Add(child.gameObject);
+                    allSlots.Add(child.gameObject);
+
+                    child.GetComponent<Slot>().slotID = allSlotIDCounter++;
+                    breadboardSlotIDCounter++;
+                }
             }
         }
+
+
     }
 
     // Update is called once per frame
@@ -114,24 +116,26 @@ public class ItemClickHandler : MonoBehaviour
         ClearAllSlots();
         var ckt = new Circuit();
 
-        //handle permanent connections
-        for( int i = 0; i < _bananaPlugs.transform.childCount ; i++)
-        {
-            var child = _bananaPlugs.transform.GetChild(i);
-            if (child.CompareTag("BBSlot"))
-            {
-                AddElectricalElement(child.GetComponent<Slot>(), ckt);
-                child.GetComponent<Slot>().slotChecked = true;
-                child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
-            }
-        }
+        // //handle permanent connections
+        // for( int i = 0; i < 1 ; i++)
+        // {
+        //     var child = _bananaPlugs.transform.GetChild(i);
+        //     if (child.CompareTag("BBSlot"))
+        //     {
+        //         AddElectricalElement(child.GetComponent<Slot>(), ckt);
+        //         child.GetComponent<Slot>().slotChecked = true;
+        //         child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
+        //     }
+        // }
 
-        for (int i = 0; i < breadboardSlotIDCounter; i++)
+        int breadboardStartID = allSlotIDCounter - breadboardSlotIDCounter;
+        for (int i = 0; i < allSlotIDCounter - breadboardStartID; i++)
         {
             if (breadboardSlots[i].GetComponent<Slot>().itemPlaced != null && !breadboardSlots[i].GetComponent<Slot>().slotChecked)
             {
                 if (breadboardSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot)
                 {
+                    Debug.Log("Adding Element");
                     AddElectricalElement(breadboardSlots[i].GetComponent<Slot>(), ckt);
                     breadboardSlots[i].GetComponent<Slot>().slotChecked = true;
                     breadboardSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
@@ -149,7 +153,15 @@ public class ItemClickHandler : MonoBehaviour
         GetCircuitToolsReading(dc);
 
         // Run the simulation
-        dc.Run(ckt);
+        try
+        {
+            dc.Run(ckt);
+        }
+        catch(ValidationFailedException e)
+        {
+            Debug.Log("Error is: " + e.ToString());
+        }
+        
     }
 
     private void ClearAllSlots()
@@ -246,7 +258,7 @@ public class ItemClickHandler : MonoBehaviour
 
         if(slot.slotType == Globals.SlotType.BananaPlugSlot)
         {
-            componentStart = "B" + slot.slotID;
+            componentStart = "ABC" + slot.slotID;
         }
 
         float value = GetComponentValue(slot);
@@ -310,7 +322,7 @@ public class ItemClickHandler : MonoBehaviour
     private int GetSlotColumn(int slot)
     {
         int column = -1;
-
+        slot -= 5;
         column = (int)Math.Floor((double)(slot / 4.0));
 
         //VCC Slots are all considered the same
