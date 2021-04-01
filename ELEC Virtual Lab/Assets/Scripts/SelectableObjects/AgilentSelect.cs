@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,8 +22,10 @@ public class AgilentSelect : SelectableItemBase
     
     public override void onInteract()
     {
+        Globals.currentMachine = "Agilent";
         Globals.lookingAtFocusableObject = true;
         Camera.GetComponent<AnimateCamera>().targetObject = focusPoint;
+        
     }
 
     void Update()
@@ -31,19 +33,21 @@ public class AgilentSelect : SelectableItemBase
 
     }
 
-    public void OpenAgilentPanel()
+    public void ButtonClickHandler(string clickedButton)
     {
-    
+        switch(clickedButton){
+            case("BtnDCV.023"):
+            Button23Pressed();
+            break;
+            default:
+            Debug.Log("No buttono");
+            break;
+
+        }
     }
-    
-    public void CloseAgilentPanel()
+
+    private void Button23Pressed()
     {
 
     }
-
-    public void CancelButton()
-    {
-    
-    }
-
 }
