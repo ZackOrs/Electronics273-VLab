@@ -41,14 +41,14 @@ public class AgilentSelect : SelectableItemBase
             break;
             case("Torus.004"):
             Debug.Log("Clicked Pos");
-            Globals.AgilentConnections.Remove(Globals.AgilentButtons.voltageInput);
-            Globals.AgilentConnections.Add(Globals.AgilentButtons.voltageInput,Globals.BananaPlugs.B1);
+            Globals.AgilentConnections.Remove(Globals.AgilentInput.voltageInput);
+            Globals.AgilentConnections.Add(Globals.AgilentInput.voltageInput,Globals.BananaPlugs.B1);
             break;
 
             case("Torus.009"):
             Debug.Log("Clicked Neg");
-            Globals.AgilentConnections.Remove(Globals.AgilentButtons.groundInput);
-            Globals.AgilentConnections.Add(Globals.AgilentButtons.groundInput,Globals.BananaPlugs.B0);
+            Globals.AgilentConnections.Remove(Globals.AgilentInput.groundInput);
+            Globals.AgilentConnections.Add(Globals.AgilentInput.groundInput,Globals.BananaPlugs.B0);
             break;
             default:
             Debug.Log("No buttono");

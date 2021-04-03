@@ -5,6 +5,11 @@ using UnityEngine;
 public class ClickManager : MonoBehaviour
 {
     [SerializeField] GameObject AgilentMachine = null;
+    [SerializeField] GameObject PSMachine = null;
+    [SerializeField] GameObject FlukeMachine = null;
+    [SerializeField] GameObject FGMachine = null;
+    [SerializeField] GameObject OscilloscopeMachine = null;
+
     private string clickableTag = "clickable";
     // Start is called before the first frame update
     void Start()
@@ -35,11 +40,28 @@ public class ClickManager : MonoBehaviour
 
     private void UseMachine(string buttonHit)
     {
+        Debug.Log("UseMachine");
         switch(Globals.currentMachine)
         {
             case("Agilent"):
             AgilentMachine.GetComponent<AgilentSelect>().ButtonClickHandler(buttonHit);
             break;
+
+            case("Fluke"):
+            FlukeMachine.GetComponent<FlukeSelect>().ButtonClickHandler(buttonHit);
+            break;
+
+            case("PowerSupply"):
+            PSMachine.GetComponent<PSSelect>().ButtonClickHandler(buttonHit);
+            Debug.Log("PowerSupply");
+            break;
+
+            case("FG"):
+            break;
+
+            case("Oscilloscope"):
+            break;
+
             default:
             Debug.Log("No Machine");
             break;

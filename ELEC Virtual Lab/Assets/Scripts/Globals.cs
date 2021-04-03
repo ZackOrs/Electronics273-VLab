@@ -17,22 +17,42 @@ public class Globals : MonoBehaviour
 
     public static List<SpawnableItem> inventoryItems = new List<SpawnableItem>();
 
-    public static Dictionary<AgilentButtons,BananaPlugs> AgilentConnections = new Dictionary<AgilentButtons,BananaPlugs>();
+    public static Dictionary<AgilentInput,BananaPlugs> AgilentConnections = new Dictionary<AgilentInput,BananaPlugs>();
     // public static List<AvailableMachines> bananaSlot2Connections = new List<AvailableMachines>();
     // public static List<AvailableMachines> bananaSlot3Connections = new List<AvailableMachines>();
     // public static List<AvailableMachines> bananaSlot4Connections = new List<AvailableMachines>();
     // public static List<AvailableMachines> bananaSlot5Connections = new List<AvailableMachines>();
+
+    public static Dictionary<PowerSupplyInput, BananaPlugs> PSConnections = new Dictionary<PowerSupplyInput, BananaPlugs>();
+    public static Dictionary<FlukeInput, BananaPlugs> FlukeConnections = new Dictionary<FlukeInput, BananaPlugs>();
 
 
     public enum AvailableMachines
     {
         AgilentPos,
         AgilentNeg,
-        PowerSuplly,
+        PowerSupply,
         Oscilloscope
     }
 
-    public enum AgilentButtons
+    public enum FlukeInput
+    {
+        currentInput,
+        currentMaxInput,
+        voltageInput,
+        groundInput,
+
+    }
+    public enum PowerSupplyInput
+    {
+        voltageInput,
+        resistor,
+        currentInput,
+        groundInput,
+        voltageKnob,
+        currentKnob
+    }
+    public enum AgilentInput
     {
         currentInput,
         groundInput,
@@ -40,11 +60,18 @@ public class Globals : MonoBehaviour
     }
 
     public enum BananaPlugs
-    {
+    {   
+        //Refers to the banana plug number location on the breadboard
+
+        //1
         B0,
+        //2
         B1,
+        //3
         B2,
+        //4
         B3,
+        //5
         B4,
         noConnection
     }
