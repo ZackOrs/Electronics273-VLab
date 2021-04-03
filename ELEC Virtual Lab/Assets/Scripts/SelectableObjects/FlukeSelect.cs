@@ -20,10 +20,13 @@ public class FlukeSelect : SelectableItemBase
         }
     }
     
+
     public override void onInteract()
     {
+        Globals.currentMachine = "Fluke";
         Globals.lookingAtFocusableObject = true;
         Camera.GetComponent<AnimateCamera>().targetObject = focusPoint;
+        
     }
 
     void Update()
@@ -31,5 +34,28 @@ public class FlukeSelect : SelectableItemBase
 
     }
 
+    public void ButtonClickHandler(string clickedButton)
+    {
+        switch(clickedButton){
+            case("BtnDCV"):
+
+            break;
+            case("Torus.004"):
+            Debug.Log("Clicked Pos");
+            Globals.AgilentConnections.Remove(Globals.AgilentInput.voltageInput);
+            Globals.AgilentConnections.Add(Globals.AgilentInput.voltageInput,Globals.BananaPlugs.B1);
+            break;
+
+            case("Torus.009"):
+            Debug.Log("Clicked Neg");
+            Globals.AgilentConnections.Remove(Globals.AgilentInput.groundInput);
+            Globals.AgilentConnections.Add(Globals.AgilentInput.groundInput,Globals.BananaPlugs.B0);
+            break;
+            default:
+            Debug.Log("No buttono");
+            break;
+
+        }
+    }
 
 }
