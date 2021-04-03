@@ -39,7 +39,7 @@ public class AgilentSelect : SelectableItemBase
             case("BtnDCV"):
             Button23Pressed();
             break;
-            case("Torus.004"):
+            case("Torus.006"):
             Debug.Log("Clicked Pos");
             Globals.AgilentConnections.Remove(Globals.AgilentButtons.voltageInput);
             Globals.AgilentConnections.Add(Globals.AgilentButtons.voltageInput,Globals.BananaPlugs.B1);
