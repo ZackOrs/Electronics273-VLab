@@ -122,11 +122,20 @@ public class ItemClickHandler : MonoBehaviour
         ClearAllSlots();
         var ckt = new Circuit();
 
-        foreach (KeyValuePair<Globals.AgilentButtons, Globals.BananaPlugs> entry in Globals.AgilentConnections)
+        foreach (KeyValuePair<Globals.AgilentInput, Globals.BananaPlugs> entry in Globals.AgilentConnections)
         {
             if (entry.Value != Globals.BananaPlugs.noConnection)
             {
                 //AddAgilentBananaConnections(entry, ckt);
+                ActivateBananaSlot(entry.Value.ToString());
+            }
+        }
+
+        foreach(KeyValuePair<Globals.PowerSupplyInput, Globals.BananaPlugs> entry in Globals.PSConnections)
+        {
+            if (entry.Value != Globals.BananaPlugs.noConnection)
+            {
+                AddPowerSupplyConnection(entry.Key.ToString(), entry.Value.ToString(), ckt);
                 ActivateBananaSlot(entry.Value.ToString());
             }
         }
@@ -162,12 +171,13 @@ public class ItemClickHandler : MonoBehaviour
         }
 
 
-        VoltageSource powerSupply = AddVoltageSource(ckt);
-        ckt.Add(powerSupply);
+        // VoltageSource powerSupply = AddVoltageSource(ckt);
+        // ckt.Add(powerSupply);
 
 
         // Create a DC sweep and register to the event for exporting simulation data
-        var dc = new DC("dc", "PS", _powerSupply.GetComponent<PowerSupply>().powerReading, _powerSupply.GetComponent<PowerSupply>().powerReading, 1);
+        //var dc = new DC("dc", "voltageSourcePS", _powerSupply.GetComponent<PowerSupply>().powerReading, _powerSupply.GetComponent<PowerSupply>().powerReading, 1);
+         var dc = new DC("dc", "voltageSourcePS", 6, 6, 1);
         GetCircuitToolsReading(dc);
         ManageAgilentReadingsConnections(dc);
         // Run the simulation
@@ -245,8 +255,33 @@ public class ItemClickHandler : MonoBehaviour
                 }
             }
         }
-
         return source;
+    }
+
+    private void AddPowerSupplyConnection(string pos, string neg, Circuit ckt)
+    {   
+        bool isGroundConnected = false;
+        if(Globals.PSConnections.TryGetValue(Globals.PowerSupplyInput.ground, out Globals.BananaPlugs groundConnection))
+        {
+            if(!groundConnection.Equals(Globals.BananaPlugs.noConnection))
+            {
+                isGroundConnected = true;
+            }
+        }
+        
+        if(pos == Globals.PowerSupplyInput.ground.ToString())
+        {
+            pos = "0";
+        }
+        else if(pos == Globals.PowerSupplyInput.voltageSource.ToString() && isGroundConnected)
+        {
+            Debug.Log("Adding PS Source: " + pos+"PS" + " " + pos + " " + "0" + " " + wireResistance);
+            VoltageSource voltSource = new VoltageSource(pos+"PS",pos,"0",5);
+            ckt.Add(voltSource);
+        }
+
+        Debug.Log("Adding Wire: " + pos + " " + pos + " " + neg + " " + 0);
+        ckt.Add(new Resistor(pos,pos,neg,0));
     }
 
     private void AttachPowerSupply(Transform slot, Circuit ckt)
@@ -281,15 +316,15 @@ public class ItemClickHandler : MonoBehaviour
         string volPos = "+";
         string AgileGroundSlot = "-";
         string currentSlot = "i";
-        if (Globals.AgilentConnections.TryGetValue(Globals.AgilentButtons.voltageInput, out Globals.BananaPlugs posVolNode))
+        if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.voltageInput, out Globals.BananaPlugs posVolNode))
         {
             volPos = GetBananaConnections(posVolNode.ToString());
         }
-        if (Globals.AgilentConnections.TryGetValue(Globals.AgilentButtons.groundInput, out Globals.BananaPlugs groundNode))
+        if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.groundInput, out Globals.BananaPlugs groundNode))
         {
             AgileGroundSlot = GetBananaConnections(groundNode.ToString());
         }
-         if (Globals.AgilentConnections.TryGetValue(Globals.AgilentButtons.currentInput, out Globals.BananaPlugs currentNode))
+        if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.currentInput, out Globals.BananaPlugs currentNode))
         {
             currentSlot = GetBananaConnections(currentNode.ToString());
         }
@@ -302,7 +337,7 @@ public class ItemClickHandler : MonoBehaviour
 
         dc.ExportSimulationData += (sender, exportDataEventArgs) =>
         {
-            Debug.Log("Real Current " + (new RealCurrentExport(dc, "PS")).Value);
+            Debug.Log("Real Current " + (new RealCurrentExport(dc, "voltageSource")).Value);
         };
 
     }

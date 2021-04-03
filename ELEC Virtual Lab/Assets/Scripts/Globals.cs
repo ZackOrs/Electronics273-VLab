@@ -45,10 +45,10 @@ public class Globals : MonoBehaviour
     }
     public enum PowerSupplyInput
     {
-        voltageInput,
+        voltageSource,
         resistor,
-        currentInput,
-        groundInput,
+        currentSource,
+        ground,
         voltageKnob,
         currentKnob
     }
