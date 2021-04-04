@@ -318,15 +318,28 @@ public class ItemClickHandler : MonoBehaviour
         string currentSlot = "i";
         if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.voltageInput, out Globals.BananaPlugs posVolNode))
         {
-            volPos = GetBananaConnections(posVolNode.ToString());
+            if(posVolNode != Globals.BananaPlugs.noConnection)
+            {
+                volPos = GetBananaConnections(posVolNode.ToString());
+            }
+            
         }
         if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.groundInput, out Globals.BananaPlugs groundNode))
         {
-            AgileGroundSlot = GetBananaConnections(groundNode.ToString());
+
+            if(posVolNode != Globals.BananaPlugs.noConnection)
+            {
+                AgileGroundSlot = GetBananaConnections(groundNode.ToString());
+            }
+            
         }
         if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.currentInput, out Globals.BananaPlugs currentNode))
         {
-            currentSlot = GetBananaConnections(currentNode.ToString());
+            if(posVolNode != Globals.BananaPlugs.noConnection)
+            {
+                currentSlot = GetBananaConnections(currentNode.ToString());
+            }
+            
         }
 
         dc.ExportSimulationData += (sender, exportDataEventArgs) =>
@@ -344,6 +357,8 @@ public class ItemClickHandler : MonoBehaviour
 
     private string GetBananaConnections(String BananaPlugSlot)
     {
+
+        Debug.Log("Before Regex:" + BananaPlugSlot);
         int removedInt = int.Parse(Regex.Match(BananaPlugSlot, @"\d+").Value);
         string columnConnection = "";
         switch (removedInt)

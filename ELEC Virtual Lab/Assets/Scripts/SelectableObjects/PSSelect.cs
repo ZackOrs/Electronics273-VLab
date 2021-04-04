@@ -66,7 +66,8 @@ public class PSSelect : SelectableItemBase
             break;
 
             case("VoltageKnob"):
-            OnPress(transform.Find("VoltageKnob").gameObject);
+            Debug.Log(transform.parent.Find("VoltageKnob").gameObject);
+            OnPress(transform.parent.Find("VoltageKnob").gameObject);
             OnRelease();
             break;
 
@@ -80,8 +81,8 @@ public class PSSelect : SelectableItemBase
     public void OnPress(GameObject voltageKnob)
     {
         _rotate = true;
-        Vector3 currRot = new Vector3(0,0,15.0f);
-        Debug.Log("current rotation: " + currRot.y);
+        Vector3 currRot = new Vector3(0,0,10.0f);
+        Debug.Log("current rotation: " + voltageKnob.transform.rotation.eulerAngles.z);
         voltageKnob.transform.Rotate(currRot);
         Debug.Log("On press");
     }
