@@ -15,6 +15,8 @@ public class AgilentSelect : SelectableItemBase
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
     private Globals.AgilentInput clickedInput;
 
+    public float VoltageReading = 0;
+
     public override string Name
     {
         get

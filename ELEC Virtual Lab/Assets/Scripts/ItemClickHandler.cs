@@ -42,6 +42,9 @@ public class ItemClickHandler : MonoBehaviour
 
     private List<bool> bananaPlugActive = new List<bool>() { false, false, false, false, false };
 
+
+    [SerializeField] GameObject _agilentMachine = null;
+
     void Start()
     {
         Debug.Log("Adding slots");
@@ -345,7 +348,7 @@ public class ItemClickHandler : MonoBehaviour
         dc.ExportSimulationData += (sender, exportDataEventArgs) =>
         {
             Debug.Log("AGILENT READING: " + new RealVoltageExport(dc, volPos, AgileGroundSlot).Value.ToString());
-
+            _agilentMachine.GetComponent<AgilentSelect>().VoltageReading = (float)new RealVoltageExport(dc, volPos, AgileGroundSlot).Value;
         };
 
         dc.ExportSimulationData += (sender, exportDataEventArgs) =>
