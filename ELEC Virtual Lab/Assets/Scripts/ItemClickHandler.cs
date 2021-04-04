@@ -10,10 +10,11 @@ using TMPro;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
+using System.Text.RegularExpressions;
 
 public class ItemClickHandler : MonoBehaviour
 {
-
     public static SpawnableItem spawnableItem;
 
     public static GameObject buttonClicked;
@@ -21,6 +22,7 @@ public class ItemClickHandler : MonoBehaviour
     [SerializeField] GameObject _breadboardUI = null;
     [SerializeField] GameObject _toolsMeter = null;
     [SerializeField] GameObject _powerSupply = null;
+    [SerializeField] GameObject _bananaPlugs = null;
 
     [SerializeField] Image _wireImage = null;
     [SerializeField] Image _resistorImage = null;
@@ -33,9 +35,12 @@ public class ItemClickHandler : MonoBehaviour
     private GameObject _pointB = null;
     public static List<GameObject> breadboardSlots = new List<GameObject>();
     public static List<GameObject> allSlots = new List<GameObject>();
-
     int breadboardSlotIDCounter = 0;
     int allSlotIDCounter = 0;
+
+    int wireResistance = 0;
+
+    private List<bool> bananaPlugActive = new List<bool>() { false, false, false, false, false };
 
     void Start()
     {
@@ -44,21 +49,14 @@ public class ItemClickHandler : MonoBehaviour
         allSlots.Clear();
         breadboardSlotIDCounter = 0;
         allSlotIDCounter = 0;
-        for (int i = 0; i < _breadboardUI.transform.childCount; i++)
+
+        for (int i = 0; i < _bananaPlugs.transform.childCount; i++)
         {
-            var child = _breadboardUI.transform.GetChild(i);
+            var child = _bananaPlugs.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
-                if (child.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot ||
-                child.GetComponent<Slot>().slotType == Globals.SlotType.groundSlot ||
-                child.GetComponent<Slot>().slotType == Globals.SlotType.startSlot)
-                {
-                    breadboardSlots.Add(child.gameObject);
-                    allSlots.Add(child.gameObject);
-
-                    child.GetComponent<Slot>().slotID = breadboardSlotIDCounter++;
-                    allSlotIDCounter++;
-                }
+                allSlots.Add(child.gameObject);
+                child.GetComponent<Slot>().slotID = allSlotIDCounter++;
             }
         }
 
@@ -81,6 +79,24 @@ public class ItemClickHandler : MonoBehaviour
                 child.GetComponent<Slot>().slotID = allSlotIDCounter++;
             }
         }
+
+        for (int i = 0; i < _breadboardUI.transform.childCount; i++)
+        {
+            var child = _breadboardUI.transform.GetChild(i);
+            if (child.CompareTag("BBSlot"))
+            {
+                if (child.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot)
+                {
+                    breadboardSlots.Add(child.gameObject);
+                    allSlots.Add(child.gameObject);
+
+                    child.GetComponent<Slot>().slotID = allSlotIDCounter++;
+                    breadboardSlotIDCounter++;
+                }
+            }
+        }
+
+
     }
 
     // Update is called once per frame
@@ -101,15 +117,52 @@ public class ItemClickHandler : MonoBehaviour
 
     public void SpiceSharpCalculation()
     {
+        Debug.Log("*********************");
+        Debug.Log("Starting calculation ");
         ClearAllSlots();
         var ckt = new Circuit();
 
-        for (int i = 0; i < breadboardSlotIDCounter; i++)
+        foreach (KeyValuePair<Globals.AgilentInput, Globals.BananaPlugs> entry in Globals.AgilentConnections)
+        {
+            if (entry.Value != Globals.BananaPlugs.noConnection)
+            {
+                //AddAgilentBananaConnections(entry, ckt);
+                ActivateBananaSlot(entry.Value.ToString());
+            }
+        }
+
+        foreach(KeyValuePair<Globals.PowerSupplyInput, Globals.BananaPlugs> entry in Globals.PSConnections)
+        {
+            if (entry.Value != Globals.BananaPlugs.noConnection)
+            {
+                AddPowerSupplyConnection(entry.Key.ToString(), entry.Value.ToString(), ckt);
+                ActivateBananaSlot(entry.Value.ToString());
+            }
+        }
+
+        //handle permanent connections
+        for (int i = 0; i < _bananaPlugs.transform.childCount; i++)
+        {
+            if (bananaPlugActive[i])
+            {
+                var child = _bananaPlugs.transform.GetChild(i);
+                if (child.CompareTag("BBSlot"))
+                {
+                    AddElectricalElement(child.GetComponent<Slot>(), ckt);
+                    child.GetComponent<Slot>().slotChecked = true;
+                    child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
+                }
+            }
+        }
+
+        int breadboardStartID = allSlotIDCounter - breadboardSlotIDCounter;
+        for (int i = 0; i < allSlotIDCounter - breadboardStartID; i++)
         {
             if (breadboardSlots[i].GetComponent<Slot>().itemPlaced != null && !breadboardSlots[i].GetComponent<Slot>().slotChecked)
             {
                 if (breadboardSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot)
                 {
+
                     AddElectricalElement(breadboardSlots[i].GetComponent<Slot>(), ckt);
                     breadboardSlots[i].GetComponent<Slot>().slotChecked = true;
                     breadboardSlots[i].GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
@@ -118,20 +171,36 @@ public class ItemClickHandler : MonoBehaviour
         }
 
 
-        VoltageSource powerSupply = AddVoltageSource(ckt);
-        ckt.Add(powerSupply);
-        Debug.Log("Starting calculation ");
+        // VoltageSource powerSupply = AddVoltageSource(ckt);
+        // ckt.Add(powerSupply);
+
 
         // Create a DC sweep and register to the event for exporting simulation data
-        var dc = new DC("dc", "PS", _powerSupply.GetComponent<PowerSupply>().powerReading, _powerSupply.GetComponent<PowerSupply>().powerReading, 1);
+        //var dc = new DC("dc", "voltageSourcePS", _powerSupply.GetComponent<PowerSupply>().powerReading, _powerSupply.GetComponent<PowerSupply>().powerReading, 1);
+         var dc = new DC("dc", "voltageSourcePS", 6, 6, 1);
         GetCircuitToolsReading(dc);
-
+        ManageAgilentReadingsConnections(dc);
         // Run the simulation
-        dc.Run(ckt);
+        try
+        {
+            dc.Run(ckt);
+        }
+        catch (ValidationFailedException e)
+        {
+            Debug.Log("Error is: " + e.ToString());
+        }
+
     }
 
     private void ClearAllSlots()
     {
+
+
+        for (int i = 0; i < bananaPlugActive.Count; i++)
+        {
+            bananaPlugActive[i] = false;
+        }
+
         for (int i = 0; i < breadboardSlotIDCounter; i++)
         {
             var child = _breadboardUI.transform.GetChild(i);
@@ -160,20 +229,19 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
 
-        // for (int i = 0; i < _powerSupply.transform.childCount; i++)
-        // {
-        //     var child = _powerSupply.transform.GetChild(i);
-        //     if (child.CompareTag("BBSlot"))
-        //     {
-        //        child.GetComponent<Slot>().slotChecked = false;
-        //     }
-        // }
-
+        for (int i = 0; i < _bananaPlugs.transform.childCount; i++)
+        {
+            var child = _bananaPlugs.transform.GetChild(i);
+            if (child.CompareTag("BBSlot"))
+            {
+                child.GetComponent<Slot>().slotChecked = false;
+            }
+        }
     }
 
     private VoltageSource AddVoltageSource(Circuit ckt)
     {
-        VoltageSource source = new VoltageSource("PS", "PSPOS", "0", 5);
+        VoltageSource source = new VoltageSource("PS", "PSPOS", "0", 0);
 
 
         for (int i = 0; i < _powerSupply.transform.childCount; i++)
@@ -187,8 +255,33 @@ public class ItemClickHandler : MonoBehaviour
                 }
             }
         }
-
         return source;
+    }
+
+    private void AddPowerSupplyConnection(string pos, string neg, Circuit ckt)
+    {   
+        bool isGroundConnected = false;
+        if(Globals.PSConnections.TryGetValue(Globals.PowerSupplyInput.ground, out Globals.BananaPlugs groundConnection))
+        {
+            if(!groundConnection.Equals(Globals.BananaPlugs.noConnection))
+            {
+                isGroundConnected = true;
+            }
+        }
+        
+        if(pos == Globals.PowerSupplyInput.ground.ToString())
+        {
+            pos = "0";
+        }
+        else if(pos == Globals.PowerSupplyInput.voltageSource.ToString() && isGroundConnected)
+        {
+            Debug.Log("Adding PS Source: " + pos+"PS" + " " + pos + " " + "0" + " " + wireResistance);
+            VoltageSource voltSource = new VoltageSource(pos+"PS",pos,"0",5);
+            ckt.Add(voltSource);
+        }
+
+        Debug.Log("Adding Wire: " + pos + " " + pos + " " + neg + " " + 0);
+        ckt.Add(new Resistor(pos,pos,neg,0));
     }
 
     private void AttachPowerSupply(Transform slot, Circuit ckt)
@@ -216,18 +309,98 @@ public class ItemClickHandler : MonoBehaviour
         }
 
     }
+
+    private void ManageAgilentReadingsConnections(DC dc)
+    {
+        //Voltmeter
+        string volPos = "+";
+        string AgileGroundSlot = "-";
+        string currentSlot = "i";
+        if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.voltageInput, out Globals.BananaPlugs posVolNode))
+        {
+            volPos = GetBananaConnections(posVolNode.ToString());
+        }
+        if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.groundInput, out Globals.BananaPlugs groundNode))
+        {
+            AgileGroundSlot = GetBananaConnections(groundNode.ToString());
+        }
+        if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.currentInput, out Globals.BananaPlugs currentNode))
+        {
+            currentSlot = GetBananaConnections(currentNode.ToString());
+        }
+
+        dc.ExportSimulationData += (sender, exportDataEventArgs) =>
+        {
+            Debug.Log("AGILENT READING: " + new RealVoltageExport(dc, volPos, AgileGroundSlot).Value.ToString());
+
+        };
+
+        dc.ExportSimulationData += (sender, exportDataEventArgs) =>
+        {
+            Debug.Log("Real Current " + (new RealCurrentExport(dc, "voltageSource")).Value);
+        };
+
+    }
+
+    private string GetBananaConnections(String BananaPlugSlot)
+    {
+        int removedInt = int.Parse(Regex.Match(BananaPlugSlot, @"\d+").Value);
+        string columnConnection = "";
+        switch (removedInt)
+        {
+
+            case 0:
+                columnConnection = "C10";
+                break;
+
+            case 1:
+                columnConnection = "C0";
+                break;
+
+            case 2:
+                columnConnection = "C5";
+                break;
+
+            case 3:
+                columnConnection = "C15";
+                break;
+
+            case 4:
+                columnConnection = "C16";
+                break;
+
+            default:
+                Debug.Log("No banana Plug found");
+                break;
+        }
+
+        return columnConnection;
+    }
+
+    private void ActivateBananaSlot(String value)
+    {
+        int removedInt = int.Parse(Regex.Match(value, @"\d+").Value);
+        bananaPlugActive[removedInt] = true;
+    }
+
     private void AddElectricalElement(Slot slot, Circuit ckt)
     {
+
         string componentName = "S" + slot.slotID;
         string componentStart = "C" + GetSlotColumn(slot.slotID);
         string componentEnd = "C" + GetSlotColumn(slot.slotPair.GetComponent<Slot>().slotID);
-        float value = GetComponentValue(slot);
 
+        if (slot.slotType == Globals.SlotType.BananaPlugSlot)
+        {
+            componentStart = "B" + slot.slotID;
+        }
+
+        float value = GetComponentValue(slot);
         switch (slot.itemPlaced.itemName)
         {
             case (Globals.AvailableItems.Wire):
-                Resistor wire = new Resistor(componentName, componentStart, componentEnd, 0);
-                Debug.Log("Adding Wire: " + componentName + " " + componentStart + " " + componentEnd + " " + 0);
+                Resistor wire = new Resistor(componentName, componentStart, componentEnd, wireResistance);
+                Debug.Log("Adding Wire: " + componentName + " " + componentStart + " " + componentEnd + " " + wireResistance);
                 ckt.Add(wire);
                 break;
 
@@ -244,9 +417,9 @@ public class ItemClickHandler : MonoBehaviour
                 break;
 
             default:
+                Debug.Log("Nothing found");
                 break;
         }
-
     }
 
     private void AddElectricalElement(Slot slot, Circuit ckt, string componentStart, string componentEnd)
@@ -257,8 +430,8 @@ public class ItemClickHandler : MonoBehaviour
         switch (slot.itemPlaced.itemName)
         {
             case (Globals.AvailableItems.Wire):
-                Resistor wire = new Resistor(componentName, componentStart, componentEnd, 0);
-                Debug.Log("Adding Wire: " + componentName + " " + componentStart + " " + componentEnd + " " + 0);
+                Resistor wire = new Resistor(componentName, componentStart, componentEnd, wireResistance);
+                Debug.Log("Adding Wire: " + componentName + " " + componentStart + " " + componentEnd + " " + wireResistance);
                 ckt.Add(wire);
                 break;
 
@@ -283,8 +456,18 @@ public class ItemClickHandler : MonoBehaviour
     private int GetSlotColumn(int slot)
     {
         int column = -1;
-
+        slot -= 9;
         column = (int)Math.Floor((double)(slot / 4.0));
+
+        //VCC Slots are all considered the same
+        if (column < 5)
+        {
+            column = 0;
+        }
+        else if (column < 10)
+        {
+            column = 5;
+        }
 
         return column;
     }
@@ -341,7 +524,7 @@ public class ItemClickHandler : MonoBehaviour
                     }
                 }
             }
-            else if(child.name.Equals("Meter Val"))
+            else if (child.name.Equals("Meter Val"))
             {
                 meterVal = child;
             }
@@ -353,6 +536,8 @@ public class ItemClickHandler : MonoBehaviour
             case 0: //VoltMeter
                 dc.ExportSimulationData += (sender, exportDataEventArgs) =>
                 {
+
+                    Debug.Log("GETTING READING BETWEEN " + posToolSlot + " AND " + negToolSlot);
                     Debug.Log("Real voltage " + (new RealVoltageExport(dc, posToolSlot, negToolSlot)).Value);
                     meterVal.GetComponent<TMP_Text>().text = new RealVoltageExport(dc, posToolSlot, negToolSlot).Value.ToString("0.0000") + " V";
                 };
@@ -362,7 +547,7 @@ public class ItemClickHandler : MonoBehaviour
                 dc.ExportSimulationData += (sender, exportDataEventArgs) =>
                 {
                     Debug.Log("Real Current " + (new RealCurrentExport(dc, "PS")).Value);
-                    meterVal.GetComponent<TMP_Text>().text = new RealCurrentExport(dc, posToolSlot).Value.ToString("0.0000") + " A";
+                    meterVal.GetComponent<TMP_Text>().text = new RealCurrentExport(dc, "PS").Value.ToString() + " A";
                 };
                 break;
             default:
@@ -400,7 +585,7 @@ public class ItemClickHandler : MonoBehaviour
                     {
                         // Debug.Log("First Click GOOD");
                         _pointA.GetComponent<Slot>().PlaceItem();
-                        
+
                     }
                 }
                 break;
@@ -554,8 +739,8 @@ public class ItemClickHandler : MonoBehaviour
         if (itemToRemove != null)
         {
             Debug.Log("Removing item between slots: " + itemToRemove.GetComponent<PlacedImages>().slotA + " and " + itemToRemove.GetComponent<PlacedImages>().slotB);
-            allSlots[itemToRemove.GetComponent<PlacedImages>().slotA].GetComponent<Slot>().RemoveItem();
-            allSlots[itemToRemove.GetComponent<PlacedImages>().slotB].GetComponent<Slot>().RemoveItem();
+            breadboardSlots[itemToRemove.GetComponent<PlacedImages>().slotA].GetComponent<Slot>().RemoveItem();
+            breadboardSlots[itemToRemove.GetComponent<PlacedImages>().slotB].GetComponent<Slot>().RemoveItem();
             Globals.inventoryItems[itemToRemove.GetComponent<PlacedImages>().itemID].isPlaced = false;
         }
         Destroy(itemToRemove);
@@ -646,6 +831,11 @@ public class ItemClickHandler : MonoBehaviour
             }
             // componentVal = 1 / ((2 * (float)Math.PI * 60) * componentVal);
         }
+
+        // float randomMultiplier = UnityEngine.Random.Range(0.95f,1.05f);
+        // Debug.Log("Random val: " + randomMultiplier);
+        // return componentVal * randomMultiplier;
+
         return componentVal;
     }
 }
