@@ -18391,6 +18391,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: PowerSupply
       objectReference: {fileID: 0}
+    - target: {fileID: 1290268953411352940, guid: ea58bcc4ea21441498f8aaa175c4a87f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.169
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290268953411352940, guid: ea58bcc4ea21441498f8aaa175c4a87f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.503
+      objectReference: {fileID: 0}
     - target: {fileID: 2971542036940430761, guid: ea58bcc4ea21441498f8aaa175c4a87f,
         type: 3}
       propertyPath: m_TagString
@@ -18420,6 +18430,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: clickable
+      objectReference: {fileID: 0}
+    - target: {fileID: 8036509081059862332, guid: ea58bcc4ea21441498f8aaa175c4a87f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.607
       objectReference: {fileID: 0}
     - target: {fileID: 8126358981264128725, guid: ea58bcc4ea21441498f8aaa175c4a87f,
         type: 3}
