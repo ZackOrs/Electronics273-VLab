@@ -44,6 +44,7 @@ public class PSSelect : SelectableItemBase
         switch(clickedButton){
             case("VoltageSource"):
             Debug.Log("Banana Voltage clicked");
+            Globals.PSConnections.Remove(Globals.PowerSupplyInput.voltageSource);
             Globals.PSConnections.Add(Globals.PowerSupplyInput.voltageSource,Globals.BananaPlugs.B1);
             break;
 
@@ -54,11 +55,13 @@ public class PSSelect : SelectableItemBase
 
             case("CurrentSource"):
             Debug.Log("Banana Current clicked");
+            Globals.PSConnections.Remove(Globals.PowerSupplyInput.currentSource);
             Globals.PSConnections.Add(Globals.PowerSupplyInput.currentSource ,Globals.BananaPlugs.B3);
             break;
 
             case("Ground"):
             Debug.Log("Banana Ground clicked");
+            Globals.PSConnections.Remove(Globals.PowerSupplyInput.ground);
             Globals.PSConnections.Add(Globals.PowerSupplyInput.ground,Globals.BananaPlugs.B0);
             break;
 
