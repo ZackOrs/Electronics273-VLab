@@ -17,7 +17,7 @@ public class SelectionManager : MonoBehaviour {
     {
 
         
-        if (lastHighlightedObject != gameObject)
+        if (lastHighlightedObject != gameObject || !Globals.cameraAttachedToPlayer)
         {
             ClearHighlighted();
             originalMaterial = gameObject.GetComponent<MeshRenderer>().material.color;
@@ -33,7 +33,11 @@ public class SelectionManager : MonoBehaviour {
 
         if(Globals.menuOpened == false)
         {
+            if(Globals.cameraAttachedToPlayer)
+            {
             Hud.OpenMessagePanel("open");
+            }
+
             ISelectableItem item = selection.GetComponent<ISelectableItem>();
 
             

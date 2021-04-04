@@ -42,6 +42,9 @@ public class ItemClickHandler : MonoBehaviour
 
     private List<bool> bananaPlugActive = new List<bool>() { false, false, false, false, false };
 
+
+    [SerializeField] GameObject _agilentMachine = null;
+
     void Start()
     {
         Debug.Log("Adding slots");
@@ -318,21 +321,34 @@ public class ItemClickHandler : MonoBehaviour
         string currentSlot = "i";
         if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.voltageInput, out Globals.BananaPlugs posVolNode))
         {
-            volPos = GetBananaConnections(posVolNode.ToString());
+            if(posVolNode != Globals.BananaPlugs.noConnection)
+            {
+                volPos = GetBananaConnections(posVolNode.ToString());
+            }
+            
         }
         if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.groundInput, out Globals.BananaPlugs groundNode))
         {
-            AgileGroundSlot = GetBananaConnections(groundNode.ToString());
+
+            if(posVolNode != Globals.BananaPlugs.noConnection)
+            {
+                AgileGroundSlot = GetBananaConnections(groundNode.ToString());
+            }
+            
         }
         if (Globals.AgilentConnections.TryGetValue(Globals.AgilentInput.currentInput, out Globals.BananaPlugs currentNode))
         {
-            currentSlot = GetBananaConnections(currentNode.ToString());
+            if(posVolNode != Globals.BananaPlugs.noConnection)
+            {
+                currentSlot = GetBananaConnections(currentNode.ToString());
+            }
+            
         }
 
         dc.ExportSimulationData += (sender, exportDataEventArgs) =>
         {
             Debug.Log("AGILENT READING: " + new RealVoltageExport(dc, volPos, AgileGroundSlot).Value.ToString());
-
+            _agilentMachine.GetComponent<AgilentSelect>().VoltageReading = (float)new RealVoltageExport(dc, volPos, AgileGroundSlot).Value;
         };
 
         dc.ExportSimulationData += (sender, exportDataEventArgs) =>
