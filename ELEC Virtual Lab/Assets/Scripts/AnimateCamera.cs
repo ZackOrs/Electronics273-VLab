@@ -30,7 +30,6 @@ public class AnimateCamera : MonoBehaviour
         {
             if (Input.GetKeyDown("f"))
             {
-                Debug.Log("F is pressed: " + focusOnTarget.ToString());
                 if (Globals.cameraAttachedToPlayer)
                 {
                     fromRot = gameObject.transform;
