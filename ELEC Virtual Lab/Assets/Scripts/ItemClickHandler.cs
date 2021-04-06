@@ -20,8 +20,6 @@ public class ItemClickHandler : MonoBehaviour
     public static GameObject buttonClicked;
 
     [SerializeField] GameObject _breadboardUI = null;
-    [SerializeField] GameObject _toolsMeter = null;
-    [SerializeField] GameObject _powerSupply = null;
     [SerializeField] GameObject _bananaPlugs = null;
 
     [SerializeField] Image _wireImage = null;
@@ -43,7 +41,9 @@ public class ItemClickHandler : MonoBehaviour
 
 
     [SerializeField] GameObject _agilentMachine = null;
+    [SerializeField] GameObject _flukeMachine = null;
     [SerializeField] GameObject _powerSupplyMachine = null;
+    
 
     VoltageSource voltageSource = new VoltageSource("a");
     CurrentSource currentSource = new CurrentSource("b");
@@ -56,26 +56,6 @@ public class ItemClickHandler : MonoBehaviour
         for (int i = 0; i < _bananaPlugs.transform.childCount; i++)
         {
             var child = _bananaPlugs.transform.GetChild(i);
-            if (child.CompareTag("BBSlot"))
-            {
-                allSlots.Add(child.gameObject);
-                child.GetComponent<Slot>().slotID = allSlotIDCounter++;
-            }
-        }
-
-        for (int i = 0; i < _powerSupply.transform.childCount; i++)
-        {
-            var child = _powerSupply.transform.GetChild(i);
-            if (child.CompareTag("BBSlot"))
-            {
-                allSlots.Add(child.gameObject);
-                child.GetComponent<Slot>().slotID = allSlotIDCounter++;
-            }
-        }
-
-        for (int i = 0; i < _toolsMeter.transform.childCount; i++)
-        {
-            var child = _toolsMeter.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
                 allSlots.Add(child.gameObject);
@@ -97,14 +77,12 @@ public class ItemClickHandler : MonoBehaviour
                 }
             }
         }
-
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
         if (Globals.mouseClickAction > 0)
         {
             WaitForClick();
@@ -113,8 +91,8 @@ public class ItemClickHandler : MonoBehaviour
         {
             RemoveComponent();
         }
-        // // function attached to a button for testing
-        // SpiceSharpCalculation();
+        // function attached to a button for testing
+        SpiceSharpCalculation();
     }
 
     public void SpiceSharpCalculation()
@@ -132,7 +110,14 @@ public class ItemClickHandler : MonoBehaviour
         {
             if (entry.Value != Globals.BananaPlugs.noConnection)
             {
-                //AddAgilentBananaConnections(entry, ckt);
+                ActivateBananaSlot(entry.Value.ToString());
+            }
+        }
+
+        foreach (KeyValuePair<Globals.FlukeInput, Globals.BananaPlugs> entry in Globals.FlukeConnections)
+        {
+            if (entry.Value != Globals.BananaPlugs.noConnection)
+            {
                 ActivateBananaSlot(entry.Value.ToString());
             }
         }
@@ -201,7 +186,6 @@ public class ItemClickHandler : MonoBehaviour
         var dc = new DC("dc");
         if (voltageSource.Name != "a" && currentSource.Name != "b")
         {
-            Debug.Log("Both hit");
             dc = new DC("dc", new[]{
             new ParameterSweep(voltageSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().voltage,_powerSupplyMachine.GetComponent<PSSelect>().voltage,1)),
             new ParameterSweep(currentSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().current,_powerSupplyMachine.GetComponent<PSSelect>().current,1))
@@ -209,14 +193,13 @@ public class ItemClickHandler : MonoBehaviour
         }
         else if (voltageSource.Name != "a")
         {
-            Debug.Log("Volt hit");
+            Debug.Log("voltage: "+_powerSupplyMachine.GetComponent<PSSelect>().voltage);
             dc = new DC("dc", new[]{
             new ParameterSweep(voltageSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().voltage,_powerSupplyMachine.GetComponent<PSSelect>().voltage,1))
         });
         }
         else if (currentSource.Name != "b")
         {
-            Debug.Log("Curr hit");
             dc = new DC("dc", new[]{
              new ParameterSweep(currentSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().current,_powerSupplyMachine.GetComponent<PSSelect>().current,1))
         });
@@ -225,6 +208,7 @@ public class ItemClickHandler : MonoBehaviour
 
         //GetCircuitToolsReading(dc);
         ManageAgilentReadingsConnections(dc);
+        ManageFlukeReadingsConnections(dc);
         // Run the simulation
         try
         {
@@ -248,24 +232,6 @@ public class ItemClickHandler : MonoBehaviour
         {
             var child = _breadboardUI.transform.GetChild(i);
 
-            if (child.CompareTag("BBSlot"))
-            {
-                child.GetComponent<Slot>().slotChecked = false;
-            }
-        }
-
-        for (int i = 0; i < _powerSupply.transform.childCount; i++)
-        {
-            var child = _powerSupply.transform.GetChild(i);
-            if (child.CompareTag("BBSlot"))
-            {
-                child.GetComponent<Slot>().slotChecked = false;
-            }
-        }
-
-        for (int i = 0; i < _toolsMeter.transform.childCount; i++)
-        {
-            var child = _toolsMeter.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
                 child.GetComponent<Slot>().slotChecked = false;
@@ -404,6 +370,57 @@ public class ItemClickHandler : MonoBehaviour
             // Debug.Log("AGILENT CURRENT READING: " + (new RealCurrentExport(dc, currentSource.Name)).Value);
             Debug.Log("AGILENT CURRENT READING: " + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
             _agilentMachine.GetComponent<AgilentSelect>().currentReading = (float) new RealCurrentExport(dc, voltageSource.Name).Value;
+            _agilentMachine.GetComponent<AgilentSelect>().valueUpdated = true;
+        };
+
+    }
+
+    private void ManageFlukeReadingsConnections(DC dc)
+    {
+        //Voltmeter
+        string volPos = "+";
+        string flukeGroundSlot = "-";
+        string currentSlot = "i";
+        if (Globals.FlukeConnections.TryGetValue(Globals.FlukeInput.voltageInput, out Globals.BananaPlugs posVolNode))
+        {
+            if (posVolNode != Globals.BananaPlugs.noConnection)
+            {
+                volPos = GetBananaConnections(posVolNode.ToString());
+            }
+
+        }
+        if (Globals.FlukeConnections.TryGetValue(Globals.FlukeInput.groundInput, out Globals.BananaPlugs groundNode))
+        {
+
+            if (groundNode != Globals.BananaPlugs.noConnection)
+            {
+                flukeGroundSlot = GetBananaConnections(groundNode.ToString());
+            }
+
+        }
+        if (Globals.FlukeConnections.TryGetValue(Globals.FlukeInput.currentInput, out Globals.BananaPlugs currentNode))
+        {
+            if (currentNode != Globals.BananaPlugs.noConnection)
+            {
+                currentSlot = GetBananaConnections(currentNode.ToString());
+            }
+
+        }
+
+        dc.ExportSimulationData += (sender, exportDataEventArgs) =>
+        {
+            Debug.Log("Fluke reading from: " + volPos + " and: " + flukeGroundSlot);
+            Debug.Log("Fluke VOLTAGE READING: " + new RealVoltageExport(dc, volPos, flukeGroundSlot).Value.ToString());
+            _flukeMachine.GetComponent<FlukeSelect>().voltageReading = (float)new RealVoltageExport(dc, volPos, flukeGroundSlot).Value;
+            _flukeMachine.GetComponent<FlukeSelect>().valueUpdated = true;
+        };
+
+        dc.ExportSimulationData += (sender, exportDataEventArgs) =>
+        {
+            // Debug.Log("Fluke CURRENT READING: " + (new RealCurrentExport(dc, currentSource.Name)).Value);
+            Debug.Log("Fluke CURRENT READING: " + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
+            _flukeMachine.GetComponent<FlukeSelect>().currentReading = (float) new RealCurrentExport(dc, voltageSource.Name).Value;
+            _flukeMachine.GetComponent<FlukeSelect>().valueUpdated = true;
         };
 
     }
@@ -524,7 +541,7 @@ public class ItemClickHandler : MonoBehaviour
     private int GetSlotColumn(int slot)
     {
         int column = -1;
-        slot -= 9;
+        slot -= 5;
         column = (int)Math.Floor((double)(slot / 4.0));
         //VCC Slots are all considered the same
         if (column < 5)
@@ -567,60 +584,60 @@ public class ItemClickHandler : MonoBehaviour
         }
     }
 
-    private void GetCircuitToolsReading(DC dc)
-    {
-        string posToolSlot = "+";
-        string negToolSlot = "-";
-        var meterMode = _toolsMeter.GetComponentInChildren<TMP_Dropdown>().value;
-        Transform meterVal = null;
+    // private void GetCircuitToolsReading(DC dc)
+    // {
+    //     string posToolSlot = "+";
+    //     string negToolSlot = "-";
+    //     var meterMode = _toolsMeter.GetComponentInChildren<TMP_Dropdown>().value;
+    //     Transform meterVal = null;
 
-        for (int i = 0; i < _toolsMeter.transform.childCount; i++)
-        {
-            var child = _toolsMeter.transform.GetChild(i);
-            if (child.CompareTag("BBSlot"))
-            {
-                if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked)
-                {
-                    if (child.name.Equals("Pos Slot"))
-                    {
-                        posToolSlot = "C" + GetSlotColumn(child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotID).ToString();
-                    }
-                    else if (child.name.Equals("Neg Slot"))
-                    {
-                        negToolSlot = "C" + GetSlotColumn(child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotID).ToString();
-                    }
-                }
-            }
-            else if (child.name.Equals("Meter Val"))
-            {
-                meterVal = child;
-            }
-        }
-        Debug.Log("Pos slot: " + posToolSlot);
-        Debug.Log("Neg slot: " + negToolSlot);
-        switch (meterMode)
-        {
-            case 0: //VoltMeter
-                dc.ExportSimulationData += (sender, exportDataEventArgs) =>
-                {
+    //     for (int i = 0; i < _toolsMeter.transform.childCount; i++)
+    //     {
+    //         var child = _toolsMeter.transform.GetChild(i);
+    //         if (child.CompareTag("BBSlot"))
+    //         {
+    //             if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked)
+    //             {
+    //                 if (child.name.Equals("Pos Slot"))
+    //                 {
+    //                     posToolSlot = "C" + GetSlotColumn(child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotID).ToString();
+    //                 }
+    //                 else if (child.name.Equals("Neg Slot"))
+    //                 {
+    //                     negToolSlot = "C" + GetSlotColumn(child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotID).ToString();
+    //                 }
+    //             }
+    //         }
+    //         else if (child.name.Equals("Meter Val"))
+    //         {
+    //             meterVal = child;
+    //         }
+    //     }
+    //     Debug.Log("Pos slot: " + posToolSlot);
+    //     Debug.Log("Neg slot: " + negToolSlot);
+    //     switch (meterMode)
+    //     {
+    //         case 0: //VoltMeter
+    //             dc.ExportSimulationData += (sender, exportDataEventArgs) =>
+    //             {
 
-                    Debug.Log("GETTING READING BETWEEN " + posToolSlot + " AND " + negToolSlot);
-                    Debug.Log("Real voltage " + (new RealVoltageExport(dc, posToolSlot, negToolSlot)).Value);
-                    meterVal.GetComponent<TMP_Text>().text = new RealVoltageExport(dc, posToolSlot, negToolSlot).Value.ToString("0.0000") + " V";
-                };
-                break;
+    //                 Debug.Log("GETTING READING BETWEEN " + posToolSlot + " AND " + negToolSlot);
+    //                 Debug.Log("Real voltage " + (new RealVoltageExport(dc, posToolSlot, negToolSlot)).Value);
+    //                 meterVal.GetComponent<TMP_Text>().text = new RealVoltageExport(dc, posToolSlot, negToolSlot).Value.ToString("0.0000") + " V";
+    //             };
+    //             break;
 
-            case 1: //Ammeter
-                dc.ExportSimulationData += (sender, exportDataEventArgs) =>
-                {
-                    Debug.Log("Real Current " + (new RealCurrentExport(dc, "PS")).Value);
-                    meterVal.GetComponent<TMP_Text>().text = new RealCurrentExport(dc, "PS").Value.ToString() + " A";
-                };
-                break;
-            default:
-                break;
-        }
-    }
+    //         case 1: //Ammeter
+    //             dc.ExportSimulationData += (sender, exportDataEventArgs) =>
+    //             {
+    //                 Debug.Log("Real Current " + (new RealCurrentExport(dc, "PS")).Value);
+    //                 meterVal.GetComponent<TMP_Text>().text = new RealCurrentExport(dc, "PS").Value.ToString() + " A";
+    //             };
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }
 
     private static void WireClicked()
     {
@@ -803,11 +820,17 @@ public class ItemClickHandler : MonoBehaviour
     {
         GameObject itemToRemove;
         itemToRemove = CheckIfPlacedComponent();
+
         if (itemToRemove != null)
         {
+            Debug.Log("Total Number of Slots:" + allSlots.Count);
+            Debug.Log("Removing number:" + itemToRemove.GetComponent<PlacedImages>().slotA);
             Debug.Log("Removing item between slots: " + itemToRemove.GetComponent<PlacedImages>().slotA + " and " + itemToRemove.GetComponent<PlacedImages>().slotB);
             allSlots[itemToRemove.GetComponent<PlacedImages>().slotA].GetComponent<Slot>().RemoveItem();
             allSlots[itemToRemove.GetComponent<PlacedImages>().slotB].GetComponent<Slot>().RemoveItem();
+            Debug.Log("Removed");
+            Debug.Log("Removing itemID:" + itemToRemove.GetComponent<PlacedImages>().itemID);
+            Debug.Log("Inventory Items count: " + Globals.inventoryItems.Count);
             Globals.inventoryItems[itemToRemove.GetComponent<PlacedImages>().itemID].isPlaced = false;
         }
         Destroy(itemToRemove);

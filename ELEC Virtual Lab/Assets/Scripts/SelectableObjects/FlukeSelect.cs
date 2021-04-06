@@ -11,8 +11,10 @@ public class FlukeSelect : SelectableItemBase
 
     //public GameObject Camera;
     [SerializeField] TMP_Text displayValueText = null;
+    [SerializeField] TMP_Text displayModeText = null;
     [SerializeField] GameObject focusPoint = null;
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
+    
     private Globals.FlukeInput clickedInput;
 
     private bool changingConnection = false;
@@ -24,17 +26,19 @@ public class FlukeSelect : SelectableItemBase
 
     private bool meterMode = true; //True = Voltmeter, False = currentmeter
 
+    private bool powerOn = false; //Initially off
+
     public override string Name
     {
         get
         {
-            return "Agilent";
+            return "Fluke";
         }
     }
 
     public override void onInteract()
     {
-        Globals.currentMachine = "Agilent";
+        Globals.currentMachine = "Fluke";
         Globals.lookingAtFocusableObject = true;
         Camera.main.GetComponent<AnimateCamera>().targetObject = focusPoint;
     }
@@ -47,7 +51,7 @@ public class FlukeSelect : SelectableItemBase
             if (BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked)
             {
                 Globals.FlukeConnections[clickedInput] = BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked;
-                Debug.Log("Updating Key: AgilentConnections[" + clickedInput + "] To: " + BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
+                Debug.Log("Updating Key: FlukeConnections[" + clickedInput + "] To: " + BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
                 BananaSlotConnectionsPanel.SetActive(false);
                 BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked = false;
                 changingConnection = false;
@@ -56,19 +60,23 @@ public class FlukeSelect : SelectableItemBase
 
         if (valueUpdated)
         {
-            if(meterMode)
+            if(Globals.FlukeConnections[Globals.FlukeInput.groundInput].Equals(Globals.BananaPlugs.noConnection) || 
+            (Globals.FlukeConnections[Globals.FlukeInput.voltageInput].Equals(Globals.BananaPlugs.noConnection) && Globals.FlukeConnections[Globals.FlukeInput.currentInput].Equals(Globals.BananaPlugs.noConnection)))
+            {
+                displayValueText.text = "-.---";
+                valueUpdated = false;
+            }
+            else if(meterMode)
             {
                 displayValueText.text = voltageReading.ToString("0.000") + " V";
                 valueUpdated = false;
             }
             else
             {
-                displayValueText.text = currentReading.ToString("0.000") + " A";
+                displayValueText.text = (currentReading * -1000).ToString("00.00") + " mA";
                 valueUpdated = false;
             }
-
         }
-
     }
 
     public void ButtonClickHandler(string clickedButton)
@@ -78,60 +86,60 @@ public class FlukeSelect : SelectableItemBase
             case ("BtnDCV"):
                 //Button23Pressed();
                 break;
-            case ("Torus.006"):
+            case ("VoltageInput"):
                 clickedInput = Globals.FlukeInput.voltageInput;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
                 break;
 
-            case ("Torus.009"):
+            case ("CommonGround"):
                 clickedInput = Globals.FlukeInput.groundInput;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
                 break;
 
-            case ("Torus.010"):
+            case ("CurrentInputmA"):
                 clickedInput = Globals.FlukeInput.currentInput;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
                 break;
 
-            case ("BtnAuto"):
-                Debug.Log("Clicked Auto");
+            case ("BtnPower"):
+                PowerButton();
                 break;
 
-            case ("BtnRange"):
-                Debug.Log("Clicked Range");
-                break;
+            case("BtnVolt"):
+            VoltageButtonClick();
+            break;
 
-            case ("BtnFreq"):
-                Debug.Log("Clicked Freq");
-                break;
-
-            case ("BtnOhms"):
-                Debug.Log("Clicked Ohms");
-                break;
-
-            case ("BtnTemp"):
-                Debug.Log("Clicked Temp");
-                break;
-
-            case ("BtnCapacitance"):
-                Debug.Log("Clicked Capacitance");
-                break;
+            case("BtnCurrent"):
+            CurrentButtonClick();
+            break;
 
             default:
                 Debug.Log("No buttono");
                 break;
         }
     }
-    private void DCVButtonClicked()
+    private void VoltageButtonClick()
     {
         meterMode = true;
+        valueUpdated = true;
+        displayModeText.text = "Reading: DC Voltage";
     }
 
-    private void DCIButtonClicked()
+    private void CurrentButtonClick()
     {
         meterMode = false;
+        valueUpdated = true;
+        displayModeText.text = "Reading: DC Current";
+    }
+
+    private void PowerButton()
+    {
+        powerOn = !powerOn;
+        valueUpdated = true;
+        displayValueText.gameObject.SetActive(powerOn);
+        displayModeText.gameObject.SetActive(powerOn);
     }
 }

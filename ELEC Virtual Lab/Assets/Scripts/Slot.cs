@@ -21,18 +21,20 @@ public class Slot : MonoBehaviour
     public List<string> machineConnections = null;
     void Start()
     {
-        
+        if(permaSlot == true)
+        { 
+            SpawnableItem wire = new SpawnableItem(Globals.AvailableItems.Wire, 0);
+            itemPlaced = wire;
+            Globals.inventoryItems.Add(wire);
+            isFree = false;
+            ChangeHighlightColor();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(permaSlot == true)
-        { 
-            itemPlaced = new SpawnableItem(Globals.AvailableItems.Wire, 0);
-            isFree = false;
-            ChangeHighlightColor();
-        }
+
     }
 
     public void PlaceItem()

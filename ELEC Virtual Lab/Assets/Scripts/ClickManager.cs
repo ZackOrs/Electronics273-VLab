@@ -40,6 +40,7 @@ public class ClickManager : MonoBehaviour
 
     private void UseMachine(string buttonHit)
     {
+        Debug.Log("Clicked machine: "+ Globals.currentMachine);
         switch(Globals.currentMachine)
         {
             case("Agilent"):

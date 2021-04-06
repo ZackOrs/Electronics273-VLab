@@ -11,13 +11,17 @@ public class PSSelect : SelectableItemBase
     private bool _rotate;
     private int numberOfTurnsVoltage = 0;
     private int numberOfTurnsCurrent = 0;
-    public float voltage = 0;
-    public float current = 0;
+    public float voltage = 1.1f;
+    public float current = 0.0056f;
     [SerializeField] GameObject focusPoint = null;
 
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
+
+    [SerializeField] GameObject PowerLight = null;
     private Globals.PowerSupplyInput clickedInput;
     private bool changingConnection = false;
+    private bool powerOn = false;
+
 
     public override string Name
     {
@@ -51,7 +55,6 @@ public class PSSelect : SelectableItemBase
         }
     }
 
-
     public void ButtonClickHandler(string clickedButton)
     {
         switch (clickedButton)
@@ -78,6 +81,10 @@ public class PSSelect : SelectableItemBase
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
                 break;
+
+            case ("BtnPower"):
+            PowerButton();
+            break;
 
             case ("VoltageKnobPos"):
                 IncreaseVoltage(transform.Find("VoltageKnob").gameObject);
@@ -136,8 +143,17 @@ public class PSSelect : SelectableItemBase
 
     private void CalculateVoltage()
     {
-        voltage = (numberOfTurnsVoltage * 0.11125f) + 1.1f;
-        Debug.Log("Voltage:" + ((numberOfTurnsVoltage * 0.11125f) + 1.1f) + " V");
+        if (powerOn)
+        {
+            voltage = (numberOfTurnsVoltage * 0.11125f) + 1.1f;
+            Debug.Log("Voltage:" + ((numberOfTurnsVoltage * 0.11125f) + 1.1f) + " V");
+        }
+        else
+        {
+            voltage = 0;
+            Debug.Log("No power, Voltage: " + voltage);
+        }
+
     }
 
     public void IncreaseCurrent(GameObject currentKnob)
@@ -175,8 +191,33 @@ public class PSSelect : SelectableItemBase
 
     private void CalculateCurrent()
     {
-        current = (numberOfTurnsCurrent * 0.000555f) + 0.0056f;
-        Debug.Log("Current:" + ((numberOfTurnsCurrent * 0.000555f) + 0.0056f) + " A");
+        if (powerOn)
+        {
+            current = (numberOfTurnsCurrent * 0.000555f) + 0.0056f;
+            Debug.Log("Current:" + ((numberOfTurnsCurrent * 0.000555f) + 0.0056f) + " A");
+        }
+        else
+        {
+            current = 0;
+            Debug.Log("No power, current: " + current);
+        }
+    }
+
+
+    private void PowerButton()
+    {
+        Debug.Log("hit power switch");
+        powerOn = !powerOn;
+        if(powerOn)
+        {
+            PowerLight.GetComponent<MeshRenderer>().material.color = Color.green;
+        }
+        else
+        {
+            PowerLight.GetComponent<MeshRenderer>().material.color = Color.black;
+        }
+        CalculateCurrent();
+        CalculateVoltage();
     }
 
 }
