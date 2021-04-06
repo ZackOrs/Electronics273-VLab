@@ -10,12 +10,16 @@ public class AgilentSelect : SelectableItemBase
     // [SerializeField] private string spawnableTag = "Spawnable";
 
     //public GameObject Camera;
+    [SerializeField] TMP_Text displayValueText = null;
     [SerializeField] GameObject focusPoint = null;
-    [SerializeField] string bananaPlugOption = "BananaPlugOption";
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
     private Globals.AgilentInput clickedInput;
 
-    public float VoltageReading = 0;
+    private bool changingConnection = false;
+
+    public float voltageReading = 0;
+
+    public bool valueUpdated = false;
 
     public override string Name
     {
@@ -30,21 +34,27 @@ public class AgilentSelect : SelectableItemBase
         Globals.currentMachine = "Agilent";
         Globals.lookingAtFocusableObject = true;
         Camera.main.GetComponent<AnimateCamera>().targetObject = focusPoint;
-
     }
 
     void Update()
     {
-        if (BananaSlotConnectionsPanel.activeSelf)
+
+        if (changingConnection)
         {
             if (BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked)
             {
-                Globals.AgilentConnections.Remove(clickedInput);
-                Globals.AgilentConnections.Add(clickedInput, BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
-                Debug.Log("Adding Connection" + clickedInput + " and " + BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
+                Globals.AgilentConnections[clickedInput] = BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked;
+                Debug.Log("Updating Key: AgilentConnections[" + clickedInput + "] To: " + BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
                 BananaSlotConnectionsPanel.SetActive(false);
                 BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked = false;
+                changingConnection = false;
             }
+        }
+
+        if (valueUpdated)
+        {
+            displayValueText.text = voltageReading.ToString("0.000") + " V";
+            valueUpdated = false;
         }
 
     }
@@ -57,27 +67,50 @@ public class AgilentSelect : SelectableItemBase
                 //Button23Pressed();
                 break;
             case ("Torus.006"):
-                Debug.Log("Clicked Pos");
                 clickedInput = Globals.AgilentInput.voltageInput;
                 BananaSlotConnectionsPanel.SetActive(true);
-                // Globals.AgilentConnections.Remove(Globals.AgilentInput.voltageInput);
-                // Globals.AgilentConnections.Add(Globals.AgilentInput.voltageInput,Globals.BananaPlugs.B1);
+                changingConnection = true;
                 break;
 
             case ("Torus.009"):
-                Debug.Log("Clicked Neg");
                 clickedInput = Globals.AgilentInput.groundInput;
                 BananaSlotConnectionsPanel.SetActive(true);
+                changingConnection = true;
                 break;
+
+            case ("Torus.010"):
+                clickedInput = Globals.AgilentInput.currentInput;
+                BananaSlotConnectionsPanel.SetActive(true);
+                changingConnection = true;
+                break;
+
+            case ("BtnAuto"):
+                Debug.Log("Clicked Auto");
+                break;
+
+            case ("BtnRange"):
+                Debug.Log("Clicked Range");
+                break;
+
+            case ("BtnFreq"):
+                Debug.Log("Clicked Freq");
+                break;
+
+            case ("BtnOhms"):
+                Debug.Log("Clicked Ohms");
+                break;
+
+            case ("BtnTemp"):
+                Debug.Log("Clicked Temp");
+                break;
+
+            case ("BtnCapacitance"):
+                Debug.Log("Clicked Capacitance");
+                break;
+
             default:
                 Debug.Log("No buttono");
                 break;
-
         }
-    }
-
-    private void Button23Pressed()
-    {
-
     }
 }
