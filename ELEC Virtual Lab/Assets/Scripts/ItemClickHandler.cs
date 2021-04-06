@@ -395,13 +395,15 @@ public class ItemClickHandler : MonoBehaviour
         {
             Debug.Log("Agilent reading from: " + volPos + " and: " + AgileGroundSlot);
             Debug.Log("AGILENT VOLTAGE READING: " + new RealVoltageExport(dc, volPos, AgileGroundSlot).Value.ToString());
-            _agilentMachine.GetComponent<AgilentSelect>().VoltageReading = (float)new RealVoltageExport(dc, volPos, AgileGroundSlot).Value;
+            _agilentMachine.GetComponent<AgilentSelect>().voltageReading = (float)new RealVoltageExport(dc, volPos, AgileGroundSlot).Value;
+            _agilentMachine.GetComponent<AgilentSelect>().valueUpdated = true;
         };
 
         dc.ExportSimulationData += (sender, exportDataEventArgs) =>
         {
             // Debug.Log("AGILENT CURRENT READING: " + (new RealCurrentExport(dc, currentSource.Name)).Value);
-            Debug.Log("AGILENT CURRENT READING: " + (new RealCurrentExport(dc, voltageSource.Name)).Value);
+            Debug.Log("AGILENT CURRENT READING: " + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
+            _agilentMachine.GetComponent<AgilentSelect>().currentReading = (float) new RealCurrentExport(dc, voltageSource.Name).Value;
         };
 
     }
