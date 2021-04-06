@@ -18,8 +18,11 @@ public class AgilentSelect : SelectableItemBase
     private bool changingConnection = false;
 
     public float voltageReading = 0;
+    public float currentReading = 0;
 
     public bool valueUpdated = false;
+
+    private bool meterMode = true; //True = Voltmeter, False = currentmeter
 
     public override string Name
     {
@@ -53,8 +56,17 @@ public class AgilentSelect : SelectableItemBase
 
         if (valueUpdated)
         {
-            displayValueText.text = voltageReading.ToString("0.000") + " V";
-            valueUpdated = false;
+            if(meterMode)
+            {
+                displayValueText.text = voltageReading.ToString("0.000") + " V";
+                valueUpdated = false;
+            }
+            else
+            {
+                displayValueText.text = currentReading.ToString("0.000") + " A";
+                valueUpdated = false;
+            }
+
         }
 
     }
@@ -112,5 +124,14 @@ public class AgilentSelect : SelectableItemBase
                 Debug.Log("No buttono");
                 break;
         }
+    }
+    private void DCVButtonClicked()
+    {
+        meterMode = true;
+    }
+
+    private void DCIButtonClicked()
+    {
+        meterMode = false;
     }
 }
