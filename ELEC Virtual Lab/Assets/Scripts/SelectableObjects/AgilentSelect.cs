@@ -10,13 +10,16 @@ public class AgilentSelect : SelectableItemBase
     // [SerializeField] private string spawnableTag = "Spawnable";
 
     //public GameObject Camera;
+    [SerializeField] TMP_Text displayValueText = null;
     [SerializeField] GameObject focusPoint = null;
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
     private Globals.AgilentInput clickedInput;
 
     private bool changingConnection = false;
 
-    public float VoltageReading = 0;
+    public float voltageReading = 0;
+
+    public bool valueUpdated = false;
 
     public override string Name
     {
@@ -35,7 +38,7 @@ public class AgilentSelect : SelectableItemBase
 
     void Update()
     {
-      
+
         if (changingConnection)
         {
             if (BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked)
@@ -46,6 +49,12 @@ public class AgilentSelect : SelectableItemBase
                 BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked = false;
                 changingConnection = false;
             }
+        }
+
+        if (valueUpdated)
+        {
+            displayValueText.text = voltageReading.ToString("0.000") + " V";
+            valueUpdated = false;
         }
 
     }
@@ -73,15 +82,35 @@ public class AgilentSelect : SelectableItemBase
                 clickedInput = Globals.AgilentInput.currentInput;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
-            break;
+                break;
+
+            case ("BtnAuto"):
+                Debug.Log("Clicked Auto");
+                break;
+
+            case ("BtnRange"):
+                Debug.Log("Clicked Range");
+                break;
+
+            case ("BtnFreq"):
+                Debug.Log("Clicked Freq");
+                break;
+
+            case ("BtnOhms"):
+                Debug.Log("Clicked Ohms");
+                break;
+
+            case ("BtnTemp"):
+                Debug.Log("Clicked Temp");
+                break;
+
+            case ("BtnCapacitance"):
+                Debug.Log("Clicked Capacitance");
+                break;
+
             default:
                 Debug.Log("No buttono");
                 break;
         }
-    }
-
-    private void Button23Pressed()
-    {
-
     }
 }
