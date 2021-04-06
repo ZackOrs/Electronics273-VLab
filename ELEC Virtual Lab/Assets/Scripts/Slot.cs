@@ -17,15 +17,12 @@ public class Slot : MonoBehaviour
     public bool slotChecked = false;
 
     public bool permaSlot = false;
-
-    public List<string> machineConnections = null;
     void Start()
     {
         if(permaSlot == true)
         { 
-            SpawnableItem wire = new SpawnableItem(Globals.AvailableItems.Wire, 0);
+            SpawnableItem wire = new SpawnableItem(Globals.AvailableItems.Wire, 0, true);
             itemPlaced = wire;
-            Globals.inventoryItems.Add(wire);
             isFree = false;
             ChangeHighlightColor();
         }

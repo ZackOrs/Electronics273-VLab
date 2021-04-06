@@ -131,6 +131,18 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
 
+
+            //INSERT POTENTIOMETER VAL HERE
+            ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", 500));
+            ckt.Add(new Resistor ("PotentioMeterBlack", "PotentioMeter", "C17", 0));
+            ckt.Add(new Resistor ("PotentioMeterBlue", "PotentioMeter", "C18", 0));
+            ckt.Add(new Resistor ("PotentioMeterRed", "PotentioMeter", "C19", 0));
+            ckt.Add(new Resistor ("ShortCircuitInductor","B2", "B4",0));
+            Debug.Log("Adding Wire: PotentioMeterBanana   B4  PotentioMeter 500");
+            Debug.Log("Adding Wire: PotentioMeterBlack   B4  PotentioMeter 500");
+            Debug.Log("Adding Wire: PotentioMeterBlue   B4  PotentioMeter 500");
+            Debug.Log("Adding Wire: PotentioMeterRed   B4  PotentioMeter 500");
+            // ckt.Add(new Inductor("ShortCircuitInductor","B2", "B4",0.020f));
         //handle permanent connections
         for (int i = 0; i < _bananaPlugs.transform.childCount; i++)
         {
@@ -427,10 +439,8 @@ public class ItemClickHandler : MonoBehaviour
 
     private string GetBananaConnections(String BananaPlugSlot)
     {
-        Debug.Log("String breaking: " + BananaPlugSlot);
         int removedInt = int.Parse(Regex.Match(BananaPlugSlot, @"\d+").Value);
         string columnConnection = "";
-        Debug.Log("Removed string:" + removedInt);
         switch (removedInt)
         {
             case 0:

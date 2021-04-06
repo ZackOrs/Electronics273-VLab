@@ -118,7 +118,9 @@ public class Globals : MonoBehaviour
         voltmeterSlot,
         currentmeterSlot,
         powerSupplySlot,
-        BananaPlugSlot
+        BananaPlugSlot,
+
+        potentioMeterSlot
     }
 
 }
