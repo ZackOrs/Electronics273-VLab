@@ -56,20 +56,20 @@ public class AgilentSelect : SelectableItemBase
             }
         }
 
-            if (valueUpdated)
+        if (valueUpdated)
+        {
+            if (meterMode)
             {
-                if (meterMode)
-                {
-                    displayValueText.text = voltageReading.ToString("0.000") + " V";
-                    valueUpdated = false;
-                }
-                else
-                {
-                    displayValueText.text = currentReading.ToString("0.000") + " A";
-                    valueUpdated = false;
-                }
-
+                displayValueText.text = voltageReading.ToString("0.000") + " V";
+                valueUpdated = false;
             }
+            else
+            {
+                displayValueText.text = currentReading.ToString("0.000") + " A";
+                valueUpdated = false;
+            }
+
+        }
 
     }
 
@@ -78,8 +78,15 @@ public class AgilentSelect : SelectableItemBase
         switch (clickedButton)
         {
             case ("BtnDCV"):
-                //Button23Pressed();
+                Debug.Log("BTNDCV");
+                DCVButtonClicked();
                 break;
+
+            case ("BtnDCI"):
+                Debug.Log("BTNDCI");
+                DCIButtonClicked();
+                break;
+
             case ("Torus.006"):
                 clickedInput = Globals.AgilentInput.voltageInput;
                 BananaSlotConnectionsPanel.SetActive(true);
@@ -142,7 +149,7 @@ public class AgilentSelect : SelectableItemBase
     }
 
     private void PowerButton()
-    {   
+    {
         powerOn = !powerOn;
         displayValueText.gameObject.SetActive(powerOn);
     }

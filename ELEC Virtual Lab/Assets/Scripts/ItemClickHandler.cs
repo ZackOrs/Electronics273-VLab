@@ -402,6 +402,7 @@ public class ItemClickHandler : MonoBehaviour
             // Debug.Log("AGILENT CURRENT READING: " + (new RealCurrentExport(dc, currentSource.Name)).Value);
             Debug.Log("AGILENT CURRENT READING: " + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
             _agilentMachine.GetComponent<AgilentSelect>().currentReading = (float) new RealCurrentExport(dc, voltageSource.Name).Value;
+            _agilentMachine.GetComponent<AgilentSelect>().valueUpdated = true;
         };
 
     }
