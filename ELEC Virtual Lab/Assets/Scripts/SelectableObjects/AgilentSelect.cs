@@ -11,6 +11,7 @@ public class AgilentSelect : SelectableItemBase
 
     //public GameObject Camera;
     [SerializeField] TMP_Text displayValueText = null;
+    [SerializeField] TMP_Text displayModeText = null;
     [SerializeField] GameObject focusPoint = null;
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
     private Globals.AgilentInput clickedInput;
@@ -23,6 +24,8 @@ public class AgilentSelect : SelectableItemBase
     public bool valueUpdated = false;
 
     private bool meterMode = true; //True = Voltmeter, False = currentmeter
+
+    private bool powerOn = false; //Initially off
 
     public override string Name
     {
@@ -54,19 +57,21 @@ public class AgilentSelect : SelectableItemBase
             }
         }
 
-        if (valueUpdated)
+        if (Globals.AgilentConnections[Globals.AgilentInput.groundInput].Equals(Globals.BananaPlugs.noConnection) ||
+        (Globals.AgilentConnections[Globals.AgilentInput.voltageInput].Equals(Globals.BananaPlugs.noConnection) && Globals.AgilentConnections[Globals.AgilentInput.currentInput].Equals(Globals.BananaPlugs.noConnection)))
         {
-            if(meterMode)
-            {
-                displayValueText.text = voltageReading.ToString("0.000") + " V";
-                valueUpdated = false;
-            }
-            else
-            {
-                displayValueText.text = currentReading.ToString("0.000") + " A";
-                valueUpdated = false;
-            }
-
+            displayValueText.text = "-.---";
+            valueUpdated = false;
+        }
+        else if (meterMode)
+        {
+            displayValueText.text = voltageReading.ToString("0.000") + " V";
+            valueUpdated = false;
+        }
+        else
+        {
+            displayValueText.text = (currentReading * -1000).ToString("0000.00") + " mA";
+            valueUpdated = false;
         }
 
     }
@@ -76,8 +81,15 @@ public class AgilentSelect : SelectableItemBase
         switch (clickedButton)
         {
             case ("BtnDCV"):
-                //Button23Pressed();
+                Debug.Log("BTNDCV");
+                DCVButtonClicked();
                 break;
+
+            case ("BtnDCI"):
+                Debug.Log("BTNDCI");
+                DCIButtonClicked();
+                break;
+
             case ("Torus.006"):
                 clickedInput = Globals.AgilentInput.voltageInput;
                 BananaSlotConnectionsPanel.SetActive(true);
@@ -120,6 +132,10 @@ public class AgilentSelect : SelectableItemBase
                 Debug.Log("Clicked Capacitance");
                 break;
 
+            case ("BtnPower"):
+                PowerButton();
+                break;
+
             default:
                 Debug.Log("No buttono");
                 break;
@@ -128,10 +144,22 @@ public class AgilentSelect : SelectableItemBase
     private void DCVButtonClicked()
     {
         meterMode = true;
+        valueUpdated = true;
+        displayModeText.text = "Reading: DC Voltage";
     }
 
     private void DCIButtonClicked()
     {
         meterMode = false;
+        valueUpdated = true;
+        displayModeText.text = "Reading: DC Current";
+    }
+
+    private void PowerButton()
+    {
+        powerOn = !powerOn;
+        displayValueText.gameObject.SetActive(powerOn);
+        displayModeText.gameObject.SetActive(powerOn);
+        valueUpdated = true;
     }
 }
