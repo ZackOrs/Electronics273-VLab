@@ -8,14 +8,16 @@ using TMPro;
 public class PSSelect : SelectableItemBase
 {
     // [SerializeField] private string spawnableTag = "Spawnable";
-
-    public GameObject Camera;
     private bool _rotate;
     private int numberOfTurnsVoltage = 0;
     private int numberOfTurnsCurrent = 0;
     public float voltage = 0;
     public float current = 0;
     [SerializeField] GameObject focusPoint = null;
+
+    [SerializeField] GameObject BananaSlotConnectionsPanel = null;
+    private Globals.PowerSupplyInput clickedInput;
+    private bool changingConnection = false;
 
     public override string Name
     {
@@ -31,12 +33,22 @@ public class PSSelect : SelectableItemBase
     {
         Globals.currentMachine = "PowerSupply";
         Globals.lookingAtFocusableObject = true;
-        Camera.GetComponent<AnimateCamera>().targetObject = focusPoint;
+        Camera.main.GetComponent<AnimateCamera>().targetObject = focusPoint;
     }
 
     void Update()
     {
-
+        if (changingConnection)
+        {
+            if (BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked)
+            {
+                Globals.PSConnections[clickedInput] = BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked;
+                Debug.Log("Updating Key: PSConnectios[" + clickedInput + "] To: " + BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
+                BananaSlotConnectionsPanel.SetActive(false);
+                BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked = false;
+                changingConnection = false;
+            }
+        }
     }
 
 
@@ -45,9 +57,9 @@ public class PSSelect : SelectableItemBase
         switch (clickedButton)
         {
             case ("VoltageSource"):
-                Debug.Log("Banana Voltage clicked");
-                Globals.PSConnections.Remove(Globals.PowerSupplyInput.voltageSource);
-                Globals.PSConnections.Add(Globals.PowerSupplyInput.voltageSource, Globals.BananaPlugs.B1);
+                clickedInput = Globals.PowerSupplyInput.voltageSource;
+                BananaSlotConnectionsPanel.SetActive(true);
+                changingConnection = true;
                 break;
 
             case ("PointP"):
@@ -56,15 +68,15 @@ public class PSSelect : SelectableItemBase
                 break;
 
             case ("CurrentSource"):
-                Debug.Log("Banana Current clicked");
-                Globals.PSConnections.Remove(Globals.PowerSupplyInput.currentSource);
-                Globals.PSConnections.Add(Globals.PowerSupplyInput.currentSource, Globals.BananaPlugs.B3);
+                clickedInput = Globals.PowerSupplyInput.currentSource;
+                BananaSlotConnectionsPanel.SetActive(true);
+                changingConnection = true;
                 break;
 
             case ("Ground"):
-                Debug.Log("Banana Ground clicked");
-                Globals.PSConnections.Remove(Globals.PowerSupplyInput.ground);
-                Globals.PSConnections.Add(Globals.PowerSupplyInput.ground, Globals.BananaPlugs.B0);
+                clickedInput = Globals.PowerSupplyInput.ground;
+                BananaSlotConnectionsPanel.SetActive(true);
+                changingConnection = true;
                 break;
 
             case ("VoltageKnobPos"):

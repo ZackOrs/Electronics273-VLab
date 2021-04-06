@@ -15428,10 +15428,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8468d1d49b142049b6b2b78d68d7684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Camera: {fileID: 1811856037}
   voltage: 0
   current: 0
   focusPoint: {fileID: 2115482513}
+  BananaSlotConnectionsPanel: {fileID: 807505932}
 --- !u!65 &506016918
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24633,7 +24633,7 @@ GameObject:
   - component: {fileID: 807505935}
   - component: {fileID: 807505934}
   m_Layer: 5
-  m_Name: InventoryScrollList
+  m_Name: BananaSlotConnectionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36200,6 +36200,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BtndB
       objectReference: {fileID: 0}
+    - target: {fileID: 2352483441516145365, guid: f4bdd5cf8dc8fd148a04fcf06df22555,
+        type: 3}
+      propertyPath: m_TagString
+      value: clickable
+      objectReference: {fileID: 0}
     - target: {fileID: 2753695524888409222, guid: f4bdd5cf8dc8fd148a04fcf06df22555,
         type: 3}
       propertyPath: m_TagString
@@ -36330,7 +36335,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   focusPoint: {fileID: 1892618378}
-  bananaPlugOption: BananaPlugOption
   BananaSlotConnectionsPanel: {fileID: 807505932}
   VoltageReading: 0
 --- !u!65 &1198963943
@@ -36967,7 +36971,7 @@ MonoBehaviour:
   slotType: 6
   componentAdded: 1
   button: {fileID: 678309077}
-  slotPair: {fileID: 537504736}
+  slotPair: {fileID: 503497606}
   slotChecked: 0
   permaSlot: 1
   machineConnections: []
@@ -41076,7 +41080,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a688f80bd971fbb4d838fc7b038007df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Camera: {fileID: 1811856037}
   focusPoint: {fileID: 542195957}
 --- !u!64 &1358694838
 MeshCollider:
@@ -41117,7 +41120,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a688f80bd971fbb4d838fc7b038007df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Camera: {fileID: 1811856037}
   focusPoint: {fileID: 542195957}
 --- !u!1 &1359680567
 GameObject:
@@ -49021,6 +49023,7 @@ MonoBehaviour:
     type: 3}
   _placedImages: {fileID: 1564736700}
   _agilentMachine: {fileID: 1198963938}
+  _powerSupplyMachine: {fileID: 506016916}
 --- !u!1 &1551887575
 GameObject:
   m_ObjectHideFlags: 0
@@ -56202,7 +56205,7 @@ MonoBehaviour:
   slotType: 6
   componentAdded: 1
   button: {fileID: 1044292363}
-  slotPair: {fileID: 503497606}
+  slotPair: {fileID: 537504736}
   slotChecked: 0
   permaSlot: 1
   machineConnections: []
@@ -64047,6 +64050,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2051680433}
   m_CullTransparentMesh: 0
+--- !u!1 &2055518144 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2352483441516145365, guid: f4bdd5cf8dc8fd148a04fcf06df22555,
+    type: 3}
+  m_PrefabInstance: {fileID: 1198963935}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &2055518148
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2055518144}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0072857584, y: 0.006860949, z: 0.007296457}
+  m_Center: {x: -0.000010615097, y: 0.0015885882, z: 1.1641526e-10}
 --- !u!1 &2058557717
 GameObject:
   m_ObjectHideFlags: 0

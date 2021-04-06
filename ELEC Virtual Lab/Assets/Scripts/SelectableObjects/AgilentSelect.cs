@@ -11,9 +11,10 @@ public class AgilentSelect : SelectableItemBase
 
     //public GameObject Camera;
     [SerializeField] GameObject focusPoint = null;
-    [SerializeField] string bananaPlugOption = "BananaPlugOption";
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
     private Globals.AgilentInput clickedInput;
+
+    private bool changingConnection = false;
 
     public float VoltageReading = 0;
 
@@ -30,20 +31,20 @@ public class AgilentSelect : SelectableItemBase
         Globals.currentMachine = "Agilent";
         Globals.lookingAtFocusableObject = true;
         Camera.main.GetComponent<AnimateCamera>().targetObject = focusPoint;
-
     }
 
     void Update()
     {
-        if (BananaSlotConnectionsPanel.activeSelf)
+      
+        if (changingConnection)
         {
             if (BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked)
             {
-                Globals.AgilentConnections.Remove(clickedInput);
-                Globals.AgilentConnections.Add(clickedInput, BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
-                Debug.Log("Adding Connection" + clickedInput + " and " + BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
+                Globals.AgilentConnections[clickedInput] = BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked;
+                Debug.Log("Updating Key: AgilentConnections[" + clickedInput + "] To: " + BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
                 BananaSlotConnectionsPanel.SetActive(false);
                 BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked = false;
+                changingConnection = false;
             }
         }
 
@@ -57,22 +58,25 @@ public class AgilentSelect : SelectableItemBase
                 //Button23Pressed();
                 break;
             case ("Torus.006"):
-                Debug.Log("Clicked Pos");
                 clickedInput = Globals.AgilentInput.voltageInput;
                 BananaSlotConnectionsPanel.SetActive(true);
-                // Globals.AgilentConnections.Remove(Globals.AgilentInput.voltageInput);
-                // Globals.AgilentConnections.Add(Globals.AgilentInput.voltageInput,Globals.BananaPlugs.B1);
+                changingConnection = true;
                 break;
 
             case ("Torus.009"):
-                Debug.Log("Clicked Neg");
                 clickedInput = Globals.AgilentInput.groundInput;
                 BananaSlotConnectionsPanel.SetActive(true);
+                changingConnection = true;
                 break;
+
+            case ("Torus.010"):
+                clickedInput = Globals.AgilentInput.currentInput;
+                BananaSlotConnectionsPanel.SetActive(true);
+                changingConnection = true;
+            break;
             default:
                 Debug.Log("No buttono");
                 break;
-
         }
     }
 

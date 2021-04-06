@@ -8,8 +8,6 @@ using TMPro;
 public class FlukeSelect : SelectableItemBase
 {
     // [SerializeField] private string spawnableTag = "Spawnable";
-
-    public GameObject Camera;
     [SerializeField] GameObject focusPoint = null;
 
     public override string Name
@@ -25,7 +23,7 @@ public class FlukeSelect : SelectableItemBase
     {
         Globals.currentMachine = "Fluke";
         Globals.lookingAtFocusableObject = true;
-        Camera.GetComponent<AnimateCamera>().targetObject = focusPoint;
+        Camera.main.GetComponent<AnimateCamera>().targetObject = focusPoint;
         
     }
 
