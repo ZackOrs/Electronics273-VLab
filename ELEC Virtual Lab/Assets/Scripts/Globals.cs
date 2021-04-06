@@ -23,6 +23,13 @@ public class Globals : MonoBehaviour
         { AgilentInput.currentInput , BananaPlugs.noConnection},
         { AgilentInput.groundInput , BananaPlugs.noConnection}
     };
+
+        public static Dictionary<FlukeInput,BananaPlugs> FlukeConnections = new Dictionary<FlukeInput,BananaPlugs>()
+    {
+        { FlukeInput.voltageInput , BananaPlugs.noConnection},
+        { FlukeInput.currentInput , BananaPlugs.noConnection},
+        { FlukeInput.groundInput , BananaPlugs.noConnection}
+    };
     // public static List<AvailableMachines> bananaSlot2Connections = new List<AvailableMachines>();
     // public static List<AvailableMachines> bananaSlot3Connections = new List<AvailableMachines>();
     // public static List<AvailableMachines> bananaSlot4Connections = new List<AvailableMachines>();
@@ -34,7 +41,6 @@ public class Globals : MonoBehaviour
         { PowerSupplyInput.currentSource , BananaPlugs.noConnection},
         { PowerSupplyInput.ground , BananaPlugs.noConnection}
     };
-    public static Dictionary<FlukeInput, BananaPlugs> FlukeConnections = new Dictionary<FlukeInput, BananaPlugs>();
 
 
     public enum AvailableMachines

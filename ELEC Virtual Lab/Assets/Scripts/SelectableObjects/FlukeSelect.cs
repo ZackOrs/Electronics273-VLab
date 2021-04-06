@@ -8,52 +8,130 @@ using TMPro;
 public class FlukeSelect : SelectableItemBase
 {
     // [SerializeField] private string spawnableTag = "Spawnable";
+
+    //public GameObject Camera;
+    [SerializeField] TMP_Text displayValueText = null;
     [SerializeField] GameObject focusPoint = null;
+    [SerializeField] GameObject BananaSlotConnectionsPanel = null;
+    private Globals.FlukeInput clickedInput;
+
+    private bool changingConnection = false;
+
+    public float voltageReading = 0;
+    public float currentReading = 0;
+
+    public bool valueUpdated = false;
+
+    private bool meterMode = true; //True = Voltmeter, False = currentmeter
 
     public override string Name
     {
         get
         {
-            return "Fluke";
+            return "Agilent";
         }
     }
-    
 
     public override void onInteract()
     {
-        Globals.currentMachine = "Fluke";
+        Globals.currentMachine = "Agilent";
         Globals.lookingAtFocusableObject = true;
         Camera.main.GetComponent<AnimateCamera>().targetObject = focusPoint;
-        
     }
 
     void Update()
     {
 
+        if (changingConnection)
+        {
+            if (BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked)
+            {
+                Globals.FlukeConnections[clickedInput] = BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked;
+                Debug.Log("Updating Key: AgilentConnections[" + clickedInput + "] To: " + BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
+                BananaSlotConnectionsPanel.SetActive(false);
+                BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked = false;
+                changingConnection = false;
+            }
+        }
+
+        if (valueUpdated)
+        {
+            if(meterMode)
+            {
+                displayValueText.text = voltageReading.ToString("0.000") + " V";
+                valueUpdated = false;
+            }
+            else
+            {
+                displayValueText.text = currentReading.ToString("0.000") + " A";
+                valueUpdated = false;
+            }
+
+        }
+
     }
 
     public void ButtonClickHandler(string clickedButton)
     {
-        switch(clickedButton){
-            case("BtnDCV"):
+        switch (clickedButton)
+        {
+            case ("BtnDCV"):
+                //Button23Pressed();
+                break;
+            case ("Torus.006"):
+                clickedInput = Globals.FlukeInput.voltageInput;
+                BananaSlotConnectionsPanel.SetActive(true);
+                changingConnection = true;
+                break;
 
-            break;
-            case("Torus.004"):
-            Debug.Log("Clicked Pos");
-            Globals.AgilentConnections.Remove(Globals.AgilentInput.voltageInput);
-            Globals.AgilentConnections.Add(Globals.AgilentInput.voltageInput,Globals.BananaPlugs.B1);
-            break;
+            case ("Torus.009"):
+                clickedInput = Globals.FlukeInput.groundInput;
+                BananaSlotConnectionsPanel.SetActive(true);
+                changingConnection = true;
+                break;
 
-            case("Torus.009"):
-            Debug.Log("Clicked Neg");
-            Globals.AgilentConnections.Remove(Globals.AgilentInput.groundInput);
-            Globals.AgilentConnections.Add(Globals.AgilentInput.groundInput,Globals.BananaPlugs.B0);
-            break;
+            case ("Torus.010"):
+                clickedInput = Globals.FlukeInput.currentInput;
+                BananaSlotConnectionsPanel.SetActive(true);
+                changingConnection = true;
+                break;
+
+            case ("BtnAuto"):
+                Debug.Log("Clicked Auto");
+                break;
+
+            case ("BtnRange"):
+                Debug.Log("Clicked Range");
+                break;
+
+            case ("BtnFreq"):
+                Debug.Log("Clicked Freq");
+                break;
+
+            case ("BtnOhms"):
+                Debug.Log("Clicked Ohms");
+                break;
+
+            case ("BtnTemp"):
+                Debug.Log("Clicked Temp");
+                break;
+
+            case ("BtnCapacitance"):
+                Debug.Log("Clicked Capacitance");
+                break;
+
             default:
-            Debug.Log("No buttono");
-            break;
-
+                Debug.Log("No buttono");
+                break;
         }
     }
+    private void DCVButtonClicked()
+    {
+        meterMode = true;
+    }
 
+    private void DCIButtonClicked()
+    {
+        meterMode = false;
+    }
 }
