@@ -6134,7 +6134,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -36337,6 +36337,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: clickable
       objectReference: {fileID: 0}
+    - target: {fileID: -7523100027144985164, guid: f4bdd5cf8dc8fd148a04fcf06df22555,
+        type: 3}
+      propertyPath: m_Name
+      value: BtnPower
+      objectReference: {fileID: 0}
     - target: {fileID: -6555964311586419708, guid: f4bdd5cf8dc8fd148a04fcf06df22555,
         type: 3}
       propertyPath: m_TagString
@@ -36572,9 +36577,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e9da5d7fce11542b74cbe8eda4ab3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayValueText: {fileID: 0}
   focusPoint: {fileID: 1892618378}
   BananaSlotConnectionsPanel: {fileID: 807505932}
-  VoltageReading: 0
+  voltageReading: 0
+  currentReading: 0
+  valueUpdated: 0
 --- !u!65 &1198963943
 BoxCollider:
   m_ObjectHideFlags: 0

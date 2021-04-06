@@ -24,6 +24,8 @@ public class AgilentSelect : SelectableItemBase
 
     private bool meterMode = true; //True = Voltmeter, False = currentmeter
 
+    private bool powerOn = false; //Initially off
+
     public override string Name
     {
         get
@@ -54,20 +56,20 @@ public class AgilentSelect : SelectableItemBase
             }
         }
 
-        if (valueUpdated)
-        {
-            if(meterMode)
+            if (valueUpdated)
             {
-                displayValueText.text = voltageReading.ToString("0.000") + " V";
-                valueUpdated = false;
-            }
-            else
-            {
-                displayValueText.text = currentReading.ToString("0.000") + " A";
-                valueUpdated = false;
-            }
+                if (meterMode)
+                {
+                    displayValueText.text = voltageReading.ToString("0.000") + " V";
+                    valueUpdated = false;
+                }
+                else
+                {
+                    displayValueText.text = currentReading.ToString("0.000") + " A";
+                    valueUpdated = false;
+                }
 
-        }
+            }
 
     }
 
@@ -120,6 +122,10 @@ public class AgilentSelect : SelectableItemBase
                 Debug.Log("Clicked Capacitance");
                 break;
 
+            case ("BtnPower"):
+                PowerButton();
+                break;
+
             default:
                 Debug.Log("No buttono");
                 break;
@@ -133,5 +139,11 @@ public class AgilentSelect : SelectableItemBase
     private void DCIButtonClicked()
     {
         meterMode = false;
+    }
+
+    private void PowerButton()
+    {   
+        powerOn = !powerOn;
+        displayValueText.gameObject.SetActive(powerOn);
     }
 }

@@ -11,8 +11,8 @@ public class PSSelect : SelectableItemBase
     private bool _rotate;
     private int numberOfTurnsVoltage = 0;
     private int numberOfTurnsCurrent = 0;
-    public float voltage = 0;
-    public float current = 0;
+    public float voltage = 1.1f;
+    public float current = 0.0056f;
     [SerializeField] GameObject focusPoint = null;
 
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
@@ -50,7 +50,6 @@ public class PSSelect : SelectableItemBase
             }
         }
     }
-
 
     public void ButtonClickHandler(string clickedButton)
     {

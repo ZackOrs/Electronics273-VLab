@@ -113,7 +113,7 @@ public class ItemClickHandler : MonoBehaviour
         {
             RemoveComponent();
         }
-        // // function attached to a button for testing
+        // function attached to a button for testing
         // SpiceSharpCalculation();
     }
 
@@ -201,7 +201,6 @@ public class ItemClickHandler : MonoBehaviour
         var dc = new DC("dc");
         if (voltageSource.Name != "a" && currentSource.Name != "b")
         {
-            Debug.Log("Both hit");
             dc = new DC("dc", new[]{
             new ParameterSweep(voltageSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().voltage,_powerSupplyMachine.GetComponent<PSSelect>().voltage,1)),
             new ParameterSweep(currentSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().current,_powerSupplyMachine.GetComponent<PSSelect>().current,1))
@@ -209,14 +208,13 @@ public class ItemClickHandler : MonoBehaviour
         }
         else if (voltageSource.Name != "a")
         {
-            Debug.Log("Volt hit");
+            Debug.Log("voltage: "+_powerSupplyMachine.GetComponent<PSSelect>().voltage);
             dc = new DC("dc", new[]{
             new ParameterSweep(voltageSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().voltage,_powerSupplyMachine.GetComponent<PSSelect>().voltage,1))
         });
         }
         else if (currentSource.Name != "b")
         {
-            Debug.Log("Curr hit");
             dc = new DC("dc", new[]{
              new ParameterSweep(currentSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().current,_powerSupplyMachine.GetComponent<PSSelect>().current,1))
         });
