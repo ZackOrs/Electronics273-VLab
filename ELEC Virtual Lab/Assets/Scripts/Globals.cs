@@ -17,6 +17,8 @@ public class Globals : MonoBehaviour
 
     public static List<SpawnableItem> inventoryItems = new List<SpawnableItem>();
 
+    public static int RandomEveryXFrame = 60;
+
     public static Dictionary<AgilentInput,BananaPlugs> AgilentConnections = new Dictionary<AgilentInput,BananaPlugs>()
     {
         { AgilentInput.voltageInput , BananaPlugs.noConnection},

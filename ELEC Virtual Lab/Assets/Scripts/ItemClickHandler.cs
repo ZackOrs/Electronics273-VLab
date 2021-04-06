@@ -16,7 +16,6 @@ using System.Text.RegularExpressions;
 public class ItemClickHandler : MonoBehaviour
 {
     public static SpawnableItem spawnableItem;
-
     public static GameObject buttonClicked;
 
     [SerializeField] GameObject _breadboardUI = null;
@@ -33,25 +32,33 @@ public class ItemClickHandler : MonoBehaviour
     private GameObject _pointB = null;
     public static List<GameObject> breadboardSlots = new List<GameObject>();
     public static List<GameObject> allSlots = new List<GameObject>();
-    int allSlotIDCounter = 0;
 
     int wireResistance = 0;
 
     private List<bool> bananaPlugActive = new List<bool>() { false, false, false, false, false };
 
-
     [SerializeField] GameObject _agilentMachine = null;
     [SerializeField] GameObject _flukeMachine = null;
     [SerializeField] GameObject _powerSupplyMachine = null;
-    
+    [SerializeField] GameObject bananaSlotConnectionPanel = null;
 
     VoltageSource voltageSource = new VoltageSource("a");
     CurrentSource currentSource = new CurrentSource("b");
+    private bool changingConnection = false;
+
+    private int clickedBananaSlot;
+
+    private List<string> B0Connections = new List<string>();
+    private List<string> B1Connections = new List<string>();
+    private List<string> B2Connections = new List<string>();
+    private List<string> B3Connections = new List<string>();
+    private List<string> B4Connections = new List<string>();
+
     void Start()
     {
         Debug.Log("Adding slots");
         allSlots.Clear();
-        allSlotIDCounter = 0;
+        int allSlotIDCounter = 0;
 
         for (int i = 0; i < _bananaPlugs.transform.childCount; i++)
         {
@@ -77,23 +84,48 @@ public class ItemClickHandler : MonoBehaviour
                 }
             }
         }
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!bananaSlotConnectionPanel.activeSelf)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                ConnectBananaSlotsTogether();
+            }
+        }
+
         if (Globals.mouseClickAction > 0)
         {
             WaitForClick();
+
         }
         if (Input.GetMouseButtonDown(1))
         {
             RemoveComponent();
         }
+
+        if (changingConnection)
+        {
+            if (bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked)
+            {
+                //Globals.PSConnections[clickedInput] = bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked;
+                //Debug.Log("Updating Key: PSConnectios[" + clickedInput + "] To: " + bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
+                AddBananaSlotConnectionToBananaSlot();
+                bananaSlotConnectionPanel.SetActive(false);
+                bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked = false;
+                changingConnection = false;
+                clickedBananaSlot = -1;
+            }
+        }
         // function attached to a button for testing
         SpiceSharpCalculation();
     }
+
+
 
     public void SpiceSharpCalculation()
     {
@@ -131,18 +163,39 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
 
+        //Handle Self BananaPlug Connections
+        for (int i = 0; i < 5; i++)
+        {
+            if (bananaPlugActive[i])
+            {
+                HandleSelfBananaConnections(i, ckt);
+            }
+        }
 
-            //INSERT POTENTIOMETER VAL HERE
-            ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", 500));
-            ckt.Add(new Resistor ("PotentioMeterBlack", "PotentioMeter", "C17", 0));
-            ckt.Add(new Resistor ("PotentioMeterBlue", "PotentioMeter", "C18", 0));
-            ckt.Add(new Resistor ("PotentioMeterRed", "PotentioMeter", "C19", 0));
-            ckt.Add(new Resistor ("ShortCircuitInductor","B2", "B4",0));
-            Debug.Log("Adding Wire: PotentioMeterBanana   B4  PotentioMeter 500");
-            Debug.Log("Adding Wire: PotentioMeterBlack   B4  PotentioMeter 500");
-            Debug.Log("Adding Wire: PotentioMeterBlue   B4  PotentioMeter 500");
-            Debug.Log("Adding Wire: PotentioMeterRed   B4  PotentioMeter 500");
-            // ckt.Add(new Inductor("ShortCircuitInductor","B2", "B4",0.020f));
+        //INSERT POTENTIOMETER VAL HERE
+        if (bananaPlugActive[4])
+        {
+            ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", 300));
+            ckt.Add(new Resistor("PotentioMeterBlack", "PotentioMeter", "C17", 0));
+            ckt.Add(new Resistor("PotentioMeterBlue", "PotentioMeter", "C18", 0));
+            ckt.Add(new Resistor("PotentioMeterRed", "PotentioMeter", "C19", 0));
+            Debug.Log("Adding Wire: PotentioMeterBanana B4 PotentioMeter 300");
+            Debug.Log("Adding Wire: PotentioMeterBlack PotentioMeter C17 0");
+            Debug.Log("Adding Wire: PotentioMeterBlue PotentioMeter C18 0");
+            Debug.Log("Adding Wire: PotentioMeterRed PotentioMeter C19 0");
+        }
+        if (bananaPlugActive[2] || bananaPlugActive[4])
+        {
+            ckt.Add(new Inductor("B2B4Inductor", "B2", "B4", 0.020f));
+            Debug.Log("Adding Inductor: PotentioMeterInductor   B2  B4 0.020H");
+        }
+        // ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", 500));
+        // ckt.Add(new Resistor("PotentioMeterBlack", "PotentioMeter", "C17", 0));
+        // ckt.Add(new Resistor("PotentioMeterBlue", "PotentioMeter", "C18", 0));
+        // ckt.Add(new Resistor("PotentioMeterRed", "PotentioMeter", "C19", 0));
+        // ckt.Add(new Resistor("ShortCircuitInductor", "B2", "B4", 0));
+        // ckt.Add(new Inductor("ShortCircuitInductor","B2", "B4",0.020f));
+
         //handle permanent connections
         for (int i = 0; i < _bananaPlugs.transform.childCount; i++)
         {
@@ -205,7 +258,7 @@ public class ItemClickHandler : MonoBehaviour
         }
         else if (voltageSource.Name != "a")
         {
-            Debug.Log("voltage: "+_powerSupplyMachine.GetComponent<PSSelect>().voltage);
+            Debug.Log("voltage: " + _powerSupplyMachine.GetComponent<PSSelect>().voltage);
             dc = new DC("dc", new[]{
             new ParameterSweep(voltageSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().voltage,_powerSupplyMachine.GetComponent<PSSelect>().voltage,1))
         });
@@ -232,6 +285,8 @@ public class ItemClickHandler : MonoBehaviour
         }
 
     }
+
+
 
     private void ClearAllSlots()
     {
@@ -381,7 +436,7 @@ public class ItemClickHandler : MonoBehaviour
         {
             // Debug.Log("AGILENT CURRENT READING: " + (new RealCurrentExport(dc, currentSource.Name)).Value);
             Debug.Log("AGILENT CURRENT READING: " + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
-            _agilentMachine.GetComponent<AgilentSelect>().currentReading = (float) new RealCurrentExport(dc, voltageSource.Name).Value;
+            _agilentMachine.GetComponent<AgilentSelect>().currentReading = (float)new RealCurrentExport(dc, voltageSource.Name).Value;
             _agilentMachine.GetComponent<AgilentSelect>().valueUpdated = true;
         };
 
@@ -430,8 +485,10 @@ public class ItemClickHandler : MonoBehaviour
         dc.ExportSimulationData += (sender, exportDataEventArgs) =>
         {
             // Debug.Log("Fluke CURRENT READING: " + (new RealCurrentExport(dc, currentSource.Name)).Value);
-            Debug.Log("Fluke CURRENT READING: " + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
-            _flukeMachine.GetComponent<FlukeSelect>().currentReading = (float) new RealCurrentExport(dc, voltageSource.Name).Value;
+            //Debug.Log("Fluke CURRENT READING: " + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
+            Debug.Log("Current source: " + currentSource.Name + " " + currentSource.Parameters.DcValue.ToString());
+            Debug.Log("Fluke Current reading: " + (new RealCurrentExport(dc, currentSource.Name)).Value.ToString());
+            _flukeMachine.GetComponent<FlukeSelect>().currentReading = (float)new RealCurrentExport(dc, voltageSource.Name).Value;
             _flukeMachine.GetComponent<FlukeSelect>().valueUpdated = true;
         };
 
@@ -866,6 +923,158 @@ public class ItemClickHandler : MonoBehaviour
         return null;
     }
 
+    private void ConnectBananaSlotsTogether()
+    {
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        pointerEventData.position = Input.mousePosition;
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerEventData, results);
+        if (results.Count > 0)
+        {
+            for (int i = 0; i < results.Count; i++)
+            {
+                if (results[i].gameObject.transform.CompareTag("clickable"))
+                {
+                    bananaSlotConnectionPanel.SetActive(true);
+                    changingConnection = true;
+                    clickedBananaSlot = results[i].gameObject.GetComponentInParent<Slot>().slotID;
+                }
+            }
+        }
+    }
+
+    private void AddBananaSlotConnectionToBananaSlot()
+    {
+        Debug.Log("Adding connections for: B"+ clickedBananaSlot);
+        switch (clickedBananaSlot)
+        {
+            case (0):
+                if (bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.Equals(Globals.BananaPlugs.noConnection))
+                {
+                    B0Connections.Clear();
+                }
+                else
+                {
+                    Debug.Log("Adding :" + bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.ToString());
+                    B0Connections.Add(bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.ToString());
+                }
+                break;
+
+            case (1):
+                if (bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.Equals(Globals.BananaPlugs.noConnection))
+                {
+                    B1Connections.Clear();
+                }
+                else
+                {
+                    Debug.Log("Adding :" + bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.ToString());
+                    B1Connections.Add(bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.ToString());
+                }
+                break;
+
+
+            case (2):
+                if (bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.Equals(Globals.BananaPlugs.noConnection))
+                {
+                    B2Connections.Clear();
+                }
+                else
+                {
+                    Debug.Log("Adding :" + bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.ToString());
+                    B2Connections.Add(bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.ToString());
+                }
+                break;
+
+
+            case (3):
+                if (bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.Equals(Globals.BananaPlugs.noConnection))
+                {
+                    B3Connections.Clear();
+                }
+                else
+                {
+                    Debug.Log("Adding :" + bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.ToString());
+                    B3Connections.Add(bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.ToString());
+                }
+                break;
+
+
+            case (4):
+                if (bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.Equals(Globals.BananaPlugs.noConnection))
+                {
+                    B4Connections.Clear();
+                }
+                else
+                {
+                    Debug.Log("Adding :" + bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.ToString());
+                    B4Connections.Add(bananaSlotConnectionPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked.ToString());
+                }
+                break;
+
+            default:
+                Debug.Log("idk");
+                break;
+        }
+
+    }
+
+    private void HandleSelfBananaConnections(int i, Circuit ckt)
+    {
+        switch (i)
+        {
+            case (0):
+                foreach (String connection in B0Connections.Distinct().ToList())
+                {
+                    Debug.Log("Adding wire:" + "B" + i + connection + " B" + i + " " + connection);
+                    ckt.Add(new Resistor("B" + i + connection, "B" + i, connection, 0));
+                    ActivateBananaSlot(connection);
+                }
+                break;
+
+            case (1):
+                foreach (String connection in B1Connections.Distinct().ToList())
+                {
+                    Debug.Log("Adding wire:" + "B" + i + connection + " B" + i + " " + connection);
+                    ckt.Add(new Resistor("B" + i + connection, "B" + i, connection, 0));
+                    ActivateBananaSlot(connection);
+                }
+                break;
+
+
+            case (2):
+                foreach (String connection in B2Connections.Distinct().ToList())
+                {
+                    Debug.Log("Adding wire:" + "B" + i + connection + " B" + i + " " + connection);
+                    ckt.Add(new Resistor("B" + i + connection, "B" + i, connection, 0));
+                    ActivateBananaSlot(connection);
+                }
+                break;
+
+
+            case (3):
+                foreach (String connection in B3Connections.Distinct().ToList())
+                {
+                    Debug.Log("Adding wire:" + "B" + i + connection + " B" + i + " " + connection);
+                    ckt.Add(new Resistor("B" + i + connection, "B" + i, connection, 0));
+                    ActivateBananaSlot(connection);
+                }
+                break;
+
+            case (4):
+                foreach (String connection in B4Connections.Distinct().ToList())
+                {
+                    Debug.Log("Adding wire:" + "B" + i + connection + " B" + i + " " + connection);
+                    ckt.Add(new Resistor("B" + i + connection, "B" + i, connection, 0));
+                    ActivateBananaSlot(connection);
+                }
+                break;
+
+            default:
+                Debug.Log("idk");
+                break;
+        }
+    }
+
     private float GetComponentValue(Slot slot)
     {
         float componentVal = 0;
@@ -933,7 +1142,6 @@ public class ItemClickHandler : MonoBehaviour
         }
 
         // float randomMultiplier = UnityEngine.Random.Range(0.95f,1.05f);
-        // Debug.Log("Random val: " + randomMultiplier);
         // return componentVal * randomMultiplier;
 
         return componentVal;

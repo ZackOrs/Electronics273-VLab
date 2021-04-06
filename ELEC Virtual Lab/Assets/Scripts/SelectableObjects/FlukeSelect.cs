@@ -14,7 +14,7 @@ public class FlukeSelect : SelectableItemBase
     [SerializeField] TMP_Text displayModeText = null;
     [SerializeField] GameObject focusPoint = null;
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
-    
+
     private Globals.FlukeInput clickedInput;
 
     private bool changingConnection = false;
@@ -27,6 +27,10 @@ public class FlukeSelect : SelectableItemBase
     private bool meterMode = true; //True = Voltmeter, False = currentmeter
 
     private bool powerOn = false; //Initially off
+
+    private int randomizeEveryXFramesCounter = 0;
+
+    private float randomValue = 1;
 
     public override string Name
     {
@@ -45,6 +49,11 @@ public class FlukeSelect : SelectableItemBase
 
     void Update()
     {
+        if (randomizeEveryXFramesCounter > Globals.RandomEveryXFrame)
+        {
+            randomValue = UnityEngine.Random.Range(0.97f, 1.03f);
+            randomizeEveryXFramesCounter = 0;
+        }
 
         if (changingConnection)
         {
@@ -60,23 +69,35 @@ public class FlukeSelect : SelectableItemBase
 
         if (valueUpdated)
         {
-            if(Globals.FlukeConnections[Globals.FlukeInput.groundInput].Equals(Globals.BananaPlugs.noConnection) || 
+            if (Globals.FlukeConnections[Globals.FlukeInput.groundInput].Equals(Globals.BananaPlugs.noConnection) ||
             (Globals.FlukeConnections[Globals.FlukeInput.voltageInput].Equals(Globals.BananaPlugs.noConnection) && Globals.FlukeConnections[Globals.FlukeInput.currentInput].Equals(Globals.BananaPlugs.noConnection)))
             {
                 displayValueText.text = "-.---";
                 valueUpdated = false;
             }
-            else if(meterMode)
+            else if (meterMode)
             {
+                voltageReading = voltageReading * randomValue;
                 displayValueText.text = voltageReading.ToString("0.000") + " V";
                 valueUpdated = false;
             }
             else
             {
-                displayValueText.text = (currentReading * -1000).ToString("00.00") + " mA";
+                if (Globals.FlukeConnections[Globals.FlukeInput.currentInput].Equals(Globals.BananaPlugs.noConnection))
+                {
+                    displayValueText.text = "-.---";
+                }
+                else
+                {
+                    currentReading = currentReading * randomValue;
+                    currentReading = currentReading < -99 ? -99 : currentReading;
+
+                    displayValueText.text = (currentReading * -1000).ToString("0000.00") + " mA";
+                }
                 valueUpdated = false;
             }
         }
+        randomizeEveryXFramesCounter++;
     }
 
     public void ButtonClickHandler(string clickedButton)
@@ -108,13 +129,13 @@ public class FlukeSelect : SelectableItemBase
                 PowerButton();
                 break;
 
-            case("BtnVolt"):
-            VoltageButtonClick();
-            break;
+            case ("BtnVolt"):
+                VoltageButtonClick();
+                break;
 
-            case("BtnCurrent"):
-            CurrentButtonClick();
-            break;
+            case ("BtnCurrent"):
+                CurrentButtonClick();
+                break;
 
             default:
                 Debug.Log("No buttono");
