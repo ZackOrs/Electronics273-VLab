@@ -5,8 +5,7 @@ using TMPro;
 
 public class Potentiometer : MonoBehaviour
 {
-    public static GameObject plusButtonClicked;
-    public static GameObject minusButtonClicked;
+    public TMP_InputField text;
     [SerializeField] TMP_Text textBox = null;
 
 
@@ -14,38 +13,7 @@ public class Potentiometer : MonoBehaviour
     public int powerReading = 0;
 
 
-    public void MoreResistance()
-    {
-        if (powerReading==500)
-        {
-
-            plusButtonClicked.SetActive(false);
-        }
-        else
-        {
-
-            powerReading += 50;
-
-            UpdateText();
-        }
-        
-    }
-
-    public void LessResistance()
-    {
-
-        if (powerReading==0)
-        {
-
-            minusButtonClicked.SetActive(false);
-        }
-        else
-        {
-            powerReading -= 50;
-            UpdateText();
-        }
-        
-    }
+   
 
     private void UpdateText()
     {
