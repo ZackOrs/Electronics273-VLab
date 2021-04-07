@@ -54,6 +54,8 @@ public class ItemClickHandler : MonoBehaviour
     private List<string> B3Connections = new List<string>();
     private List<string> B4Connections = new List<string>();
 
+    private int delayCalulationByFrames = 0;
+
     void Start()
     {
         Debug.Log("Adding slots");
@@ -90,6 +92,7 @@ public class ItemClickHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (!bananaSlotConnectionPanel.activeSelf)
         {
             if (Input.GetMouseButton(0))
@@ -97,12 +100,7 @@ public class ItemClickHandler : MonoBehaviour
                 ConnectBananaSlotsTogether();
             }
         }
-
-        if (Globals.mouseClickAction > 0)
-        {
-            WaitForClick();
-
-        }
+        WaitForClick();
         if (Input.GetMouseButtonDown(1))
         {
             RemoveComponent();
@@ -122,7 +120,14 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
         // function attached to a button for testing
-        SpiceSharpCalculation();
+
+        // if(delayCalulationByFrames > 80)
+        // {
+            SpiceSharpCalculation();
+        //     delayCalulationByFrames = 0;
+        // }
+        // delayCalulationByFrames++;
+
     }
 
 
@@ -199,6 +204,7 @@ public class ItemClickHandler : MonoBehaviour
         //handle permanent connections
         for (int i = 0; i < _bananaPlugs.transform.childCount; i++)
         {
+            
             if (bananaPlugActive[i])
             {
                 var child = _bananaPlugs.transform.GetChild(i);
@@ -210,7 +216,6 @@ public class ItemClickHandler : MonoBehaviour
                 }
             }
         }
-
         for (int i = 0; i < _breadboardUI.transform.childCount; i++)
         {
             var child = _breadboardUI.transform.GetChild(i);
@@ -220,7 +225,6 @@ public class ItemClickHandler : MonoBehaviour
                 {
                     if (child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot)
                     {
-
                         AddElectricalElement(child.GetComponent<Slot>(), ckt);
                         child.GetComponent<Slot>().slotChecked = true;
                         child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
@@ -238,7 +242,6 @@ public class ItemClickHandler : MonoBehaviour
             //     }
             // }
         }
-
 
         // VoltageSource powerSupply = AddVoltageSource(ckt);
         // ckt.Add(powerSupply);
@@ -258,7 +261,6 @@ public class ItemClickHandler : MonoBehaviour
         }
         else if (voltageSource.Name != "a")
         {
-            Debug.Log("voltage: " + _powerSupplyMachine.GetComponent<PSSelect>().voltage);
             dc = new DC("dc", new[]{
             new ParameterSweep(voltageSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().voltage,_powerSupplyMachine.GetComponent<PSSelect>().voltage,1))
         });
@@ -501,7 +503,7 @@ public class ItemClickHandler : MonoBehaviour
         switch (removedInt)
         {
             case 0:
-                columnConnection = "C10";
+                columnConnection = "C20";
                 break;
 
             case 1:
@@ -513,11 +515,11 @@ public class ItemClickHandler : MonoBehaviour
                 break;
 
             case 3:
-                columnConnection = "C15";
+                columnConnection = "C10";
                 break;
 
             case 4:
-                columnConnection = "C16";
+                columnConnection = "C15";
                 break;
 
             default:
@@ -609,7 +611,7 @@ public class ItemClickHandler : MonoBehaviour
     {
         int column = -1;
         slot -= 5;
-        column = (int)Math.Floor((double)(slot / 4.0));
+        column = (int)Math.Floor((double)(slot / 5.0));
         //VCC Slots are all considered the same
         if (column < 5)
         {
@@ -618,6 +620,14 @@ public class ItemClickHandler : MonoBehaviour
         else if (column < 10)
         {
             column = 5;
+        }
+        else if (column < 15)
+        {
+            column = 10;
+        }
+        else if (column < 20)
+        {
+            column = 15;
         }
 
         return column;
@@ -725,44 +735,56 @@ public class ItemClickHandler : MonoBehaviour
     }
 
     private void WaitForClick()
-    {
+    {   
+
         switch (Globals.mouseClickAction)
         {
             case Globals.MouseClickAction.TwoClicks_FirstClick:
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButton(0))
                 {
+                    Debug.Log("In here3");
                     CheckIfBBSlot();
                     if (isBBSlotFree)
                     {
+                        Debug.Log("In here4");
                         // Debug.Log("First Click GOOD");
                         _pointA.GetComponent<Slot>().PlaceItem();
-
+                        isBBSlotFree = false;
                     }
                 }
                 break;
 
             case Globals.MouseClickAction.TwoClicks_SecondClick:
-                if (Input.GetMouseButtonDown(0))
+            
+                if (Input.GetMouseButton(0))
                 {
+                    Debug.Log("In here5");
                     CheckIfBBSlot();
                     if (isBBSlotFree)
                     {
                         // Debug.Log("Second Click GOOD DRAWING LINE");
-
+                        Debug.Log("1");
                         _pointB.GetComponent<Slot>().PlaceItem();
+                        Debug.Log("2");
                         _pointB.GetComponent<Slot>().itemPlaced = spawnableItem;
+                        Debug.Log("3");
                         _pointA.GetComponent<Slot>().itemPlaced = spawnableItem;
-
+                        Debug.Log("4");
+                        
                         _pointB.GetComponent<Slot>().slotPair = _pointA;
+                        Debug.Log("5");
                         _pointA.GetComponent<Slot>().slotPair = _pointB;
+                        Debug.Log("6");
                         DrawLineBetweenPoints();
+                        Debug.Log("7");
                         RemoveItemButtonInList();
+                        Debug.Log("8");
+                        isBBSlotFree = false;
                     }
                 }
                 break;
 
             default:
-                Debug.Log("Something is wrong");
                 break;
         }
     }
@@ -866,16 +888,20 @@ public class ItemClickHandler : MonoBehaviour
         {
             for (int i = 0; i < results.Count; i++)
             {
+                Debug.Log("Raycasting Item: "+ i + " " +results[i].gameObject.name);
                 if (results[i].gameObject.transform.CompareTag("BBSlot"))
-                {
+                {   
+                    Debug.Log("Found BB Slot");
                     isBBSlotFree = results[i].gameObject.transform.GetComponent<Slot>().isFree;
 
                     if (Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_FirstClick)
                     {
+                        Debug.Log("Setting Point A");
                         _pointA = results[i].gameObject;
                     }
                     else if (Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_SecondClick)
                     {
+                        Debug.Log("Setting Point B");
                         _pointB = results[i].gameObject;
                     }
                 }

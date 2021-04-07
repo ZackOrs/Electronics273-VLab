@@ -1248,6 +1248,8 @@ MonoBehaviour:
   button: {fileID: 667082924}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &30810089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4187,6 +4189,8 @@ MonoBehaviour:
   button: {fileID: 117718453}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &169886624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6024,6 +6028,8 @@ MonoBehaviour:
   button: {fileID: 1054184773}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &217449851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8130,6 +8136,8 @@ MonoBehaviour:
   button: {fileID: 1124788877}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &329325954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8955,6 +8963,8 @@ MonoBehaviour:
   button: {fileID: 213461952}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &386850007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10560,6 +10570,8 @@ MonoBehaviour:
   button: {fileID: 74920790}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &486886217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11348,6 +11360,8 @@ MonoBehaviour:
   button: {fileID: 263093209}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &536602129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12347,6 +12361,8 @@ MonoBehaviour:
   button: {fileID: 981856174}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &563599513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12442,6 +12458,8 @@ MonoBehaviour:
   button: {fileID: 843078326}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &578268974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13304,6 +13322,8 @@ MonoBehaviour:
   button: {fileID: 785039212}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &630816909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14233,6 +14253,8 @@ MonoBehaviour:
   button: {fileID: 1914906599}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &670556322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16605,6 +16627,8 @@ MonoBehaviour:
   button: {fileID: 7088434}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &760237497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19530,7 +19554,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -20622,6 +20646,8 @@ MonoBehaviour:
   button: {fileID: 2047691562}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &922679937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24200,6 +24226,8 @@ MonoBehaviour:
   button: {fileID: 508823426}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1064083342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27552,6 +27580,8 @@ MonoBehaviour:
   button: {fileID: 1111203927}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!1 &1274047587
 GameObject:
   m_ObjectHideFlags: 0
@@ -28054,7 +28084,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1305982871
 Light:
   m_ObjectHideFlags: 0
@@ -28669,6 +28699,8 @@ MonoBehaviour:
   button: {fileID: 1880167811}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1320397583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31105,6 +31137,8 @@ MonoBehaviour:
   button: {fileID: 3317250}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1406660163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34614,6 +34648,8 @@ MonoBehaviour:
   button: {fileID: 361298547}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1478455597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36100,7 +36136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1546129742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36178,6 +36214,7 @@ MonoBehaviour:
   _breadboardUI: {fileID: 873207304}
   _toolsMeter: {fileID: 141734125}
   _powerSupply: {fileID: 2092270504}
+  _bananaPlugs: {fileID: 0}
   _wireImage: {fileID: 8561823322331990391, guid: 6f7274fdd8056684d8eeb3c144f42e1c,
     type: 3}
   _resistorImage: {fileID: 3220167450444337859, guid: 791011f42e2b3834cb48cebedef62a6a,
@@ -36929,6 +36966,8 @@ MonoBehaviour:
   button: {fileID: 1027010577}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1579708996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37024,6 +37063,8 @@ MonoBehaviour:
   button: {fileID: 551729579}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1580823609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37394,6 +37435,8 @@ MonoBehaviour:
   button: {fileID: 1219038925}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1585296668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40264,6 +40307,8 @@ MonoBehaviour:
   button: {fileID: 1494339937}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1706385324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40553,6 +40598,8 @@ MonoBehaviour:
   button: {fileID: 1193226320}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1718007659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40770,6 +40817,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AgilentMachine: {fileID: 1267829354}
+  PSMachine: {fileID: 0}
+  FlukeMachine: {fileID: 0}
+  FGMachine: {fileID: 0}
+  OscilloscopeMachine: {fileID: 0}
 --- !u!1 &1721643149
 GameObject:
   m_ObjectHideFlags: 0
@@ -41099,6 +41150,8 @@ MonoBehaviour:
   button: {fileID: 607061303}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1741115171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41268,6 +41321,8 @@ MonoBehaviour:
   button: {fileID: 51848127}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1746921452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41762,6 +41817,8 @@ MonoBehaviour:
   button: {fileID: 1913074429}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1765384873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43651,6 +43708,8 @@ MonoBehaviour:
   button: {fileID: 1721039498}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1867742976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45117,6 +45176,8 @@ MonoBehaviour:
   button: {fileID: 1375959084}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &1920552149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46607,6 +46668,8 @@ MonoBehaviour:
   button: {fileID: 647779117}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &2008186100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48361,6 +48424,8 @@ MonoBehaviour:
   button: {fileID: 1314141289}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &2090132932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48995,6 +49060,8 @@ MonoBehaviour:
   button: {fileID: 856226071}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &2105207853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49216,6 +49283,8 @@ MonoBehaviour:
   button: {fileID: 1353122653}
   slotPair: {fileID: 0}
   slotChecked: 0
+  permaSlot: 0
+  machineConnections: []
 --- !u!114 &2111385264
 MonoBehaviour:
   m_ObjectHideFlags: 0
