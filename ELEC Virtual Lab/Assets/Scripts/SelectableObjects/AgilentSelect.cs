@@ -27,6 +27,11 @@ public class AgilentSelect : SelectableItemBase
 
     private bool powerOn = false; //Initially off
 
+    private int randomizeEveryXFramesCounter = 0;
+
+    private float randomValue = 1;
+
+
     public override string Name
     {
         get
@@ -44,6 +49,11 @@ public class AgilentSelect : SelectableItemBase
 
     void Update()
     {
+        if (randomizeEveryXFramesCounter > Globals.RandomEveryXFrame)
+        {
+            randomValue = UnityEngine.Random.Range(0.97f, 1.03f);
+            randomizeEveryXFramesCounter = 0;
+        }
 
         if (changingConnection)
         {
@@ -57,23 +67,37 @@ public class AgilentSelect : SelectableItemBase
             }
         }
 
-        if (Globals.AgilentConnections[Globals.AgilentInput.groundInput].Equals(Globals.BananaPlugs.noConnection) ||
-        (Globals.AgilentConnections[Globals.AgilentInput.voltageInput].Equals(Globals.BananaPlugs.noConnection) && Globals.AgilentConnections[Globals.AgilentInput.currentInput].Equals(Globals.BananaPlugs.noConnection)))
+        if (valueUpdated)
         {
-            displayValueText.text = "-.---";
-            valueUpdated = false;
-        }
-        else if (meterMode)
-        {
-            displayValueText.text = voltageReading.ToString("0.000") + " V";
-            valueUpdated = false;
-        }
-        else
-        {
-            displayValueText.text = (currentReading * -1000).ToString("0000.00") + " mA";
-            valueUpdated = false;
-        }
+            if (Globals.AgilentConnections[Globals.AgilentInput.groundInput].Equals(Globals.BananaPlugs.noConnection) ||
+            (Globals.AgilentConnections[Globals.AgilentInput.voltageInput].Equals(Globals.BananaPlugs.noConnection) && Globals.AgilentConnections[Globals.AgilentInput.currentInput].Equals(Globals.BananaPlugs.noConnection)))
+            {
+                displayValueText.text = "-.---";
+                valueUpdated = false;
+            }
+            else if (meterMode)
+            {
+                voltageReading = voltageReading * randomValue;
+                displayValueText.text = voltageReading.ToString("0.000") + " V";
+                valueUpdated = false;
+            }
+            else
+            {
+                if (Globals.AgilentConnections[Globals.AgilentInput.currentInput].Equals(Globals.BananaPlugs.noConnection))
+                {
+                    displayValueText.text = "-.---";
+                }
+                else
+                {
+                    currentReading = currentReading * randomValue;
+                    currentReading = currentReading < -99 ? -99 : currentReading;
 
+                    displayValueText.text = (currentReading * -1000).ToString("0000.00") + " mA";
+                }
+                valueUpdated = false;
+            }
+        }
+        randomizeEveryXFramesCounter++;
     }
 
     public void ButtonClickHandler(string clickedButton)

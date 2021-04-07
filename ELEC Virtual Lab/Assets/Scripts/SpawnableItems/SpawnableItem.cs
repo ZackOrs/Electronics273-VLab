@@ -41,4 +41,10 @@ public class SpawnableItem
         itemID = Globals.itemIDCount++;
         isPlaced = false;
     }
+    public SpawnableItem(Globals.AvailableItems iName, int iValue, bool Increment)
+    {
+        itemName = iName;
+        itemValue = iValue;
+        isPlaced = true;
+    }
 }
