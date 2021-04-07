@@ -5,7 +5,7 @@ using TMPro;
 
 public class Potentiometer : MonoBehaviour
 {
-    public TMP_InputField text;
+    public TMP_InputField text ;
     [SerializeField] TMP_Text textBox = null;
 
 
