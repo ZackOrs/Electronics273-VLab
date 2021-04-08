@@ -17,8 +17,8 @@ public class UnityLoginLogoutRegister : MonoBehaviour
     public int minute;
     public int second;
 
-    public string baseUrl = "http://localhost:8888/UnityLoginLogoutRegister/";
-      
+    public string baseUrl = "https://www.phpmyadmin.co/db_structure.php?server=1&db=sql5399213";
+   // public string baseUrl = "http://localhost:8888/UnityLoginLogoutRegister/";
 
     public InputField accountName;
     public InputField accountSID;
@@ -200,7 +200,7 @@ public class UnityLoginLogoutRegister : MonoBehaviour
                 if (responseText == "1")
                 {
                     PlayerPrefs.SetString(taKey, taName);
-                    SceneManager.LoadScene(3);
+                    SceneManager.LoadScene(5);
                     //info.text = "Login Success with Name: " + sName;
                 }
                 else
@@ -242,6 +242,6 @@ public class UnityLoginLogoutRegister : MonoBehaviour
     IEnumerator ChangeScene(int index, float delay = 3f)
     {
         yield return new WaitForSeconds(delay);
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(6);
     }
 }
