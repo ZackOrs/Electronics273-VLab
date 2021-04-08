@@ -60,13 +60,13 @@ public class ResistorSpawn : SpawnableItemBase
         {
             spawnSpace += 0.25f;
             Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.5f, 3.7f);
-            Quaternion rotationValue = new Quaternion(0, 0, 0, 0);
+            Quaternion rotationValue = new Quaternion(0, 180f, 0, 0);
             var spawnObject = Instantiate(itemPrefabList[itemValue.value], worldSpawnLocation, rotationValue, workBenchSpawnedItems.transform);
-            spawnObject.gameObject.AddComponent<ResistorSelect>();
             spawnObject.AddComponent<MeshRenderer>();
             spawnObject.AddComponent<BoxCollider>();
             spawnObject.GetComponent<BoxCollider>().isTrigger = true;
             spawnObject.GetComponent<BoxCollider>().size = new Vector3(0.025f,0.025f, 0.025f);
+            spawnObject.gameObject.AddComponent<ResistorSelect>();
             spawnObject.tag = "Selectable";
 
 

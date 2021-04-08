@@ -27,6 +27,8 @@ public class ItemClickHandler : MonoBehaviour
 
     [SerializeField] GameObject _placedImages = null;
 
+    [SerializeField] TMP_InputField _potentioMeterTextBox = null;
+
     public static bool isBBSlotFree = false;
     private GameObject _pointA = null;
     private GameObject _pointB = null;
@@ -53,6 +55,8 @@ public class ItemClickHandler : MonoBehaviour
     private List<string> B2Connections = new List<string>();
     private List<string> B3Connections = new List<string>();
     private List<string> B4Connections = new List<string>();
+
+    private int delayCalulationByFrames = 0;
 
     void Start()
     {
@@ -90,6 +94,7 @@ public class ItemClickHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (!bananaSlotConnectionPanel.activeSelf)
         {
             if (Input.GetMouseButton(0))
@@ -97,12 +102,7 @@ public class ItemClickHandler : MonoBehaviour
                 ConnectBananaSlotsTogether();
             }
         }
-
-        if (Globals.mouseClickAction > 0)
-        {
-            WaitForClick();
-
-        }
+        WaitForClick();
         if (Input.GetMouseButtonDown(1))
         {
             RemoveComponent();
@@ -122,7 +122,14 @@ public class ItemClickHandler : MonoBehaviour
             }
         }
         // function attached to a button for testing
-        SpiceSharpCalculation();
+
+        if(delayCalulationByFrames > 80)
+        {   
+            SpiceSharpCalculation();
+            delayCalulationByFrames = 0;
+        }
+        delayCalulationByFrames++;
+
     }
 
 
@@ -173,21 +180,32 @@ public class ItemClickHandler : MonoBehaviour
         }
 
         //INSERT POTENTIOMETER VAL HERE
+
+
         if (bananaPlugActive[4])
         {
-            ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", 300));
-            ckt.Add(new Resistor("PotentioMeterBlack", "PotentioMeter", "C17", 0));
-            ckt.Add(new Resistor("PotentioMeterBlue", "PotentioMeter", "C18", 0));
-            ckt.Add(new Resistor("PotentioMeterRed", "PotentioMeter", "C19", 0));
-            Debug.Log("Adding Wire: PotentioMeterBanana B4 PotentioMeter 300");
-            Debug.Log("Adding Wire: PotentioMeterBlack PotentioMeter C17 0");
-            Debug.Log("Adding Wire: PotentioMeterBlue PotentioMeter C18 0");
-            Debug.Log("Adding Wire: PotentioMeterRed PotentioMeter C19 0");
+            if(_potentioMeterTextBox.text.Length == 0)
+            {
+                ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", 0));
+                Debug.Log("Adding Wire: PotentioMeterBanana B4 PotentioMeter 0");
+            }
+            else
+            {
+                ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", int.Parse(_potentioMeterTextBox.text)));
+                Debug.Log("Adding Wire: PotentioMeterBanana B4 PotentioMeter " + _potentioMeterTextBox.text);
+            }
+            
+            ckt.Add(new Resistor("PotentioMeterBlack", "PotentioMeter", "C67", 0));
+            ckt.Add(new Resistor("PotentioMeterBlue", "PotentioMeter", "C70", 0));
+            ckt.Add(new Resistor("PotentioMeterRed", "PotentioMeter", "C72", 0));
+            Debug.Log("Adding Wire: PotentioMeterBlack PotentioMeter C67 0");
+            Debug.Log("Adding Wire: PotentioMeterBlue PotentioMeter C70 0");
+            Debug.Log("Adding Wire: PotentioMeterRed PotentioMeter C82 0");
         }
         if (bananaPlugActive[2] || bananaPlugActive[4])
         {
             ckt.Add(new Inductor("B2B4Inductor", "B2", "B4", 0.020f));
-            Debug.Log("Adding Inductor: PotentioMeterInductor   B2  B4 0.020H");
+            Debug.Log("Adding Inductor: PotentioMeterInductor B2 B4 0.020H");
         }
         // ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", 500));
         // ckt.Add(new Resistor("PotentioMeterBlack", "PotentioMeter", "C17", 0));
@@ -199,6 +217,7 @@ public class ItemClickHandler : MonoBehaviour
         //handle permanent connections
         for (int i = 0; i < _bananaPlugs.transform.childCount; i++)
         {
+            
             if (bananaPlugActive[i])
             {
                 var child = _bananaPlugs.transform.GetChild(i);
@@ -210,17 +229,15 @@ public class ItemClickHandler : MonoBehaviour
                 }
             }
         }
-
         for (int i = 0; i < _breadboardUI.transform.childCount; i++)
         {
             var child = _breadboardUI.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
-                if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked)
+                if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked && !child.GetComponent<Slot>().ignoreThisSlot)
                 {
                     if (child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot)
                     {
-
                         AddElectricalElement(child.GetComponent<Slot>(), ckt);
                         child.GetComponent<Slot>().slotChecked = true;
                         child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotChecked = true;
@@ -238,7 +255,6 @@ public class ItemClickHandler : MonoBehaviour
             //     }
             // }
         }
-
 
         // VoltageSource powerSupply = AddVoltageSource(ckt);
         // ckt.Add(powerSupply);
@@ -258,7 +274,6 @@ public class ItemClickHandler : MonoBehaviour
         }
         else if (voltageSource.Name != "a")
         {
-            Debug.Log("voltage: " + _powerSupplyMachine.GetComponent<PSSelect>().voltage);
             dc = new DC("dc", new[]{
             new ParameterSweep(voltageSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().voltage,_powerSupplyMachine.GetComponent<PSSelect>().voltage,1))
         });
@@ -498,10 +513,11 @@ public class ItemClickHandler : MonoBehaviour
     {
         int removedInt = int.Parse(Regex.Match(BananaPlugSlot, @"\d+").Value);
         string columnConnection = "";
+        
         switch (removedInt)
         {
             case 0:
-                columnConnection = "C10";
+                columnConnection = "C20";
                 break;
 
             case 1:
@@ -513,11 +529,11 @@ public class ItemClickHandler : MonoBehaviour
                 break;
 
             case 3:
-                columnConnection = "C15";
+                columnConnection = "C10";
                 break;
 
             case 4:
-                columnConnection = "C16";
+                columnConnection = "C15";
                 break;
 
             default:
@@ -609,7 +625,7 @@ public class ItemClickHandler : MonoBehaviour
     {
         int column = -1;
         slot -= 5;
-        column = (int)Math.Floor((double)(slot / 4.0));
+        column = (int)Math.Floor((double)(slot / 5.0));
         //VCC Slots are all considered the same
         if (column < 5)
         {
@@ -619,7 +635,14 @@ public class ItemClickHandler : MonoBehaviour
         {
             column = 5;
         }
-
+        else if (column < 15)
+        {
+            column = 10;
+        }
+        else if (column < 20)
+        {
+            column = 15;
+        }
         return column;
     }
 
@@ -725,44 +748,46 @@ public class ItemClickHandler : MonoBehaviour
     }
 
     private void WaitForClick()
-    {
+    {   
+
         switch (Globals.mouseClickAction)
         {
             case Globals.MouseClickAction.TwoClicks_FirstClick:
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButton(0))
                 {
                     CheckIfBBSlot();
                     if (isBBSlotFree)
                     {
                         // Debug.Log("First Click GOOD");
                         _pointA.GetComponent<Slot>().PlaceItem();
-
+                        isBBSlotFree = false;
                     }
                 }
                 break;
 
             case Globals.MouseClickAction.TwoClicks_SecondClick:
-                if (Input.GetMouseButtonDown(0))
+            
+                if (Input.GetMouseButton(0))
                 {
                     CheckIfBBSlot();
                     if (isBBSlotFree)
                     {
                         // Debug.Log("Second Click GOOD DRAWING LINE");
-
                         _pointB.GetComponent<Slot>().PlaceItem();
                         _pointB.GetComponent<Slot>().itemPlaced = spawnableItem;
                         _pointA.GetComponent<Slot>().itemPlaced = spawnableItem;
-
+                        
                         _pointB.GetComponent<Slot>().slotPair = _pointA;
                         _pointA.GetComponent<Slot>().slotPair = _pointB;
                         DrawLineBetweenPoints();
                         RemoveItemButtonInList();
+
+                        isBBSlotFree = false;
                     }
                 }
                 break;
 
             default:
-                Debug.Log("Something is wrong");
                 break;
         }
     }
@@ -867,7 +892,7 @@ public class ItemClickHandler : MonoBehaviour
             for (int i = 0; i < results.Count; i++)
             {
                 if (results[i].gameObject.transform.CompareTag("BBSlot"))
-                {
+                {   
                     isBBSlotFree = results[i].gameObject.transform.GetComponent<Slot>().isFree;
 
                     if (Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_FirstClick)
@@ -890,14 +915,9 @@ public class ItemClickHandler : MonoBehaviour
 
         if (itemToRemove != null)
         {
-            Debug.Log("Total Number of Slots:" + allSlots.Count);
-            Debug.Log("Removing number:" + itemToRemove.GetComponent<PlacedImages>().slotA);
             Debug.Log("Removing item between slots: " + itemToRemove.GetComponent<PlacedImages>().slotA + " and " + itemToRemove.GetComponent<PlacedImages>().slotB);
             allSlots[itemToRemove.GetComponent<PlacedImages>().slotA].GetComponent<Slot>().RemoveItem();
             allSlots[itemToRemove.GetComponent<PlacedImages>().slotB].GetComponent<Slot>().RemoveItem();
-            Debug.Log("Removed");
-            Debug.Log("Removing itemID:" + itemToRemove.GetComponent<PlacedImages>().itemID);
-            Debug.Log("Inventory Items count: " + Globals.inventoryItems.Count);
             Globals.inventoryItems[itemToRemove.GetComponent<PlacedImages>().itemID].isPlaced = false;
         }
         Destroy(itemToRemove);

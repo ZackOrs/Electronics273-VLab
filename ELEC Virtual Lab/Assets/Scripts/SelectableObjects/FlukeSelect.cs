@@ -132,6 +132,7 @@ public class FlukeSelect : SelectableItemBase
                 break;
 
             case ("BtnPower"):
+                Debug.Log("Clicked Power");
                 PowerButton();
                 break;
 
