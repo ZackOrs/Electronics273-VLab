@@ -185,18 +185,18 @@ public class ItemClickHandler : MonoBehaviour
         if (bananaPlugActive[4])
         {
             ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", _potentioMeterTextBox.text));
-            ckt.Add(new Resistor("PotentioMeterBlack", "PotentioMeter", "C17", 0));
-            ckt.Add(new Resistor("PotentioMeterBlue", "PotentioMeter", "C18", 0));
-            ckt.Add(new Resistor("PotentioMeterRed", "PotentioMeter", "C19", 0));
-            Debug.Log("Adding Wire: PotentioMeterBanana B4 PotentioMeter 300");
-            Debug.Log("Adding Wire: PotentioMeterBlack PotentioMeter C17 0");
-            Debug.Log("Adding Wire: PotentioMeterBlue PotentioMeter C18 0");
-            Debug.Log("Adding Wire: PotentioMeterRed PotentioMeter C19 0");
+            ckt.Add(new Resistor("PotentioMeterBlack", "PotentioMeter", "C67", 0));
+            ckt.Add(new Resistor("PotentioMeterBlue", "PotentioMeter", "C70", 0));
+            ckt.Add(new Resistor("PotentioMeterRed", "PotentioMeter", "C72", 0));
+            Debug.Log("Adding Wire: PotentioMeterBanana B4 PotentioMeter " + _potentioMeterTextBox.text);
+            Debug.Log("Adding Wire: PotentioMeterBlack PotentioMeter C67 0");
+            Debug.Log("Adding Wire: PotentioMeterBlue PotentioMeter C70 0");
+            Debug.Log("Adding Wire: PotentioMeterRed PotentioMeter C82 0");
         }
         if (bananaPlugActive[2] || bananaPlugActive[4])
         {
             ckt.Add(new Inductor("B2B4Inductor", "B2", "B4", 0.020f));
-            Debug.Log("Adding Inductor: PotentioMeterInductor   B2  B4 0.020H");
+            Debug.Log("Adding Inductor: PotentioMeterInductor B2 B4 0.020H");
         }
         // ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", 500));
         // ckt.Add(new Resistor("PotentioMeterBlack", "PotentioMeter", "C17", 0));
@@ -614,7 +614,6 @@ public class ItemClickHandler : MonoBehaviour
 
     private int GetSlotColumn(int slot)
     {
-        Debug.Log("Slot:" + slot);
         int column = -1;
         slot -= 5;
         column = (int)Math.Floor((double)(slot / 5.0));
@@ -635,7 +634,6 @@ public class ItemClickHandler : MonoBehaviour
         {
             column = 15;
         }
-        Debug.Log("Column: "+ column);
         return column;
     }
 
@@ -748,11 +746,9 @@ public class ItemClickHandler : MonoBehaviour
             case Globals.MouseClickAction.TwoClicks_FirstClick:
                 if (Input.GetMouseButton(0))
                 {
-                    Debug.Log("In here3");
                     CheckIfBBSlot();
                     if (isBBSlotFree)
                     {
-                        Debug.Log("In here4");
                         // Debug.Log("First Click GOOD");
                         _pointA.GetComponent<Slot>().PlaceItem();
                         isBBSlotFree = false;
@@ -764,27 +760,19 @@ public class ItemClickHandler : MonoBehaviour
             
                 if (Input.GetMouseButton(0))
                 {
-                    Debug.Log("In here5");
                     CheckIfBBSlot();
                     if (isBBSlotFree)
                     {
                         // Debug.Log("Second Click GOOD DRAWING LINE");
-                        Debug.Log("1");
                         _pointB.GetComponent<Slot>().PlaceItem();
-                        Debug.Log("2");
                         _pointB.GetComponent<Slot>().itemPlaced = spawnableItem;
-                        Debug.Log("3");
                         _pointA.GetComponent<Slot>().itemPlaced = spawnableItem;
-                        Debug.Log("4");
                         
                         _pointB.GetComponent<Slot>().slotPair = _pointA;
-                        Debug.Log("5");
                         _pointA.GetComponent<Slot>().slotPair = _pointB;
-                        Debug.Log("6");
                         DrawLineBetweenPoints();
-                        Debug.Log("7");
                         RemoveItemButtonInList();
-                        Debug.Log("8");
+
                         isBBSlotFree = false;
                     }
                 }
@@ -894,20 +882,16 @@ public class ItemClickHandler : MonoBehaviour
         {
             for (int i = 0; i < results.Count; i++)
             {
-                Debug.Log("Raycasting Item: "+ i + " " +results[i].gameObject.name);
                 if (results[i].gameObject.transform.CompareTag("BBSlot"))
                 {   
-                    Debug.Log("Found BB Slot");
                     isBBSlotFree = results[i].gameObject.transform.GetComponent<Slot>().isFree;
 
                     if (Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_FirstClick)
                     {
-                        Debug.Log("Setting Point A");
                         _pointA = results[i].gameObject;
                     }
                     else if (Globals.mouseClickAction == Globals.MouseClickAction.TwoClicks_SecondClick)
                     {
-                        Debug.Log("Setting Point B");
                         _pointB = results[i].gameObject;
                     }
                 }
@@ -922,14 +906,9 @@ public class ItemClickHandler : MonoBehaviour
 
         if (itemToRemove != null)
         {
-            Debug.Log("Total Number of Slots:" + allSlots.Count);
-            Debug.Log("Removing number:" + itemToRemove.GetComponent<PlacedImages>().slotA);
             Debug.Log("Removing item between slots: " + itemToRemove.GetComponent<PlacedImages>().slotA + " and " + itemToRemove.GetComponent<PlacedImages>().slotB);
             allSlots[itemToRemove.GetComponent<PlacedImages>().slotA].GetComponent<Slot>().RemoveItem();
             allSlots[itemToRemove.GetComponent<PlacedImages>().slotB].GetComponent<Slot>().RemoveItem();
-            Debug.Log("Removed");
-            Debug.Log("Removing itemID:" + itemToRemove.GetComponent<PlacedImages>().itemID);
-            Debug.Log("Inventory Items count: " + Globals.inventoryItems.Count);
             Globals.inventoryItems[itemToRemove.GetComponent<PlacedImages>().itemID].isPlaced = false;
         }
         Destroy(itemToRemove);
