@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 504499193}
   - component: {fileID: 504499194}
   - component: {fileID: 504499195}
+  - component: {fileID: 504499196}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -272,6 +273,18 @@ MonoBehaviour:
   hour: 0
   minute: 0
   second: 0
+--- !u!114 &504499196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504499192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83360dfab93eb4fca8ab0ac823c2e907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &737051796
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,6 +385,17 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 504499196}
+        m_MethodName: changeToScene
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

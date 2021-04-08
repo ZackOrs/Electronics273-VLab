@@ -163,7 +163,7 @@ public class UnityLoginLogoutRegister : MonoBehaviour
                     PlayerPrefs.SetString(ukey, sName);
                     //info.text = "Login Success with Name: " + sName;
 
-                    StartCoroutine(ChangeScene(1));
+                    StartCoroutine(ChangeScene(2));
                     hour = System.DateTime.Now.Hour;
                     minute = System.DateTime.Now.Minute;
                     second = System.DateTime.Now.Second;
