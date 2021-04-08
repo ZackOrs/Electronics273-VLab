@@ -59,7 +59,7 @@ public class ResistorSpawn : SpawnableItemBase
         for (int i = 0; i < int.Parse(itemQuantity.text); i++)
         {
             spawnSpace += 0.25f;
-            Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.5f, 3.7f);
+            Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.59f, 3.7f);
             Quaternion rotationValue = new Quaternion(0, 180f, 0, 0);
             var spawnObject = Instantiate(itemPrefabList[itemValue.value], worldSpawnLocation, rotationValue, workBenchSpawnedItems.transform);
             spawnObject.AddComponent<MeshRenderer>();
@@ -69,8 +69,6 @@ public class ResistorSpawn : SpawnableItemBase
             spawnObject.gameObject.AddComponent<ResistorSelect>();
             spawnObject.tag = "Selectable";
 
-
-            
             SpawnableItem resistor = new SpawnableItem(ItemName, ItemValue);
             Globals.inventoryItems.Add(resistor);
 
