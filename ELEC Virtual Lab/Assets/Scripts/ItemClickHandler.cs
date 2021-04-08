@@ -502,7 +502,7 @@ public class ItemClickHandler : MonoBehaviour
             // Debug.Log("Fluke CURRENT READING: " + (new RealCurrentExport(dc, currentSource.Name)).Value);
             //Debug.Log("Fluke CURRENT READING: " + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
             Debug.Log("Current source: " + currentSource.Name + " " + currentSource.Parameters.DcValue.ToString());
-            Debug.Log("Fluke Current reading: " + (new RealCurrentExport(dc, currentSource.Name)).Value.ToString());
+            Debug.Log("Fluke Current reading: " + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
             _flukeMachine.GetComponent<FlukeSelect>().currentReading = (float)new RealCurrentExport(dc, voltageSource.Name).Value;
             _flukeMachine.GetComponent<FlukeSelect>().valueUpdated = true;
         };
