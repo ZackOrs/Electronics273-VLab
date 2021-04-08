@@ -184,11 +184,20 @@ public class ItemClickHandler : MonoBehaviour
 
         if (bananaPlugActive[4])
         {
-            ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", _potentioMeterTextBox.text));
+            if(_potentioMeterTextBox.text.Length == 0)
+            {
+                ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", 0));
+                Debug.Log("Adding Wire: PotentioMeterBanana B4 PotentioMeter 0");
+            }
+            else
+            {
+                ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", int.Parse(_potentioMeterTextBox.text)));
+                Debug.Log("Adding Wire: PotentioMeterBanana B4 PotentioMeter " + _potentioMeterTextBox.text);
+            }
+            
             ckt.Add(new Resistor("PotentioMeterBlack", "PotentioMeter", "C67", 0));
             ckt.Add(new Resistor("PotentioMeterBlue", "PotentioMeter", "C70", 0));
             ckt.Add(new Resistor("PotentioMeterRed", "PotentioMeter", "C72", 0));
-            Debug.Log("Adding Wire: PotentioMeterBanana B4 PotentioMeter " + _potentioMeterTextBox.text);
             Debug.Log("Adding Wire: PotentioMeterBlack PotentioMeter C67 0");
             Debug.Log("Adding Wire: PotentioMeterBlue PotentioMeter C70 0");
             Debug.Log("Adding Wire: PotentioMeterRed PotentioMeter C82 0");
@@ -225,7 +234,7 @@ public class ItemClickHandler : MonoBehaviour
             var child = _breadboardUI.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
-                if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked)
+                if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked && !child.GetComponent<Slot>().ignoreThisSlot)
                 {
                     if (child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot)
                     {

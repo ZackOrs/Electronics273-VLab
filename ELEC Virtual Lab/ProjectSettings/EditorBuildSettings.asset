@@ -14,22 +14,22 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Home Screen.unity
     guid: 13de370942bc64fdaa43b9ca5ba49f59
-  - enabled: 0
-    path: Assets/Scenes/Main.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/Scenes/Main Nabil fixed.unity
-    guid: 9dfe7e1df306d994292795d2ed0140cc
   - enabled: 1
     path: Assets/Scenes/Help Menu.unity
     guid: 5348bb8297de249a3835b4be5fb0b2b9
   - enabled: 1
-    path: Assets/Scenes/Logout.unity
-    guid: d5f0dd60de7ac49e7809a855fedfeb50
-  - enabled: 1
     path: Assets/Scenes/Class Section Information.unity
     guid: 1772fc5db14584c38a555ec28976082a
+  - enabled: 0
+    path: Assets/Scenes/Main.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/TAScene.unity
     guid: 9211f2c6ba99c43019400b61cb231c62
+  - enabled: 1
+    path: Assets/Scenes/Logout.unity
+    guid: d5f0dd60de7ac49e7809a855fedfeb50
+  - enabled: 1
+    path: Assets/Scenes/Main Zack.unity
+    guid: 9dfe7e1df306d994292795d2ed0140cc
   m_configObjects: {}

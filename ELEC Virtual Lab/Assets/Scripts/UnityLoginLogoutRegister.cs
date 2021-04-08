@@ -140,6 +140,7 @@ public class UnityLoginLogoutRegister : MonoBehaviour
 
     IEnumerator LogInAccount(string sName, string sID, string cCode, string lSection)
     {
+        
         WWWForm form = new WWWForm();
         form.AddField("loginname", sName);
         form.AddField("loginstudentid", sID);
@@ -180,6 +181,7 @@ public class UnityLoginLogoutRegister : MonoBehaviour
 
     IEnumerator taLogInAccount(string taName, string taPword)
     {
+        Debug.Log("Trying to login");
         WWWForm form = new WWWForm();
         form.AddField("tausername", taName);
         form.AddField("tapassword", taPword);
