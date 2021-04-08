@@ -18,7 +18,7 @@ public class Slot : MonoBehaviour
 
     public bool permaSlot = false;
 
-    public bool ignoreThisSlots = false;
+    public bool ignoreThisSlot = false;
     void Start()
     {
         if(permaSlot == true)
