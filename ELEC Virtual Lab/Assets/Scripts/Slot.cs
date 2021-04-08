@@ -17,22 +17,21 @@ public class Slot : MonoBehaviour
     public bool slotChecked = false;
 
     public bool permaSlot = false;
-
-    public List<string> machineConnections = null;
     void Start()
     {
-        
+        if(permaSlot == true)
+        { 
+            SpawnableItem wire = new SpawnableItem(Globals.AvailableItems.Wire, 0, true);
+            itemPlaced = wire;
+            isFree = false;
+            ChangeHighlightColor();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(permaSlot == true)
-        { 
-            itemPlaced = new SpawnableItem(Globals.AvailableItems.Wire, 0);
-            isFree = false;
-            ChangeHighlightColor();
-        }
+
     }
 
     public void PlaceItem()

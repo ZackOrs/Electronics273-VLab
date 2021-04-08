@@ -17,14 +17,32 @@ public class Globals : MonoBehaviour
 
     public static List<SpawnableItem> inventoryItems = new List<SpawnableItem>();
 
-    public static Dictionary<AgilentInput,BananaPlugs> AgilentConnections = new Dictionary<AgilentInput,BananaPlugs>();
+    public static int RandomEveryXFrame = 60;
+
+    public static Dictionary<AgilentInput,BananaPlugs> AgilentConnections = new Dictionary<AgilentInput,BananaPlugs>()
+    {
+        { AgilentInput.voltageInput , BananaPlugs.noConnection},
+        { AgilentInput.currentInput , BananaPlugs.noConnection},
+        { AgilentInput.groundInput , BananaPlugs.noConnection}
+    };
+
+        public static Dictionary<FlukeInput,BananaPlugs> FlukeConnections = new Dictionary<FlukeInput,BananaPlugs>()
+    {
+        { FlukeInput.voltageInput , BananaPlugs.noConnection},
+        { FlukeInput.currentInput , BananaPlugs.noConnection},
+        { FlukeInput.groundInput , BananaPlugs.noConnection}
+    };
     // public static List<AvailableMachines> bananaSlot2Connections = new List<AvailableMachines>();
     // public static List<AvailableMachines> bananaSlot3Connections = new List<AvailableMachines>();
     // public static List<AvailableMachines> bananaSlot4Connections = new List<AvailableMachines>();
     // public static List<AvailableMachines> bananaSlot5Connections = new List<AvailableMachines>();
 
-    public static Dictionary<PowerSupplyInput, BananaPlugs> PSConnections = new Dictionary<PowerSupplyInput, BananaPlugs>();
-    public static Dictionary<FlukeInput, BananaPlugs> FlukeConnections = new Dictionary<FlukeInput, BananaPlugs>();
+    public static Dictionary<PowerSupplyInput, BananaPlugs> PSConnections = new Dictionary<PowerSupplyInput, BananaPlugs>()
+    {
+        { PowerSupplyInput.voltageSource , BananaPlugs.noConnection},
+        { PowerSupplyInput.currentSource , BananaPlugs.noConnection},
+        { PowerSupplyInput.ground , BananaPlugs.noConnection}
+    };
 
 
     public enum AvailableMachines
@@ -102,7 +120,9 @@ public class Globals : MonoBehaviour
         voltmeterSlot,
         currentmeterSlot,
         powerSupplySlot,
-        BananaPlugSlot
+        BananaPlugSlot,
+
+        potentioMeterSlot
     }
 
 }

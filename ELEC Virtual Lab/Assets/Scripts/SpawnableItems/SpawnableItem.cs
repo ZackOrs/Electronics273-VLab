@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface ISpawnableItem
-{    
-    Globals.AvailableItems ItemName {get;}
-    int ItemValue {get;}
-    int ItemQuantity{get;}
-    GameObject ItemPrefab {get;}
+{
+    Globals.AvailableItems ItemName { get; }
+    int ItemValue { get; }
+    int ItemQuantity { get; }
+    GameObject ItemPrefab { get; }
     void onSpawn();
 
 }
@@ -36,9 +36,15 @@ public class SpawnableItem
 
     public SpawnableItem(Globals.AvailableItems iName, int iValue)
     {
-         itemName = iName;
-         itemValue = iValue;
-         itemID = Globals.itemIDCount++;
-         isPlaced = false;
+        itemName = iName;
+        itemValue = iValue;
+        itemID = Globals.itemIDCount++;
+        isPlaced = false;
+    }
+    public SpawnableItem(Globals.AvailableItems iName, int iValue, bool Increment)
+    {
+        itemName = iName;
+        itemValue = iValue;
+        isPlaced = true;
     }
 }

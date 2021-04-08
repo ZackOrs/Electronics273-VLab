@@ -9,6 +9,7 @@ TagManager:
   - BBSlot
   - PlacedItem
   - clickable
+  - BananaPlugOption
   layers:
   - Default
   - TransparentFX

@@ -40,7 +40,7 @@ public class ClickManager : MonoBehaviour
 
     private void UseMachine(string buttonHit)
     {
-        Debug.Log("UseMachine");
+        Debug.Log("Clicked machine: "+ Globals.currentMachine);
         switch(Globals.currentMachine)
         {
             case("Agilent"):
@@ -53,7 +53,6 @@ public class ClickManager : MonoBehaviour
 
             case("PowerSupply"):
             PSMachine.GetComponent<PSSelect>().ButtonClickHandler(buttonHit);
-            Debug.Log("PowerSupply");
             break;
 
             case("FG"):

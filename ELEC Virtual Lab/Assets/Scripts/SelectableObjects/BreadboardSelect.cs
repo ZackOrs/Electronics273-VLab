@@ -12,6 +12,10 @@ public class BreadboardSelect : SelectableItemBase
     public GameObject InventoryItemButton;
 
 
+    private bool setActiveOnce = false;
+
+    private bool setActiveTwice = true;
+
     public override string Name
     {
         get
@@ -30,6 +34,22 @@ public class BreadboardSelect : SelectableItemBase
         {
             CancelButton();
         }
+        
+        if(!setActiveOnce)
+        {
+            BreadboardPanel.SetActive(true);
+            if(!setActiveTwice)
+            {
+                BreadboardPanel.SetActive(false);
+                setActiveOnce = true;
+                setActiveTwice = true;
+            }
+            setActiveTwice = false;
+        }
+    }
+    void Start()
+    {
+        
     }
 
     public void OpenBreadboardPanel()
