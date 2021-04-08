@@ -17,8 +17,9 @@ public class UnityLoginLogoutRegister : MonoBehaviour
     public int minute;
     public int second;
 
-    public string baseUrl = "http://localhost:8888/UnityLoginLogoutRegister/";
-      
+    public string baseUrl = "http://sql5.freesqldatabase.com"
+   // public string baseUrl = "http://localhost:8888/UnityLoginLogoutRegister/";
+
 
     public InputField accountName;
     public InputField accountSID;
@@ -242,6 +243,6 @@ public class UnityLoginLogoutRegister : MonoBehaviour
     IEnumerator ChangeScene(int index, float delay = 3f)
     {
         yield return new WaitForSeconds(delay);
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(6);
     }
 }
