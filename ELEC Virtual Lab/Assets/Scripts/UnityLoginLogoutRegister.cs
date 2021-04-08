@@ -200,7 +200,7 @@ public class UnityLoginLogoutRegister : MonoBehaviour
                 if (responseText == "1")
                 {
                     PlayerPrefs.SetString(taKey, taName);
-                    SceneManager.LoadScene(3);
+                    SceneManager.LoadScene(5);
                     //info.text = "Login Success with Name: " + sName;
                 }
                 else
