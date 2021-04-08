@@ -27,6 +27,8 @@ public class ItemClickHandler : MonoBehaviour
 
     [SerializeField] GameObject _placedImages = null;
 
+    [SerializeField] TMP_InputField _potentioMeterTextBox = null;
+
     public static bool isBBSlotFree = false;
     private GameObject _pointA = null;
     private GameObject _pointB = null;
@@ -121,12 +123,13 @@ public class ItemClickHandler : MonoBehaviour
         }
         // function attached to a button for testing
 
-        // if(delayCalulationByFrames > 80)
-        // {
+        if(delayCalulationByFrames > 80)
+        {   
             SpiceSharpCalculation();
-        //     delayCalulationByFrames = 0;
-        // }
-        // delayCalulationByFrames++;
+            delayCalulationByFrames = 0;
+        }
+        Debug.Log("frame:" + delayCalulationByFrames);
+        delayCalulationByFrames++;
 
     }
 
@@ -178,9 +181,11 @@ public class ItemClickHandler : MonoBehaviour
         }
 
         //INSERT POTENTIOMETER VAL HERE
+
+
         if (bananaPlugActive[4])
         {
-            ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", 300));
+            ckt.Add(new Resistor("PotentioMeterBanana", "B4", "PotentioMeter", _potentioMeterTextBox.text));
             ckt.Add(new Resistor("PotentioMeterBlack", "PotentioMeter", "C17", 0));
             ckt.Add(new Resistor("PotentioMeterBlue", "PotentioMeter", "C18", 0));
             ckt.Add(new Resistor("PotentioMeterRed", "PotentioMeter", "C19", 0));
@@ -500,6 +505,7 @@ public class ItemClickHandler : MonoBehaviour
     {
         int removedInt = int.Parse(Regex.Match(BananaPlugSlot, @"\d+").Value);
         string columnConnection = "";
+        
         switch (removedInt)
         {
             case 0:
@@ -609,6 +615,7 @@ public class ItemClickHandler : MonoBehaviour
 
     private int GetSlotColumn(int slot)
     {
+        Debug.Log("Slot:" + slot);
         int column = -1;
         slot -= 5;
         column = (int)Math.Floor((double)(slot / 5.0));
@@ -629,7 +636,7 @@ public class ItemClickHandler : MonoBehaviour
         {
             column = 15;
         }
-
+        Debug.Log("Column: "+ column);
         return column;
     }
 
