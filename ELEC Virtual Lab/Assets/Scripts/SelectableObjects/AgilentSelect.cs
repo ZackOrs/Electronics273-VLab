@@ -15,6 +15,8 @@ public class AgilentSelect : SelectableItemBase
     [SerializeField] GameObject focusPoint = null;
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
     private Globals.AgilentInput clickedInput;
+    [SerializeField] GameObject WireCreationManager = null;
+    private GameObject clickedInputGameObject;
 
     private bool changingConnection = false;
 
@@ -64,6 +66,7 @@ public class AgilentSelect : SelectableItemBase
                 BananaSlotConnectionsPanel.SetActive(false);
                 BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked = false;
                 changingConnection = false;
+                WireCreationManager.GetComponent<WireCreationManager>().CreateWireStartPointEndPoint(clickedInputGameObject.transform, BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
             }
         }
 
@@ -118,18 +121,21 @@ public class AgilentSelect : SelectableItemBase
                 clickedInput = Globals.AgilentInput.voltageInput;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
+                clickedInputGameObject = transform.Find(clickedButton).gameObject;
                 break;
 
             case ("Torus.009"):
                 clickedInput = Globals.AgilentInput.groundInput;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
+                clickedInputGameObject = transform.Find(clickedButton).gameObject;
                 break;
 
             case ("Torus.010"):
                 clickedInput = Globals.AgilentInput.currentInput;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
+                clickedInputGameObject = transform.Find(clickedButton).gameObject;
                 break;
 
             case ("BtnAuto"):

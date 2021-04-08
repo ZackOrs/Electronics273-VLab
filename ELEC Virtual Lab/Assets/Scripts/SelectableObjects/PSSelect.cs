@@ -16,6 +16,8 @@ public class PSSelect : SelectableItemBase
     [SerializeField] GameObject focusPoint = null;
 
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
+    [SerializeField] GameObject WireCreationManager = null;
+    private GameObject clickedInputGameObject;
 
     [SerializeField] GameObject PowerLight = null;
     private Globals.PowerSupplyInput clickedInput;
@@ -51,6 +53,7 @@ public class PSSelect : SelectableItemBase
                 BananaSlotConnectionsPanel.SetActive(false);
                 BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked = false;
                 changingConnection = false;
+                WireCreationManager.GetComponent<WireCreationManager>().CreateWireStartPointEndPoint(clickedInputGameObject.transform, BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
             }
         }
     }
@@ -63,6 +66,7 @@ public class PSSelect : SelectableItemBase
                 clickedInput = Globals.PowerSupplyInput.voltageSource;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
+                clickedInputGameObject = transform.Find(clickedButton).gameObject;
                 break;
 
             case ("PointP"):
@@ -74,12 +78,14 @@ public class PSSelect : SelectableItemBase
                 clickedInput = Globals.PowerSupplyInput.currentSource;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
+                clickedInputGameObject = transform.Find(clickedButton).gameObject;
                 break;
 
             case ("Ground"):
                 clickedInput = Globals.PowerSupplyInput.ground;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
+                clickedInputGameObject = transform.Find(clickedButton).gameObject;
                 break;
 
             case ("BtnPower"):
