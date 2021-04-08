@@ -16,6 +16,8 @@ public class FlukeSelect : SelectableItemBase
     [SerializeField] GameObject BananaSlotConnectionsPanel = null;
 
     private Globals.FlukeInput clickedInput;
+    [SerializeField] GameObject WireCreationManager = null;
+    private GameObject clickedInputGameObject;
 
     private bool changingConnection = false;
 
@@ -64,6 +66,7 @@ public class FlukeSelect : SelectableItemBase
                 BananaSlotConnectionsPanel.SetActive(false);
                 BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().OptionClicked = false;
                 changingConnection = false;
+                WireCreationManager.GetComponent<WireCreationManager>().CreateWireStartPointEndPoint(clickedInputGameObject.transform, BananaSlotConnectionsPanel.GetComponent<BreadboardBananaConnectionPanelButtons>().BananaPlugsSlotClicked);
             }
         }
 
@@ -111,18 +114,21 @@ public class FlukeSelect : SelectableItemBase
                 clickedInput = Globals.FlukeInput.voltageInput;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
+                clickedInputGameObject = transform.Find(clickedButton).gameObject;
                 break;
 
             case ("CommonGround"):
                 clickedInput = Globals.FlukeInput.groundInput;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
+                clickedInputGameObject = transform.Find(clickedButton).gameObject;
                 break;
 
             case ("CurrentInputmA"):
                 clickedInput = Globals.FlukeInput.currentInput;
                 BananaSlotConnectionsPanel.SetActive(true);
                 changingConnection = true;
+                clickedInputGameObject = transform.Find(clickedButton).gameObject;
                 break;
 
             case ("BtnPower"):
