@@ -185,4 +185,5 @@ public class AgilentSelect : SelectableItemBase
         displayValueText.gameObject.SetActive(powerOn);
         displayModeText.gameObject.SetActive(powerOn);
         valueUpdated = true;
-
+    }
+}
