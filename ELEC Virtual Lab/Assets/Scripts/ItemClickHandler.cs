@@ -225,7 +225,7 @@ public class ItemClickHandler : MonoBehaviour
             var child = _breadboardUI.transform.GetChild(i);
             if (child.CompareTag("BBSlot"))
             {
-                if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked)
+                if (child.GetComponent<Slot>().itemPlaced != null && !child.GetComponent<Slot>().slotChecked && !child.GetComponent<Slot>().ignoreThisSlots)
                 {
                     if (child.GetComponent<Slot>().slotPair.GetComponent<Slot>().slotType == Globals.SlotType.defaultSlot)
                     {
@@ -257,7 +257,8 @@ public class ItemClickHandler : MonoBehaviour
 
         var dc = new DC("dc");
         if (voltageSource.Name != "a" && currentSource.Name != "b")
-        {
+        {   
+            Debug.Log("one");
             dc = new DC("dc", new[]{
             new ParameterSweep(voltageSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().voltage,_powerSupplyMachine.GetComponent<PSSelect>().voltage,1)),
             new ParameterSweep(currentSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().current,_powerSupplyMachine.GetComponent<PSSelect>().current,1))
@@ -265,15 +266,29 @@ public class ItemClickHandler : MonoBehaviour
         }
         else if (voltageSource.Name != "a")
         {
+            Debug.Log("two");
             dc = new DC("dc", new[]{
             new ParameterSweep(voltageSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().voltage,_powerSupplyMachine.GetComponent<PSSelect>().voltage,1))
         });
         }
         else if (currentSource.Name != "b")
         {
+            Debug.Log("three");
             dc = new DC("dc", new[]{
              new ParameterSweep(currentSource.Name,new LinearSweep(_powerSupplyMachine.GetComponent<PSSelect>().current,_powerSupplyMachine.GetComponent<PSSelect>().current,1))
         });
+        }
+        else
+        {
+            Debug.Log("4");
+            
+            _agilentMachine.GetComponent<AgilentSelect>().voltageReading = 0;
+            _agilentMachine.GetComponent<AgilentSelect>().currentReading = 0;
+            _agilentMachine.GetComponent<AgilentSelect>().valueUpdated = true;
+
+            _flukeMachine.GetComponent<FlukeSelect>().voltageReading = 0;
+            _flukeMachine.GetComponent<FlukeSelect>().currentReading = 0;
+            _flukeMachine.GetComponent<FlukeSelect>().valueUpdated = true;
         }
 
 
@@ -440,8 +455,7 @@ public class ItemClickHandler : MonoBehaviour
 
         dc.ExportSimulationData += (sender, exportDataEventArgs) =>
         {
-            // Debug.Log("AGILENT CURRENT READING: " + (new RealCurrentExport(dc, currentSource.Name)).Value);
-            Debug.Log("AGILENT CURRENT READING: " + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
+            Debug.Log("AGILENT CURRENT READING FROM : " + voltageSource.Name + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
             _agilentMachine.GetComponent<AgilentSelect>().currentReading = (float)new RealCurrentExport(dc, voltageSource.Name).Value;
             _agilentMachine.GetComponent<AgilentSelect>().valueUpdated = true;
         };
@@ -490,9 +504,6 @@ public class ItemClickHandler : MonoBehaviour
 
         dc.ExportSimulationData += (sender, exportDataEventArgs) =>
         {
-            // Debug.Log("Fluke CURRENT READING: " + (new RealCurrentExport(dc, currentSource.Name)).Value);
-            //Debug.Log("Fluke CURRENT READING: " + (new RealCurrentExport(dc, voltageSource.Name)).Value.ToString());
-            Debug.Log("Current source: " + currentSource.Name + " " + currentSource.Parameters.DcValue.ToString());
             Debug.Log("Fluke Current reading: " + (new RealCurrentExport(dc, currentSource.Name)).Value.ToString());
             _flukeMachine.GetComponent<FlukeSelect>().currentReading = (float)new RealCurrentExport(dc, voltageSource.Name).Value;
             _flukeMachine.GetComponent<FlukeSelect>().valueUpdated = true;
