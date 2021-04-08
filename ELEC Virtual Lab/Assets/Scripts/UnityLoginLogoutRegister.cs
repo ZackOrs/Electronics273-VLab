@@ -17,8 +17,8 @@ public class UnityLoginLogoutRegister : MonoBehaviour
     public int minute;
     public int second;
 
-    public string baseUrl = "http://localhost:8888/UnityLoginLogoutRegister/";
-      
+    public string baseUrl = "https://www.phpmyadmin.co/db_structure.php?server=1&db=sql5399213";
+   // public string baseUrl = "http://localhost:8888/UnityLoginLogoutRegister/";
 
     public InputField accountName;
     public InputField accountSID;
@@ -140,6 +140,7 @@ public class UnityLoginLogoutRegister : MonoBehaviour
 
     IEnumerator LogInAccount(string sName, string sID, string cCode, string lSection)
     {
+        
         WWWForm form = new WWWForm();
         form.AddField("loginname", sName);
         form.AddField("loginstudentid", sID);
@@ -163,7 +164,7 @@ public class UnityLoginLogoutRegister : MonoBehaviour
                     PlayerPrefs.SetString(ukey, sName);
                     //info.text = "Login Success with Name: " + sName;
 
-                    StartCoroutine(ChangeScene(1));
+                    StartCoroutine(ChangeScene(2));
                     hour = System.DateTime.Now.Hour;
                     minute = System.DateTime.Now.Minute;
                     second = System.DateTime.Now.Second;
@@ -180,6 +181,7 @@ public class UnityLoginLogoutRegister : MonoBehaviour
 
     IEnumerator taLogInAccount(string taName, string taPword)
     {
+        Debug.Log("Trying to login");
         WWWForm form = new WWWForm();
         form.AddField("tausername", taName);
         form.AddField("tapassword", taPword);
@@ -198,7 +200,7 @@ public class UnityLoginLogoutRegister : MonoBehaviour
                 if (responseText == "1")
                 {
                     PlayerPrefs.SetString(taKey, taName);
-                    SceneManager.LoadScene(3);
+                    SceneManager.LoadScene(5);
                     //info.text = "Login Success with Name: " + sName;
                 }
                 else
@@ -240,6 +242,6 @@ public class UnityLoginLogoutRegister : MonoBehaviour
     IEnumerator ChangeScene(int index, float delay = 3f)
     {
         yield return new WaitForSeconds(delay);
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(6);
     }
 }

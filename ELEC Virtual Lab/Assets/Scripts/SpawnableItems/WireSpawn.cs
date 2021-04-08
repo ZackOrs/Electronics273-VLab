@@ -53,7 +53,7 @@ public class WireSpawn : SpawnableItemBase
         for (int i = 0; i < int.Parse(itemQuantity.text); i++)
         {
             spawnSpace += 0.05f;
-            Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.5f, 3.5f);
+            Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.6f, 3.5f);
             Quaternion rotationValue = new Quaternion(0, 0, 0, 0);
             var spawnObject = Instantiate(itemPrefab, worldSpawnLocation, rotationValue, workBenchSpawnedItems.transform);
             spawnObject.GetComponent<WireSelect>().Colour = ItemValue;

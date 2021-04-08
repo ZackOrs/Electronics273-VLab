@@ -53,7 +53,7 @@ public class CapacitorSpawn : SpawnableItemBase
         for (int i = 0; i < int.Parse(itemQuantity.text); i++)
         {
             spawnSpace += 0.20f;
-            Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.6f, 3.9f);
+            Vector3 worldSpawnLocation = new Vector3(2.4f - spawnSpace, 2.67f, 3.9f);
             Quaternion rotationValue = new Quaternion(0, 0, 0, 0);
             var spawnObject = Instantiate(itemPrefab, worldSpawnLocation, rotationValue, workBenchSpawnedItems.transform);
             spawnObject.gameObject.AddComponent<CapacitorSelect>();
