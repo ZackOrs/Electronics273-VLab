@@ -128,7 +128,6 @@ public class ItemClickHandler : MonoBehaviour
             SpiceSharpCalculation();
             delayCalulationByFrames = 0;
         }
-        Debug.Log("frame:" + delayCalulationByFrames);
         delayCalulationByFrames++;
 
     }
