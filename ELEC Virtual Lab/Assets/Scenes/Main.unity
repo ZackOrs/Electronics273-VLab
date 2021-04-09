@@ -1249,7 +1249,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &30810089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4010,7 +4010,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &169886624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5694,7 +5694,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &217449851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7808,7 +7808,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &329325954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8635,7 +8635,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &386850007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10242,7 +10242,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &486886217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10917,7 +10917,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &536602129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11918,7 +11918,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &563599513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12015,7 +12015,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &578268974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12879,7 +12879,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &630816909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14216,7 +14216,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &670556322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16590,7 +16590,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &760237497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17869,7 +17869,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 887391906}
   m_HandleRect: {fileID: 887391905}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -20562,7 +20562,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &922679937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24297,7 +24297,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1064083342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27740,7 +27740,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!1 &1274047587
 GameObject:
   m_ObjectHideFlags: 0
@@ -28829,7 +28829,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1320397583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31350,7 +31350,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1406660163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34765,7 +34765,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1478455597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36328,8 +36328,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _breadboardUI: {fileID: 873207304}
-  _toolsMeter: {fileID: 141734125}
-  _powerSupply: {fileID: 2092270504}
   _bananaPlugs: {fileID: 0}
   _wireImage: {fileID: 8561823322331990391, guid: 6f7274fdd8056684d8eeb3c144f42e1c,
     type: 3}
@@ -36338,6 +36336,11 @@ MonoBehaviour:
   _capacitorImage: {fileID: 4825889425457321076, guid: 55dfd2897507bfd438cd4d736594364b,
     type: 3}
   _placedImages: {fileID: 1564736700}
+  _potentioMeterTextBox: {fileID: 0}
+  _agilentMachine: {fileID: 0}
+  _flukeMachine: {fileID: 0}
+  _powerSupplyMachine: {fileID: 0}
+  bananaSlotConnectionPanel: {fileID: 0}
 --- !u!1 &1554201540
 GameObject:
   m_ObjectHideFlags: 0
@@ -37083,7 +37086,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1579708996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37180,7 +37183,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1580823609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37552,7 +37555,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1585296668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40493,7 +40496,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1706385324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40784,7 +40787,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1718007659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41294,7 +41297,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1741115171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41465,7 +41468,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1746921452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41961,7 +41964,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1765384873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43701,7 +43704,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1867742976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45139,7 +45142,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &1920552149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46324,7 +46327,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 4
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -46631,7 +46634,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &2008186100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48238,7 +48241,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &2090132932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48775,7 +48778,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &2105207853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49082,7 +49085,7 @@ MonoBehaviour:
   slotPair: {fileID: 0}
   slotChecked: 0
   permaSlot: 0
-  machineConnections: []
+  ignoreThisSlot: 0
 --- !u!114 &2111385264
 MonoBehaviour:
   m_ObjectHideFlags: 0
